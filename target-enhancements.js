@@ -6,6 +6,7 @@
 const mod = "target-enhancements";
 window.myx = '';
 import { __filters }  from './src/pixi-filters.js';
+import { ImageFilters } from './src/image-filters.js';
 
 
 Array.prototype.partition = function(rule) {
@@ -25,19 +26,45 @@ class TargetEnhancements {
 
     }
 
+    /**
+     * Have to reset existing target art on hover
+     * @param {Token} token -- Token instance passed in
+     * @param {*} tf 
+     */
     static async hoverTokenEventHandler(token,tf) { 
         token.target.clear();
         if (TargetEnhancements.getTargets(await token.targeted).selfA.length) {
-            TargetEnhancements.drawFoundryTargetIndicators(token);
+            TargetEnhancements.drawTargetIndicators(token);
         }
     };
+
+    /**
+     * Have to reset existing target art on TokenUpdate
+     * @param {Scene} scene -- The current Scene
+     * @param {Token} token_obj -- token instance
+     * @param {*} update -- the data being updated
+     * @param {*} dif 
+     * @param {*} userId -- user who made the change
+     */
     static async updateTokenEventHandler(scene,token_obj,update,dif,userId) { 
         let token = canvas.tokens.get(token_obj._id);
         token.target.clear();
         if (TargetEnhancements.getTargets(await token.targeted).selfA.length) {
-            TargetEnhancements.drawFoundryTargetIndicators(token);
+            TargetEnhancements.drawTargetIndicators(token);
         }
     };
+
+    /**
+     * Helper function to draw consistent target indicators
+     * @param {Token} token -- the Token
+     */
+    static async drawTargetIndicators(token) {
+        // playing with different filters...ignore this
+        // token.target.filters = new ImageFilters().TiltShift().filters;
+        // token.icon.filters = new ImageFilters().Glow().filters;
+
+        TargetEnhancements.drawFoundryTargetIndicators(token);
+    }
  
     /**
      * Splits the <set> of targets of a token into two arrays
@@ -58,6 +85,12 @@ class TargetEnhancements {
     }
 
 
+    /**
+     * Fires when a token has been Targetted
+     * @param {User} usr -- User object
+     * @param {Token} token  -- Token object
+     * @param {Boolean} targeted -- Is targeted or just is clicked?
+     */
     static async targetTokenEventHandler(usr, token, targeted) {
        
         // initialize some values
@@ -82,7 +115,7 @@ class TargetEnhancements {
         //-----------------------------
         //           Target
         //-----------------------------
-        if (userArray.length) { TargetEnhancements.drawFoundryTargetIndicators(token);}
+        if (userArray.length) { TargetEnhancements.drawTargetIndicators(token);}
 
         //-----------------------------
         //           Tokens
@@ -217,48 +250,10 @@ class TargetEnhancements {
      */
     static applyFilters() {
        var filters = new ImageFilters();
-       filters.DropShadow().Outline(3);
-       return filters.filters;
+       return filters.DropShadow().Outline(3).filters;
     }
 }
 
-
-/**
- * dedicated class to implement some PIXI.js filters
- */
-class ImageFilters {
-    constructor () {
-        this._filters = [];
-    }
-    get filters() {
-        return this._filters;
-    }
-    DropShadow() {
-        let shadow = new PIXI.filters.DropShadowFilter(); 
-        shadow.blur = 4; 
-        shadow.alpha = 1; 
-        shadow.distance = 5;
-        shadow.angle = Math.PI/4;
-        this._filters.push(shadow);
-        return this;
-    }
-    Bevel() {
-        let bevel = new PIXI.filters.BevelFilter();
-        this._filters.push(bevel);
-        return this;
-    }
-    Outline(thickness = 1) {
-        let outline = new PIXI.filters.OutlineFilter(thickness);
-        this._filters.push(outline);
-        return this;
-    }
-    Alpha(val) {
-        let alpha = new PIXI.filters.AlphaFilter(val=1);
-        this._filters.push(alpha);
-        return this;
-    }
-
-}
 
 Hooks.on("ready", TargetEnhancements.ready);
 Hooks.on("targetToken", TargetEnhancements.targetTokenEventHandler);
