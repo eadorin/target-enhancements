@@ -31,6 +31,13 @@ class TargetEnhancements {
             TargetEnhancements.drawFoundryTargetIndicators(token);
         }
     };
+    static async updateTokenEventHandler(scene,token_obj,update,dif,userId) { 
+        let token = canvas.tokens.get(token_obj._id);
+        token.target.clear();
+        if (TargetEnhancements.getTargets(await token.targeted).selfA.length) {
+            TargetEnhancements.drawFoundryTargetIndicators(token);
+        }
+    };
  
     /**
      * Splits the <set> of targets of a token into two arrays
@@ -83,7 +90,7 @@ class TargetEnhancements {
         if (!othersArray.length) { return;} // only user is ourself or no one
 
         // get our icons & add them to the display
-        let tokensContainer = await TargetEnhancements.getTargetIcons(othersArray);
+        let tokensContainer = await TargetEnhancements.getTargetIcons(othersArray,token);
         token.target.addChild(tokensContainer);        
     }
 
@@ -109,15 +116,18 @@ class TargetEnhancements {
     /**
      * Iterates the list of *other* players, creates an container and adds the target Icons
      * @param {array} others -- array of other User objects
+     * @param {Token} token -- Token instance is useful for height & width;
      */
-    static async getTargetIcons(others) {
+    static async getTargetIcons(others,token) {
         // icon/avatar info
         this.icon_size = canvas.dimensions.size / 3.5;
         let num_icons = others.length;
 
         let tc = await new PIXI.Container();
+
+
         for ( let [i, u] of others.entries() ) {
-            tc.addChild( await TargetEnhancements.getIcon(u,i));
+            tc.addChild( await TargetEnhancements.getIcon(u,i, token));
         }
         return tc;
     }
@@ -126,8 +136,9 @@ class TargetEnhancements {
      * Creates a sprite from the selected avatar and positions around the container
      * @param {User} user -- the user to get
      * @param {int} idx  -- the current row count
+     * @param {Container} container -- PIXI.js container for height & width
      */
-    static async getIcon(user,idx) {
+    static async getIcon(user,idx, container) {
         let icon = {};
         let padding = 2;
 
@@ -138,9 +149,11 @@ class TargetEnhancements {
             icon = PIXI.Sprite.from("icons/svg/mystery-man.svg");
         }
 
-        // set the icon anchor
+        // set the icon dimensions & anchor
         icon.anchor.x = 0;
         icon.anchor.y = 0;
+        icon.width  = this.icon_size;
+        icon.height = this.icon_size;
 
 
         
@@ -153,23 +166,36 @@ class TargetEnhancements {
          * [-] finish different arrangements
          * [-] refactor out to Icon Class?
          */
-
-
-        // Top, Bottom, Top, Bottom
-        //-----------------------------
-        if (idx == 0) {
-            icon.position.x = icon.position.y = 0;
-        } else if (idx % 2 == 0) {
-            icon.position.y = this.icon_size * idx + padding;
-            icon.position.x = 0;
-            if (idx > 2) { icon.position.x = this.icon_size * idx + padding;}
-        } else {
-            icon.position.x = this.icon_size * idx + padding;
-            icon.position.y = 0;
+        let icon_arrangement = 1;
+        if (icon_arrangement==1) {
+            // Top, Bottom, Top, Bottom
+            //-----------------------------
+            if (idx == 0) {
+                icon.position.x = icon.position.y = 0;
+            } else if (idx % 2 > 0) {
+                // icon.position.y = this.icon_size * idx + padding;
+                console.log(container.h,this.icon_size);
+                icon.position.y = container.h - this.icon_size
+                icon.position.x = 0;
+                if (idx > 2) { icon.position.x = this.icon_size * Math.floor(idx/2) + padding;}
+            } else {
+                icon.position.x = this.icon_size * Math.floor(idx/2) + padding;
+                icon.position.y = 0;
+            }
         }
 
-        // Top to fit, bottom
-        //-----------------------------
+        if (icon_arrangement == 2) {
+            // Top to fit, bottom
+            //-----------------------------
+            icon.position.y = 0;
+            if (idx == 0) {
+                icon.position.x = 0;
+            } else {
+                icon.position.x = this.icon_size * idx + padding;
+            }
+        }
+        
+        
 
         // Bottom to fit, top
         //-----------------------------
@@ -178,8 +204,7 @@ class TargetEnhancements {
         //-----------------------------
 
 
-        icon.width  = this.icon_size;
-        icon.height = this.icon_size;
+ 
 
         // apply any selected filters
         icon.filters = await TargetEnhancements.applyFilters();
@@ -238,3 +263,4 @@ class ImageFilters {
 Hooks.on("ready", TargetEnhancements.ready);
 Hooks.on("targetToken", TargetEnhancements.targetTokenEventHandler);
 Hooks.on("hoverToken", TargetEnhancements.hoverTokenEventHandler);
+Hooks.on("updateToken",TargetEnhancements.updateTokenEventHandler);
