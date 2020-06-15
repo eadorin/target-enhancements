@@ -8,11 +8,13 @@ copy the folder to your `modules` directory.
 
 
 ## Usage
+<!----
 1. From the Game Settings tab
 1. In the 'Game Settings' section, Click 'Configure Settings' (button)
 1. Click the 'Module Settings' tab. 
 1. Scrol down to the *Target Enhancements* section
 1. Select the options that you want and save
+-->
 
 
 ## Known Issues / Limitations
