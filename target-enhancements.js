@@ -82,18 +82,15 @@ class TargetEnhancements {
         //-----------------------------
         if (!othersArray.length) { return;} // only user is ourself or no one
 
-        // get our tokens & add tem to the dislplay
-        let tokensContainer = await TargetEnhancements.getTokens(othersArray);
-
-        token.target.addChild(tokensContainer);
-
-
-
-        
-        ///////////////////////// Animation?
-        ///////////////////////// Supplemental
-        
+        // get our icons & add them to the display
+        let tokensContainer = await TargetEnhancements.getTargetIcons(othersArray);
+        token.target.addChild(tokensContainer);        
     }
+
+    /**
+     * Draws the default target indicators, taken from Token._refreshTarget()
+     * @param {Token} token  -- a Token object
+     */
     static async drawFoundryTargetIndicators(token) {
         let p = 4;
         let aw = 12;
@@ -108,7 +105,12 @@ class TargetEnhancements {
         .drawPolygon([hw,-p, hw-ah,-p-aw, hw+ah,-p-aw])
         .drawPolygon([hw,h+p, hw-ah,h+p+aw, hw+ah,h+p+aw]);
     }
-    static async getTokens(others) {
+
+    /**
+     * Iterates the list of *other* players, creates an container and adds the target Icons
+     * @param {array} others -- array of other User objects
+     */
+    static async getTargetIcons(others) {
         // icon/avatar info
         this.icon_size = canvas.dimensions.size / 3.5;
         let num_icons = others.length;
@@ -120,19 +122,41 @@ class TargetEnhancements {
         return tc;
     }
 
-
+    /**
+     * Creates a sprite from the selected avatar and positions around the container
+     * @param {User} user -- the user to get
+     * @param {int} idx  -- the current row count
+     */
     static async getIcon(user,idx) {
         let icon = {};
         let padding = 2;
 
+        // grab the user's avatar. If not available use mysteryman.
         try {
             icon = PIXI.Sprite.from(user.avatar);
         } catch (err) {
             icon = PIXI.Sprite.from("icons/svg/mystery-man.svg");
         }
+
+        // set the icon anchor
         icon.anchor.x = 0;
         icon.anchor.y = 0;
 
+
+        
+        //-----------------------------
+        //      Icon Positioning
+        //-----------------------------
+
+        /*
+         * TODO: 
+         * [-] finish different arrangements
+         * [-] refactor out to Icon Class?
+         */
+
+
+        // Top, Bottom, Top, Bottom
+        //-----------------------------
         if (idx == 0) {
             icon.position.x = icon.position.y = 0;
         } else if (idx % 2 == 0) {
@@ -143,20 +167,40 @@ class TargetEnhancements {
             icon.position.x = this.icon_size * idx + padding;
             icon.position.y = 0;
         }
+
+        // Top to fit, bottom
+        //-----------------------------
+
+        // Bottom to fit, top
+        //-----------------------------
+
+        // Top Left, Down 1, Right 1, Down 1...
+        //-----------------------------
+
+
         icon.width  = this.icon_size;
         icon.height = this.icon_size;
+
+        // apply any selected filters
         icon.filters = await TargetEnhancements.applyFilters();
         return icon;
         
     }
 
+    /**
+     * Applies a preselected choice of filters; should refactor out
+     */
     static applyFilters() {
        var filters = new ImageFilters();
-       filters.DropShadow().Outline(4);
+       filters.DropShadow().Outline(3);
        return filters.filters;
     }
 }
 
+
+/**
+ * dedicated class to implement some PIXI.js filters
+ */
 class ImageFilters {
     constructor () {
         this._filters = [];
