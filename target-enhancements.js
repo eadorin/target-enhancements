@@ -25,12 +25,29 @@ class TargetEnhancements {
 
     }
 
-    static hoverTokenEventHandler(token,tf) { token.target.clear();};
+    static async hoverTokenEventHandler(token,tf) { 
+        token.target.clear();
+        if (TargetEnhancements.getTargets(await token.targeted).selfA.length) {
+            TargetEnhancements.drawFoundryTargetIndicators(token);
+        }
+    };
  
-
-
-    static isSelfTarget() {
-        
+    /**
+     * Splits the <set> of targets of a token into two arrays
+     * @param {set} tokenTargets 
+     * @return {object} -- contains 2 arrays; one with other users and one with current player
+     */
+    static getTargets(tokenTargets) {
+        let uA = [];
+        let oA = [];
+        tokenTargets.forEach( u => {
+            if (u.id == game.user.id) {
+                uA.push(u); // current player
+            } else {
+                oA.push(u); // other players
+            }
+        });
+        return {othersA: oA, selfA: uA};
     }
 
 
@@ -45,23 +62,15 @@ class TargetEnhancements {
         await token.target.clear();
         await token.target.removeChildren();
 
-
-
-
-
-
         // if for some reason we still don't have a size
         if (!tokenTargets.size) return;
 
         
         // split the targets into two arrays -- we don't need to show player their own icon
-        tokenTargets.forEach( u => {
-            if (u.id == game.user.id) {
-                userArray.push(u);
-            } else {
-                othersArray.push(u);
-            }
-        });
+        let targets = TargetEnhancements.getTargets(tokenTargets);
+        userArray = targets.selfA;
+        othersArray = targets.othersA;
+  
 
         //-----------------------------
         //           Target
