@@ -7,8 +7,8 @@ Target Enhancements is a module for FoundryVTT that provides customizations for 
 
 
 ## Installation
-~~Simply use the install module screen within the FoundryVTT setup~~
-copy the folder to your `modules` directory.
+Simply use the install module screen within the FoundryVTT setup
+
 
 
 ## Usage & features
