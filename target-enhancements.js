@@ -19,10 +19,12 @@ Array.prototype.partition = function(rule) {
 
 class TargetEnhancements {
 
-    icon_size = 40;
+    static icon_size = 40;
+    static npc_targeting_key = 'npc-targeting-tokens';  // used by our flag
+
 
     static async ready() {
-        // register game settings
+        // TODO register game settings
 
     }
 
@@ -84,6 +86,55 @@ class TargetEnhancements {
         return {othersA: oA, selfA: uA};
     }
 
+    /**
+     * Gets the results from our flag
+     */
+    static async npcTokensTargetingHandler() {
+        // user clicked before GM targeted anything
+        if (!canvas.scene.getFlag(mod,TargetEnhancements.npc_targeting_key)) {
+            return false;
+        }
+        return canvas.scene.getFlag(mod,TargetEnhancements.npc_targeting_key);
+    }
+
+
+    /**
+     * When the GM controls a token, allows them to target other npcs
+     * @param {Token} token  -- the token being controlled
+     * @param {boolean} opt  -- taking control of the token or dropping it
+     */
+    static async controlTokenEventHandler(token, opt) {
+
+        // exit out if not GM. Need to change this to check for token ownership
+        if (!game.user.isGM) { return false; }
+        let mySet = [];
+
+        // get flag if exists, if not create it
+        if (typeof canvas.scene.getFlag(mod, (TargetEnhancements.npc_targeting_key)) === 'undefined'){
+            await canvas.scene.setFlag(mod, (TargetEnhancements.npc_targeting_key), mySet);
+        }
+
+        // not really a set, an array of npc token info
+        mySet = canvas.scene.getFlag(mod,TargetEnhancements.npc_targeting_key);
+
+        // cull out tokens not actively controlled.
+        let myObj = {id:token.id,img:token.data.img,name:token.data.name,type:"npc"};
+        if (opt) {
+            if (!mySet.find(x=> x.id === token.id)) {
+                mySet.push(myObj);
+            }
+        } else {
+            mySet.splice(mySet.findIndex(x => x.id === token.id),1);
+        }
+        let toStore = Array.from(mySet);
+
+        // update the flag. Have to unset first b/c sometimes it just doesn't take the setting
+        canvas.scene.unsetFlag(mod,TargetEnhancements.npc_targeting_key).then( () => {
+            canvas.scene.setFlag(mod, (TargetEnhancements.npc_targeting_key) , toStore);
+        })
+
+        return;
+    }
 
     /**
      * Fires when a token has been Targetted
@@ -96,6 +147,7 @@ class TargetEnhancements {
         // initialize some values
         var userArray = [];
         var othersArray = [];
+        var npcs = [];
         let tokenTargets = await token.targeted; // this takes time to arrive
   
         // clear any existing items/icons
@@ -105,12 +157,23 @@ class TargetEnhancements {
         // if for some reason we still don't have a size
         if (!tokenTargets.size) return;
 
-        
         // split the targets into two arrays -- we don't need to show player their own icon
         let targets = TargetEnhancements.getTargets(tokenTargets);
         userArray = targets.selfA;
         othersArray = targets.othersA;
-  
+
+        // handle npcs
+        let npcsArray = await TargetEnhancements.npcTokensTargetingHandler();
+        if (npcsArray) {
+            npcs  = npcsArray;
+        }
+
+        // only display npc updates if the GM triggered the update
+        console.log(npcs, othersArray);
+        let targetingItems = await (usr.isGM) ? othersArray.concat(npcs) : othersArray;
+
+        // targetingItems = othersArray;
+
 
         //-----------------------------
         //           Target
@@ -120,11 +183,14 @@ class TargetEnhancements {
         //-----------------------------
         //           Tokens
         //-----------------------------
-        if (!othersArray.length) { return;} // only user is ourself or no one
+        if (!targetingItems.length) { return;} // only user is ourself or no one
+
+        // TODO: update which tokens are now targeting the token, store this in a custom property or in a canvas flag
+ 
 
         // get our icons & add them to the display
-        let tokensContainer = await TargetEnhancements.getTargetIcons(othersArray,token);
-        token.target.addChild(tokensContainer);        
+        let tokensContainer = await TargetEnhancements.getTargetIcons(targetingItems,token);
+        token.target.addChild(tokensContainer);
     }
 
     /**
@@ -148,7 +214,7 @@ class TargetEnhancements {
 
     /**
      * Iterates the list of *other* players, creates an container and adds the target Icons
-     * @param {array} others -- array of other User objects
+     * @param {array} others -- array of other User objects (and NPC tokens)
      * @param {Token} token -- Token instance is useful for height & width;
      */
     static async getTargetIcons(others,token) {
@@ -162,6 +228,7 @@ class TargetEnhancements {
         for ( let [i, u] of others.entries() ) {
             tc.addChild( await TargetEnhancements.getIcon(u,i, token));
         }
+        //tc.token_id = token.id;
         return tc;
     }
 
@@ -169,17 +236,27 @@ class TargetEnhancements {
      * Creates a sprite from the selected avatar and positions around the container
      * @param {User} user -- the user to get
      * @param {int} idx  -- the current row count
-     * @param {Container} container -- PIXI.js container for height & width
+     * @param {Token} token -- PIXI.js container for height & width (the token)
      */
-    static async getIcon(user,idx, container) {
+    static async getIcon(user,idx, token) {
         let icon = {};
         let padding = 2;
+
+
+        // custom in case we need it
+        //icon.token_id = token.id;
+       // icon.user_id = user.id;
 
         // grab the user's avatar. If not available use mysteryman.
         try {
             icon = PIXI.Sprite.from(user.avatar);
         } catch (err) {
-            icon = PIXI.Sprite.from("icons/svg/mystery-man.svg");
+            try {
+                icon = PIXI.Sprite.from(user.img); // npc- token.actor.type === "npc"; !actor.isPC
+            } catch (er) {
+                icon = PIXI.Sprite.from("icons/svg/mystery-man.svg");
+            }
+            
         }
 
         // set the icon dimensions & anchor
@@ -187,7 +264,6 @@ class TargetEnhancements {
         icon.anchor.y = 0;
         icon.width  = this.icon_size;
         icon.height = this.icon_size;
-
 
         
         //-----------------------------
@@ -199,7 +275,7 @@ class TargetEnhancements {
          * [-] finish different arrangements
          * [-] refactor out to Icon Class?
          */
-        let icon_arrangement = 1;
+        let icon_arrangement = 1; 
         if (icon_arrangement==1) {
             // Top, Bottom, Top, Bottom
             //-----------------------------
@@ -207,8 +283,7 @@ class TargetEnhancements {
                 icon.position.x = icon.position.y = 0;
             } else if (idx % 2 > 0) {
                 // icon.position.y = this.icon_size * idx + padding;
-                console.log(container.h,this.icon_size);
-                icon.position.y = container.h - this.icon_size
+                icon.position.y = token.h - this.icon_size
                 icon.position.x = 0;
                 if (idx > 2) { icon.position.x = this.icon_size * Math.floor(idx/2) + padding;}
             } else {
@@ -246,16 +321,75 @@ class TargetEnhancements {
     }
 
     /**
-     * Applies a preselected choice of filters; should refactor out
+     * Applies a preselected choice of filters; should refactor out and be user-configurable
      */
     static applyFilters() {
        var filters = new ImageFilters();
        return filters.DropShadow().Outline(3).filters;
     }
+
+    
+    /**
+     * Button Handler to clear token targets & selections
+     * @param {User} user              -- the user clearing the targets
+     * @param {TokenLayer} tokenlayer  -- token layer
+     */
+    static clearTokenTargetsHandler(user,tokenlayer) {
+
+        user.targets.forEach( t => t.setTarget(false, {user: user, releaseOthers: true, groupSelection:false }));
+    
+
+        tokenlayer.selectObjects({
+            x:0,
+            y:0,
+            height:0,
+            releaseOptions:{},
+            controlOptions:{releaseOthers:true,updateSight:true}
+        });
+
+        if (user.isGM) { canvas.scene.unsetFlag(mod,TargetEnhancements.npc_targeting_key);}
+
+        // clear all Targets
+        canvas.tokens.objects.children.forEach( t => {
+            if (t instanceof Token) {
+            }
+        });
+
+        return true;
+    }
+
+    /**
+     * Adds the clear targets/selection button to the menu.
+     * @param {array} controls -- the current controls hud array
+     */
+    static getSceneControlButtonsHandler(controls) {
+        var icon1 = {
+            name: "cancelTargets", 
+            title: "Clear Targets/Selection",
+            icon:"fa fa-times-circle", 
+            button:true,
+            onClick: function() { Hooks.call("clearTokenTargets",game.user,TokenLayer.instance);},
+            layer: "TokenLayer"
+        };
+    
+        controls[0].tools.push(icon1);
+    }
 }
 
-
+/** Hooks **/
 Hooks.on("ready", TargetEnhancements.ready);
 Hooks.on("targetToken", TargetEnhancements.targetTokenEventHandler);
 Hooks.on("hoverToken", TargetEnhancements.hoverTokenEventHandler);
 Hooks.on("updateToken",TargetEnhancements.updateTokenEventHandler);
+Hooks.on("controlToken",TargetEnhancements.controlTokenEventHandler);
+Hooks.on("clearTokenTargets",TargetEnhancements.clearTokenTargetsHandler);
+Hooks.on("getSceneControlButtons",TargetEnhancements.getSceneControlButtonsHandler);
+
+
+
+/**
+ * Bugs
+ *  - Sometimes after selecting multiple on GM side, neither side updates appropriately (NPCs) -- resolved?
+ *  - clear target button doesn't always update clients // event handler isn't firing
+ *      game.users.updateTokenTargets(); // resolved by setting groupSelection to False -- forces token updates
+ */
