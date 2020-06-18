@@ -151,8 +151,12 @@ class TargetEnhancements {
         let tokenTargets = await token.targeted; // this takes time to arrive
   
         // clear any existing items/icons
-        await token.target.clear();
-        await token.target.removeChildren();
+        try {
+            await token.target.clear();
+            await token.target.removeChildren();
+        } catch(err) {
+            // something weird happeened. return;
+        }
 
         // if for some reason we still don't have a size
         if (!tokenTargets.size) return;
@@ -265,7 +269,7 @@ class TargetEnhancements {
         icon.width  = this.icon_size;
         icon.height = this.icon_size;
 
-        
+    
         //-----------------------------
         //      Icon Positioning
         //-----------------------------
@@ -310,12 +314,39 @@ class TargetEnhancements {
 
         // Top Left, Down 1, Right 1, Down 1...
         //-----------------------------
+        let bg = new PIXI.Graphics();
+        let oc = new PIXI.Graphics();
+        let drawbox = true;
+        let drawCircle = false;
+        if (drawbox) {
+            
+            bg.beginFill(colorStringToHex((user.color) ? user.color : '#000000'), .4);
+            bg.drawRect(icon.position.x - 1, icon.position.y - 1, this.icon_size + 1, this.icon_size + 1);
+            bg.endFill();
+        }
+        
+        if (drawCircle) {
+            bg.beginFill(colorStringToHex((user.color) ? user.color : '#000000'), .4);
+            bg.drawCircle(icon.position.x + this.icon_size /2, icon.position.y + this.icon_size / 2, this.icon_size+.5);
+            bg.lineStyle(3.2,0x000000);
+            
+            oc.lineStyle(1.2,0x000000);
+            oc.drawCircle(icon.position.x + this.icon_size / 2, icon.position.y + this.icon_size / 2, this.icon_size + .5);
+
+        }
+
 
 
  
 
         // apply any selected filters
         icon.filters = await TargetEnhancements.applyFilters();
+
+        let p = new PIXI.Container();
+        p.addChild(bg);
+        p.addChild(oc);
+        p.addChild(icon);
+        return p;
         return icon;
         
     }
