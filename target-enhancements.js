@@ -135,7 +135,11 @@ class TargetEnhancements {
         if (game.settings.get(mod,'enable-target-modifier-key')) {
             if (TargetEnhancements.modKeyPressed) {
                 token.target.clear();
-                token.setTarget(game.user, {releaseOthers: false});
+                if (!token.targeted.has(game.user)) {
+                    token.setTarget(game.user, {releaseOthers: false});
+                } else {
+                    token.setTarget(false, {user: game.user, releaseOthers: false, groupSelection: true});
+                }
             }
         }
     }
@@ -251,8 +255,10 @@ class TargetEnhancements {
      */
     static async controlTokenEventHandler(token, opt) {
 
+
         // exit out if not GM. Need to change this to check for token ownership
         if (!game.user.isGM) { return false; }
+        await token.target.clear();
 
         let mySet = [];
 
@@ -279,6 +285,7 @@ class TargetEnhancements {
         canvas.scene.unsetFlag(mod,TargetEnhancements.npc_targeting_key).then( () => {
             canvas.scene.setFlag(mod, (TargetEnhancements.npc_targeting_key) , toStore);
         })
+        await token.target.clear();
 
         return;
     }
