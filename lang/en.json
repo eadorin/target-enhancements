@@ -6,6 +6,6 @@
     "target-enhancements.options.target-indicator.choices.0" : "Default Foundry Indicator",
     "target-enhancements.options.target-indicator.choices.1" : "CrossHair 1",
     "target-enhancements.options.target-indicator.choices.2" : "BullsEye 1",
-    "target-enhancements.options.enable-ctrl-resize-modifer.name": "Resize token with mousewheel",
-    "target-enhancements.options.enable-ctrl-resize-modifer.hint" : "While holding <SHIFT>, user can resize the token using the mousewheel. The token MUST NOT BE SELECTED!"
+    "target-enhancements.options.enable-ctrl-resize-modifier.name": "Resize token with mousewheel",
+    "target-enhancements.options.enable-ctrl-resize-modifier.hint" : "While holding <SHIFT>, user can resize the token using the mousewheel. The token MUST NOT BE SELECTED!"
 }

@@ -31,6 +31,7 @@ class TargetEnhancements {
     static clickedToken = "";
     static resizeToken = "";
     static resizeFlagKey = "resize-scale";
+    static resizeModKeyPressed = false;
 
 
     static async ready() {
@@ -60,9 +61,9 @@ class TargetEnhancements {
             default: true,
             type: Boolean
         });
-        game.settings.register(mod,'enable-ctrl-resize-modifer', {
-            name : "target-enhancements.options.enable-ctrl-resize-modifer.name",
-            hint : "target-enhancements.options.enable-ctrl-resize-modifer.hint",
+        game.settings.register(mod,'enable-ctrl-resize-modifier', {
+            name : "target-enhancements.options.enable-ctrl-resize-modifier.name",
+            hint : "target-enhancements.options.enable-ctrl-resize-modifier.hint",
             scope: "world",
             config: "true",
             default: true,
@@ -83,6 +84,7 @@ class TargetEnhancements {
             }
         }
         if (!game.user.isGM) { return; }
+        TargetEnhancements.registerResizeModifier();
         $('body').on('mousewheel',TargetEnhancements.resizeHandler);
     }
 
@@ -103,6 +105,18 @@ class TargetEnhancements {
         return false;
     }
 
+    static async registerResizeModifier() {
+        if (game.settings.get(mod,'enable-ctrl-resize-modifier')) {
+            $(document).keydown(function(event) {
+                if (event.which == "82") {
+                    TargetEnhancements.resizeModKeyPressed = true;
+                }
+            });
+            $(document).keyup(function(event) {
+                TargetEnhancements.resizeModKeyPressed = false;
+            });
+        }
+    }
     static async registerClickModifier() {
         if (game.settings.get(mod,'enable-target-modifier-key')) {
             $(document).keydown(function(event) {
@@ -117,6 +131,7 @@ class TargetEnhancements {
             });
         }
     }
+    
     static async handleTokenClick() {
         let token = await Helpers.getTokenByTokenID(TargetEnhancements.clickedToken);
         if (game.settings.get(mod,'enable-target-modifier-key')) {
@@ -145,8 +160,9 @@ class TargetEnhancements {
 
     static async resizeHandler(event) {
         let oe = event.originalEvent;
-        if (game.settings.get(mod,'enable-ctrl-resize-modifer')) {
-            if (event.shiftKey) {
+        if (game.settings.get(mod,'enable-ctrl-resize-modifier')) {
+            // 82 is the 'r' key
+            if (TargetEnhancements.resizeModKeyPressed) {
                 let token = await Helpers.getTokenByTokenID(TargetEnhancements.resizeToken);
                 if (oe.deltaY < 0 ) {
                     token.icon.scale.x += .05; // the icon scales at a different rate
@@ -328,24 +344,6 @@ class TargetEnhancements {
         token.target.addChild(tokensContainer);
     }
 
-    /**
-     * Draws the default target indicators, taken from Token._refreshTarget()
-     * @param {Token} token  -- a Token object
-     */
-    static async drawFoundryTargetIndicators(token) {
-        let p = 4;
-        let aw = 12;
-        let h = token.h;
-        let hh = token.h / 2;
-        let w = token.w;
-        let hw = w / 2;
-        let ah = canvas.dimensions.size / 3;
-        token.target.beginFill(0xFF9829, 1.0).lineStyle(1, 0x000000)
-        .drawPolygon([-p,hh, -p-aw,hh-ah, -p-aw,hh+ah])
-        .drawPolygon([w+p,hh, w+p+aw,hh-ah, w+p+aw,hh+ah])
-        .drawPolygon([hw,-p, hw-ah,-p-aw, hw+ah,-p-aw])
-        .drawPolygon([hw,h+p, hw-ah,h+p+aw, hw+ah,h+p+aw]);
-    }
 
     /**
      * Iterates the list of *other* players, creates an container and adds the target Icons
