@@ -2,7 +2,7 @@
 Target Enhancements is a module for FoundryVTT that provides customizations for targeting. As a colorblind player, having icons instead of indistinguishable colored dots makes for a much better experience.
 
 ![New Targets](https://github.com/eadorin/target-enhancements/blob/master/screenshots/screenshot_targets.png?raw=true)
-
+![New Target Inticators](https://github.com/eadorin/target-enhancements/blob/master/screenshots/screenshot_indicator_crosshair.png?raw=true)
 ![New Cancel Control](https://github.com/eadorin/target-enhancements/blob/master/screenshots/new_cancel_control.png?raw=true)
 
 
@@ -13,8 +13,11 @@ Simply use the install module screen within the FoundryVTT setup
 
 ## Usage & features
 - Replaces the colored baubles for users targeting a token with their avatar. (Now with NPC Support!) It will fall back to token if an avatar is not supplied
+- Adds new "targeted token" indicators
 - Adds a new button under "Basic Controls" to remove all of a user's current targets/selections
 - Allows the GM to select tokens (<SELECTED>) and then target other tokens as <SELECTED>
+- Experimental --&gt; adds the ability to hold the &lt;T&gt; key down and click enemies to target them
+- If a token is not selected and you're the GM, you can use the &lt;SHIFT&gt; key + mousewheel to resize tokens
 
 <!----
 1. From the Game Settings tab
@@ -30,14 +33,15 @@ Simply use the install module screen within the FoundryVTT setup
 - Moving or clicking too fast may try to update the token before the target request is received by a client.
 
 - I've noticed an issue sometimes regarding the selection of multiple NPCs targeting...they don't all show up. If you can reproduce this consistently, please let me know how.
+  
+- The use of the &lt;T&gt; targeting ability may not be 100% yet.
 
 
-- There are currently no settings for the module!! The following settings are planned for the next release:
+Upcoming/requested features:
 1. Turn target features on/off
-1. Adjust the display of the target token icons!! (currently uses a black outline + shadow)
-1. Adjust size of target token icons
-1. Turn token target icon features on/off  (the default triangles)
-1. Adjust type of target feature (replacements for the triangles)
+2. Adjust the display of the target token icons!! (currently uses a black outline + shadow)
+3. Adjust size of target token icons
+4. Turn token target icon features on/off  (the default triangles)
 
 ## Troubleshooting
 - Users should report issues to the github issues. Reaching out on Discord is a good option as well, but please follow-up with a github issue
