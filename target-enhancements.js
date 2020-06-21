@@ -1,12 +1,18 @@
 /**
  * main entry point
  * Used to kickoff our target enhancements
+ * 
+ *  canvas.scene.update({"flags.-=target-enhancements":null}); // fixes random issues.
  */
 
 const mod = "target-enhancements";
 window.myx = '';
 import { __filters }  from './src/pixi-filters.js';
 import { ImageFilters } from './src/image-filters.js';
+import { TargetIndicator } from './src/TargetIndicator.js';
+import * as Helpers from './src/helpers.js';
+
+var ready = false;
 
 
 Array.prototype.partition = function(rule) {
@@ -21,11 +27,104 @@ class TargetEnhancements {
 
     static icon_size = 40;
     static npc_targeting_key = 'npc-targeting-tokens';  // used by our flag
+    static modKeyPressed = false;
+    static clickedToken = "";
+    static resizeToken = "";
+    static resizeFlagKey = "resize-scale";
 
 
     static async ready() {
         // TODO register game settings
+        ready = true;
 
+        game.settings.register(mod,'target-indicator',{
+            name: "target-enhancements.options.target-indicator.name",
+            hint: "target-enhancements.options.target-indicator.hint",
+            scope: "world",
+            config: true,
+            default: "0",
+            type: String,
+            choices: {
+                "0" : "target-enhancements.options.target-indicator.choices.0",
+                "1" : "target-enhancements.options.target-indicator.choices.1",
+                "2" : "target-enhancements.options.target-indicator.choices.2"
+            }
+        });
+        
+
+        game.settings.register(mod,'enable-target-modifier-key', {
+            name : "target-enhancements.options.enable-target-modifier-key.name",
+            hint : "target-enhancements.options.enable-target-modifier-key.hint",
+            scope: "world",
+            config: "true",
+            default: true,
+            type: Boolean
+        });
+        game.settings.register(mod,'enable-ctrl-resize-modifer', {
+            name : "target-enhancements.options.enable-ctrl-resize-modifer.name",
+            hint : "target-enhancements.options.enable-ctrl-resize-modifer.hint",
+            scope: "world",
+            config: "true",
+            default: true,
+            type: Boolean
+        });
+
+        TargetEnhancements.registerClickModifier(); // consider moving to onHoverToken()
+        
+        
+        if (game.settings.get(mod,'enable-target-modifier-key')) {
+            for (let x = canvas.tokens.placeables.length -1; x >=0; x--) {
+                let token = canvas.tokens.placeables[x];
+                try {
+                    token.data.scale = token.getFlag(mod,TargetEnhancements.resizeFlagKey) || 1;
+                    token.refresh();
+                } catch (ex) {}
+                
+            }
+        }
+        if (!game.user.isGM) { return; }
+        $('body').on('mousewheel',TargetEnhancements.resizeHandler);
+    }
+
+    static async checkForToken(x,y) {
+        let tokens = game.scenes.active.data.tokens;
+        let numTokens = tokens.length;
+        let clickedLocation = canvas.grid.grid.getGridPositionFromPixels(x,y);
+        console.log("Clicked:",clickedLocation);
+        for (let x=numTokens-1; x >= 0; x-- ) {
+            let token = tokens[x];
+            let tokenLocation = canvas.grid.grid.getGridPositionFromPixels(token.x,token.y);
+            
+            console.log("Checked:",tokenLocation);
+            if (clickedLocation == tokenLocation) { 
+                return token;
+            }
+        }
+        return false;
+    }
+
+    static async registerClickModifier() {
+        if (game.settings.get(mod,'enable-target-modifier-key')) {
+            $(document).keydown(function(event) {
+                if (event.which == "84") {
+                    TargetEnhancements.modKeyPressed = true;
+                    document.body.style.cursor = 'crosshair';
+                }
+            });
+            $(document).keyup(function(event) {
+                TargetEnhancements.modKeyPressed = false;
+                document.body.style.cursor = 'default';
+            });
+        }
+    }
+    static async handleTokenClick() {
+        let token = await Helpers.getTokenByTokenID(TargetEnhancements.clickedToken);
+        if (game.settings.get(mod,'enable-target-modifier-key')) {
+            if (TargetEnhancements.modKeyPressed) {
+                console.log("Target:",token);
+                token.setTarget(game.user, {releaseOthers: false});
+            }
+        }
     }
 
     /**
@@ -38,7 +137,31 @@ class TargetEnhancements {
         if (TargetEnhancements.getTargets(await token.targeted).selfA.length) {
             TargetEnhancements.drawTargetIndicators(token);
         }
+
+        TargetEnhancements.clickedToken = token.id;
+        TargetEnhancements.resizeToken  = token.id;
+        token.on('mousedown',TargetEnhancements.handleTokenClick);
     };
+
+    static async resizeHandler(event) {
+        let oe = event.originalEvent;
+        if (game.settings.get(mod,'enable-ctrl-resize-modifer')) {
+            if (event.shiftKey) {
+                let token = await Helpers.getTokenByTokenID(TargetEnhancements.resizeToken);
+                if (oe.deltaY < 0 ) {
+                    token.icon.scale.x += .05; // the icon scales at a different rate
+                    token.icon.scale.y += .05; // additionally scaling data maintains our changes
+                    token.data.scale +=  0.2;
+                } else {
+                    token.icon.scale.x -= .05;
+                    token.icon.scale.y -= .05;
+                    token.data.scale -= 0.2;
+                }
+                token.setFlag(mod,TargetEnhancements.resizeFlagKey,token.data.scale);
+            }
+            
+        }
+    }
 
     /**
      * Have to reset existing target art on TokenUpdate
@@ -50,6 +173,7 @@ class TargetEnhancements {
      */
     static async updateTokenEventHandler(scene,token_obj,update,dif,userId) { 
         let token = canvas.tokens.get(token_obj._id);
+        console.log("Token updated:",token.icon);
         token.target.clear();
         if (TargetEnhancements.getTargets(await token.targeted).selfA.length) {
             TargetEnhancements.drawTargetIndicators(token);
@@ -61,12 +185,16 @@ class TargetEnhancements {
      * @param {Token} token -- the Token
      */
     static async drawTargetIndicators(token) {
+        let selectedIndicator = game.settings.get(mod,"target-indicator");
         // playing with different filters...ignore this
         // token.target.filters = new ImageFilters().TiltShift().filters;
         // token.icon.filters = new ImageFilters().Glow().filters;
 
-        TargetEnhancements.drawFoundryTargetIndicators(token);
+        let indicator = new TargetIndicator(token);
+        indicator.drawIndicator(selectedIndicator);
     }
+
+
  
     /**
      * Splits the <set> of targets of a token into two arrays
@@ -107,6 +235,9 @@ class TargetEnhancements {
 
         // exit out if not GM. Need to change this to check for token ownership
         if (!game.user.isGM) { return false; }
+
+
+        
         let mySet = [];
 
         // get flag if exists, if not create it
@@ -173,7 +304,7 @@ class TargetEnhancements {
         }
 
         // only display npc updates if the GM triggered the update
-        console.log(npcs, othersArray);
+        // console.log(npcs, othersArray);
         let targetingItems = await (usr.isGM) ? othersArray.concat(npcs) : othersArray;
 
         // targetingItems = othersArray;
@@ -359,6 +490,14 @@ class TargetEnhancements {
        return filters.DropShadow().Outline(3).filters;
     }
 
+
+    static renderTokenEventHandler(a, div, data) {
+        if (data instanceof Token) {
+            if (token.getFlag(mod,TargetEnhancements.resizeFlagKey)) {
+                token.data.scale = token.getFlag(mod,TargetEnhancements.resizeFlagKey);
+            } 
+        }
+    }
     
     /**
      * Button Handler to clear token targets & selections
@@ -381,10 +520,15 @@ class TargetEnhancements {
         if (user.isGM) { canvas.scene.unsetFlag(mod,TargetEnhancements.npc_targeting_key);}
 
         // clear all Targets
-        canvas.tokens.objects.children.forEach( t => {
-            if (t instanceof Token) {
-            }
-        });
+        // canvas.tokens.objects.children.forEach( t => {
+        //     if (t instanceof Token) {
+        //         try {
+                   
+        //         } catch (ex) {
+
+        //         }
+        //     }
+        // });
 
         return true;
     }
@@ -405,6 +549,7 @@ class TargetEnhancements {
     
         controls[0].tools.push(icon1);
     }
+    
 }
 
 /** Hooks **/
@@ -412,10 +557,10 @@ Hooks.on("ready", TargetEnhancements.ready);
 Hooks.on("targetToken", TargetEnhancements.targetTokenEventHandler);
 Hooks.on("hoverToken", TargetEnhancements.hoverTokenEventHandler);
 Hooks.on("updateToken",TargetEnhancements.updateTokenEventHandler);
+Hooks.on("render",TargetEnhancements.renderTokenEventHandler);
 Hooks.on("controlToken",TargetEnhancements.controlTokenEventHandler);
 Hooks.on("clearTokenTargets",TargetEnhancements.clearTokenTargetsHandler);
 Hooks.on("getSceneControlButtons",TargetEnhancements.getSceneControlButtonsHandler);
-
 
 
 /**
@@ -424,3 +569,10 @@ Hooks.on("getSceneControlButtons",TargetEnhancements.getSceneControlButtonsHandl
  *  - clear target button doesn't always update clients // event handler isn't firing
  *      game.users.updateTokenTargets(); // resolved by setting groupSelection to False -- forces token updates
  */
+
+
+
+ /*** Utility Stuff, will be hoisted ***/
+export function getKeyByValue(object, value) {
+    return Object.keys(object).filter(key => object[key] === value);
+}
