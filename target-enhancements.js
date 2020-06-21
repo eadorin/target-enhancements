@@ -69,6 +69,16 @@ class TargetEnhancements {
             default: true,
             type: Boolean
         });
+        
+
+        game.settings.register(mod,'enable-target-portraits', {
+            name : "target-enhancements.options.enable-target-portraits.name",
+            hint : "target-enhancements.options.enable-target-portraits.hint",
+            scope: "world",
+            config: "true",
+            default: true,
+            type: Boolean
+        });
 
         TargetEnhancements.registerClickModifier(); // consider moving to onHoverToken()
 
@@ -305,13 +315,14 @@ class TargetEnhancements {
         let tokenTargets = await token.targeted; // this takes time to arrive
   
         // clear any existing items/icons
-        try {
-            await token.target.clear();
-            await token.target.removeChildren();
-        } catch(err) {
-            // something weird happeened. return;
-        }
-
+        if (game.settings.get(mod,"enable-target-portraits")) {
+            try {
+                await token.target.clear();
+                await token.target.removeChildren();
+            } catch(err) {
+                // something weird happeened. return;
+            }
+            }
         // if for some reason we still don't have a size
         if (!tokenTargets.size) return;
 
@@ -345,7 +356,7 @@ class TargetEnhancements {
 
         // TODO: update which tokens are now targeting the token, store this in a custom property or in a canvas flag
  
-
+        if (!game.settings.get(mod,"enable-target-portraits")){return;}
         // get our icons & add them to the display
         let tokensContainer = await TargetEnhancements.getTargetIcons(targetingItems,token);
         token.target.addChild(tokensContainer);
