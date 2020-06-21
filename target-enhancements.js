@@ -71,11 +71,14 @@ class TargetEnhancements {
         });
 
         TargetEnhancements.registerClickModifier(); // consider moving to onHoverToken()
-        
+
+ 
+            
         
         if (game.settings.get(mod,'enable-target-modifier-key')) {
             for (let x = canvas.tokens.placeables.length -1; x >=0; x--) {
                 let token = canvas.tokens.placeables[x];
+                token.on('mousedown',TargetEnhancements.handleTokenClick);
                 try {
                     token.data.scale = token.getFlag(mod,TargetEnhancements.resizeFlagKey) || 1;
                     token.refresh();
@@ -88,26 +91,13 @@ class TargetEnhancements {
         $('body').on('mousewheel',TargetEnhancements.resizeHandler);
     }
 
-    static async checkForToken(x,y) {
-        let tokens = game.scenes.active.data.tokens;
-        let numTokens = tokens.length;
-        let clickedLocation = canvas.grid.grid.getGridPositionFromPixels(x,y);
-        console.log("Clicked:",clickedLocation);
-        for (let x=numTokens-1; x >= 0; x-- ) {
-            let token = tokens[x];
-            let tokenLocation = canvas.grid.grid.getGridPositionFromPixels(token.x,token.y);
-            
-            console.log("Checked:",tokenLocation);
-            if (clickedLocation == tokenLocation) { 
-                return token;
-            }
-        }
-        return false;
-    }
-
+    /**
+     * Event listener on keydown to enable resize modifier
+     */
     static async registerResizeModifier() {
         if (game.settings.get(mod,'enable-ctrl-resize-modifier')) {
             $(document).keydown(function(event) {
+                // resize using the 'r' key
                 if (event.which == "82") {
                     TargetEnhancements.resizeModKeyPressed = true;
                 }
@@ -117,9 +107,14 @@ class TargetEnhancements {
             });
         }
     }
+
+    /**
+     * Event listener on keydown to enable targeting modifier
+     */
     static async registerClickModifier() {
         if (game.settings.get(mod,'enable-target-modifier-key')) {
             $(document).keydown(function(event) {
+                // target with the 't' key
                 if (event.which == "84") {
                     TargetEnhancements.modKeyPressed = true;
                     document.body.style.cursor = 'crosshair';
@@ -132,11 +127,14 @@ class TargetEnhancements {
         }
     }
     
+    /**
+     * If using the modifier to target a mob, sets them as a target
+     */
     static async handleTokenClick() {
         let token = await Helpers.getTokenByTokenID(TargetEnhancements.clickedToken);
         if (game.settings.get(mod,'enable-target-modifier-key')) {
             if (TargetEnhancements.modKeyPressed) {
-                console.log("Target:",token);
+                token.target.clear();
                 token.setTarget(game.user, {releaseOthers: false});
             }
         }
@@ -155,9 +153,13 @@ class TargetEnhancements {
 
         TargetEnhancements.clickedToken = token.id;
         TargetEnhancements.resizeToken  = token.id;
-        token.on('mousedown',TargetEnhancements.handleTokenClick);
     };
 
+
+    /**
+     * If mod key is pressed, resizes teh scale of the token
+     * @param {Event} event  -- the mousewheel event
+     */
     static async resizeHandler(event) {
         let oe = event.originalEvent;
         if (game.settings.get(mod,'enable-ctrl-resize-modifier')) {
@@ -252,8 +254,6 @@ class TargetEnhancements {
         // exit out if not GM. Need to change this to check for token ownership
         if (!game.user.isGM) { return false; }
 
-
-        
         let mySet = [];
 
         // get flag if exists, if not create it
@@ -489,6 +489,13 @@ class TargetEnhancements {
     }
 
 
+    static preUpdateSceneEventHandler(sene,flags,diff,id) {
+        game.user.targets.forEach( t => {
+            t.target.clear();
+            TargetEnhancements.drawTargetIndicators(t);
+        });
+    }
+
     static renderTokenEventHandler(a, div, data) {
         if (data instanceof Token) {
             if (token.getFlag(mod,TargetEnhancements.resizeFlagKey)) {
@@ -556,6 +563,7 @@ Hooks.on("targetToken", TargetEnhancements.targetTokenEventHandler);
 Hooks.on("hoverToken", TargetEnhancements.hoverTokenEventHandler);
 Hooks.on("updateToken",TargetEnhancements.updateTokenEventHandler);
 Hooks.on("render",TargetEnhancements.renderTokenEventHandler);
+Hooks.on("preUpdateScene",TargetEnhancements.preUpdateSceneEventHandler);
 Hooks.on("controlToken",TargetEnhancements.controlTokenEventHandler);
 Hooks.on("clearTokenTargets",TargetEnhancements.clearTokenTargetsHandler);
 Hooks.on("getSceneControlButtons",TargetEnhancements.getSceneControlButtonsHandler);
