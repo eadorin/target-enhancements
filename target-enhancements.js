@@ -589,6 +589,7 @@ Hooks.on("hoverToken", TargetEnhancements.hoverTokenEventHandler);
 Hooks.on("updateToken",TargetEnhancements.updateTokenEventHandler);
 Hooks.on("render",TargetEnhancements.renderTokenEventHandler);
 Hooks.on("preUpdateScene",TargetEnhancements.preUpdateSceneEventHandler);
+Hooks.on("renderSceneControls",TargetEnhancements.preUpdateSceneEventHandler);
 Hooks.on("controlToken",TargetEnhancements.controlTokenEventHandler);
 Hooks.on("clearTokenTargets",TargetEnhancements.clearTokenTargetsHandler);
 Hooks.on("getSceneControlButtons",TargetEnhancements.getSceneControlButtonsHandler);
