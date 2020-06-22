@@ -400,7 +400,14 @@ class TargetEnhancements {
 
         // grab the user's avatar. If not available use mysteryman.
         try {
-            icon = PIXI.Sprite.from(user.avatar);
+            if (user.avatar === "icons/svg/mystery-man.svg") {
+                let t = canvas.tokens.placeables.find( (x) => { return x.actor.id == user.data.character;});
+                icon = PIXI.Sprite.from(t.data.img);
+            } else {
+                icon = PIXI.Sprite.from(user.avatar);
+            }
+            
+
         } catch (err) {
             try {
                 icon = PIXI.Sprite.from(user.img); // npc- token.actor.type === "npc"; !actor.isPC
