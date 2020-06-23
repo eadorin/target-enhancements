@@ -41,15 +41,42 @@ class TargetEnhancements {
         game.settings.register(mod,'target-indicator',{
             name: "target-enhancements.options.target-indicator.name",
             hint: "target-enhancements.options.target-indicator.hint",
-            scope: "world",
+            scope: "player",
             config: true,
             default: "0",
             type: String,
             choices: {
                 "0" : "target-enhancements.options.target-indicator.choices.0",
                 "1" : "target-enhancements.options.target-indicator.choices.1",
-                "2" : "target-enhancements.options.target-indicator.choices.2"
+                "2" : "target-enhancements.options.target-indicator.choices.2",
+                "3" : "target-enhancements.options.target-indicator.choices.3",
+                "4" : "target-enhancements.options.target-indicator.choices.4",
             }
+        });
+
+        game.settings.register(mod,'use-player-color', {
+            name : "target-enhancements.options.use-player-color.name",
+            hint : "target-enhancements.options.use-player-color.hint",
+            scope: "player",
+            config: "true",
+            default: true,
+            type: Boolean
+        });
+        game.settings.register(mod,'use-fx-rotate', {
+            name : "target-enhancements.options.use-fx-rotate.name",
+            hint : "target-enhancements.options.use-fx-rotate.hint",
+            scope: "player",
+            config: "true",
+            default: true,
+            type: Boolean
+        });
+        game.settings.register(mod,'use-fx-pulse', {
+            name : "target-enhancements.options.use-fx-pulse.name",
+            hint : "target-enhancements.options.use-fx-pulse.hint",
+            scope: "player",
+            config: "true",
+            default: true,
+            type: Boolean
         });
         
 
@@ -162,7 +189,11 @@ class TargetEnhancements {
     static async hoverTokenEventHandler(token,tf) { 
         token.target.clear();
         if (TargetEnhancements.getTargets(await token.targeted).selfA.length) {
+
+            // only redraw if not already existing
+            if (token.target.children.length <= 0) {
             TargetEnhancements.drawTargetIndicators(token);
+            }
         }
 
         TargetEnhancements.clickedToken = token.id;
@@ -205,7 +236,7 @@ class TargetEnhancements {
      */
     static async updateTokenEventHandler(scene,token_obj,update,dif,userId) { 
         let token = canvas.tokens.get(token_obj._id);
-        console.log("Token updated:",token.icon);
+        // console.log("Token updated:",token.icon);
         token.target.clear();
         if (TargetEnhancements.getTargets(await token.targeted).selfA.length) {
             TargetEnhancements.drawTargetIndicators(token);
@@ -223,7 +254,7 @@ class TargetEnhancements {
         // token.icon.filters = new ImageFilters().Glow().filters;
 
         let indicator = new TargetIndicator(token);
-        indicator.drawIndicator(selectedIndicator);
+        indicator.create(selectedIndicator);
     }
 
 

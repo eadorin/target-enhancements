@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## [0.9.3] 2020-06-23
+
+### ADDED
+- Two new target indicators
+- Two new target indicator effects: rotate & pulse
+- Target Indicators can now user user color
+- Target Indicator customization can be done at the player level
 
 
 ## [1.0.5] 2020-06-21

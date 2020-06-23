@@ -13,7 +13,7 @@ Simply use the install module screen within the FoundryVTT setup
 
 ## Usage & features
 - Replaces the colored baubles for users targeting a token with their avatar. (Now with NPC Support!) It will fall back to token if an avatar is not supplied
-- Adds new "targeted token" indicators
+- Adds new "targeted token" indicators, including animations
 - Adds a new button under "Basic Controls" to remove all of a user's current targets/selections
 - Allows the GM to select tokens (<SELECTED>) and then target other tokens as <SELECTED>
 - Experimental --&gt; adds the ability to hold the &lt;T&gt; key down and click enemies to target them
