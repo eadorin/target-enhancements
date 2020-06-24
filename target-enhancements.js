@@ -12,7 +12,12 @@ import { ImageFilters } from './src/image-filters.js';
 import { TargetIndicator } from './src/TargetIndicator.js';
 import * as Helpers from './src/helpers.js';
 
+import ColorSetting from "./src/lib/colorSetting.js";
+
+
 var ready = false;
+
+
 
 
 Array.prototype.partition = function(rule) {
@@ -33,6 +38,9 @@ class TargetEnhancements {
     static resizeFlagKey = "resize-scale";
     static resizeModKeyPressed = false;
 
+    static friendly_text = new PIXI.Text('Friendly Unit',{fontFamily : 'Signika', fontSize: 24, fill : 0x00ff10, align : 'center'});
+    static neutral_text = new PIXI.Text('Neutral Unit',{fontFamily : 'Signika', fontSize: 24, fill : 0xff1010, align : 'center'});
+    static hostile_text = new PIXI.Text('Hostile Unit',{fontFamily : 'Signika', fontSize: 24, fill : 0xFF0000, align : 'center'});
 
     static async ready() {
         // TODO register game settings
@@ -52,6 +60,40 @@ class TargetEnhancements {
                 "3" : "target-enhancements.options.target-indicator.choices.3",
                 "4" : "target-enhancements.options.target-indicator.choices.4",
             }
+        });
+
+        // new ColorSetting(mod, 'friendly-color', {
+        //     name: "target-enhancements.options.friendly-color.name",
+        //     hint: "target-enhancements.options.friendly-color.hint",
+        //     label: "Pick color",
+        //     restricted: false,
+        //     defaultColor: hexToRGBAString(0x43DFDF, 1),
+        //     scope: "client"
+        // });
+        // new ColorSetting(mod, 'neutral-color', {
+        //     name: "target-enhancements.options.neutral-color.name",
+        //     hint: "target-enhancements.options.neutral-color.hint",
+        //     label: "Pick color",
+        //     restricted: false,
+        //     defaultColor: hexToRGBAString(0xF1D836, 1),
+        //     scope: "client"
+        // });
+        // new ColorSetting(mod, 'hostile-color', {
+        //     name: "target-enhancements.options.hostile-color.name",
+        //     hint: "target-enhancements.options.hostile-color.hint",
+        //     label: "Pick color",
+        //     restricted: false,
+        //     defaultColor: hexToRGBAString(0xE72124, 1),
+        //     scope: "client"
+        // });
+
+        game.settings.register(mod,'enable-colorblind-features', {
+            name : "target-enhancements.options.enable-colorblind-features.name",
+            hint : "target-enhancements.options.enable-colorblind-features.hint",
+            scope: "player",
+            config: "true",
+            default: false,
+            type: Boolean
         });
 
         game.settings.register(mod,'use-player-color', {
@@ -110,7 +152,7 @@ class TargetEnhancements {
         TargetEnhancements.registerClickModifier(); // consider moving to onHoverToken()
 
  
-            
+        // customBorderColors();
         
         if (game.settings.get(mod,'enable-target-modifier-key')) {
             for (let x = canvas.tokens.placeables.length -1; x >=0; x--) {
@@ -198,6 +240,60 @@ class TargetEnhancements {
 
         TargetEnhancements.clickedToken = token.id;
         TargetEnhancements.resizeToken  = token.id;
+
+        
+        // customBorderColors();
+        
+        
+        let text = "";
+        var line = new PIXI.Graphics();
+        switch (token.data.disposition) {
+           
+            case 1 :
+                text = TargetEnhancements.friendly_text;
+                line.lineStyle(3,0x00FF00);
+                break;
+            case 0 :
+                text = TargetEnhancements.neutral_text;
+                line.lineStyle(3,0x0000FF);
+                break;
+            default:
+                text = TargetEnhancements.hostile_text;
+                line.lineStyle(3,0xFF0000);
+                break;
+            
+        }
+
+        line.moveTo(0,0);
+        line.drawDashLine(token.w,0,10,6);
+        line.drawDashLine(token.w,token.h,10,6);
+        // line.drawDashLine(0,token.h+1,10,6);
+        // line.drawDashLine(0,0,10,6);
+        line.moveTo(0,0);
+        line.drawDashLine(0,token.h+1,10,6);
+        line.drawDashLine(token.w,token.h+1,10,6);
+        text.position.set(0,-25);
+
+
+
+
+        if (game.settings.get(mod,'enable-colorblind-features')) {
+            if (tf) {
+                token.addChild(text);
+                token.addChild(line);
+            } else {
+                token.removeChild(text);
+                for (let x = 0; x <= token.children.length;x++) {
+                    if (token.children[x].line) {
+                        if (token.children[x].line.width == 3) {
+                            token.removeChild(token.children[x]);
+                        }
+                    }
+                }
+            } // end if tf
+        } // end if enable
+
+
     };
 
 
@@ -238,6 +334,8 @@ class TargetEnhancements {
         let token = canvas.tokens.get(token_obj._id);
         // console.log("Token updated:",token.icon);
         token.target.clear();
+
+
         if (TargetEnhancements.getTargets(await token.targeted).selfA.length) {
             TargetEnhancements.drawTargetIndicators(token);
         }
@@ -253,8 +351,11 @@ class TargetEnhancements {
         // token.target.filters = new ImageFilters().TiltShift().filters;
         // token.icon.filters = new ImageFilters().Glow().filters;
 
-        let indicator = new TargetIndicator(token);
-        indicator.create(selectedIndicator);
+         // only redraw if not already existing
+         if (token.target.children.length <= 0) {
+            let indicator = new TargetIndicator(token);
+            indicator.create(selectedIndicator);
+         }
     }
 
 
@@ -310,6 +411,7 @@ class TargetEnhancements {
 
         // not really a set, an array of npc token info
         mySet = canvas.scene.getFlag(mod,TargetEnhancements.npc_targeting_key);
+        console.log(mod,mySet);
 
         // cull out tokens not actively controlled.
         let myObj = {id:token.id,img:token.data.img,name:token.data.name,type:"npc"};
@@ -327,7 +429,7 @@ class TargetEnhancements {
             canvas.scene.setFlag(mod, (TargetEnhancements.npc_targeting_key) , toStore);
         })
         await token.target.clear();
-
+        
         return;
     }
 
@@ -345,15 +447,28 @@ class TargetEnhancements {
         var npcs = [];
         let tokenTargets = await token.targeted; // this takes time to arrive
   
+
+        
         // clear any existing items/icons
-        if (game.settings.get(mod,"enable-target-portraits")) {
+        // if (game.settings.get(mod,"enable-target-portraits")) {
             try {
-                await token.target.clear();
-                await token.target.removeChildren();
+                await token.target.clear(); // indicator & baubles
+                await token.target.removeChildren(); // baubles
+
+                // baubles?
+                // token.target._lineStyle.texture.destroy();
+                // token.target._fillStyle.visible = false;
+                // token.target.fill.visible = false;
+                // token.target.graphicsData.length = 0;
+                
             } catch(err) {
                 // something weird happeened. return;
             }
-            }
+        // } 
+
+
+      
+
         // if for some reason we still don't have a size
         if (!tokenTargets.size) return;
 
@@ -375,6 +490,14 @@ class TargetEnhancements {
         // targetingItems = othersArray;
 
 
+        // if not using our indicators, then redraw the baubles
+        if (!game.settings.get(mod,"enable-target-portraits")) {
+            for ( let [i, u] of othersArray.entries() ) {
+                let color = colorStringToHex(u.data.color);
+                token.target.beginFill(color, 1.0).lineStyle(2, 0x0000000).drawCircle(2 + (i * 8), 0, 6);
+              }
+        }
+
         //-----------------------------
         //           Target
         //-----------------------------
@@ -391,6 +514,7 @@ class TargetEnhancements {
         // get our icons & add them to the display
         let tokensContainer = await TargetEnhancements.getTargetIcons(targetingItems,token);
         token.target.addChild(tokensContainer);
+        
     }
 
 
@@ -639,3 +763,64 @@ Hooks.on("getSceneControlButtons",TargetEnhancements.getSceneControlButtonsHandl
 export function getKeyByValue(object, value) {
     return Object.keys(object).filter(key => object[key] === value);
 }
+
+
+(function customBorderColors() {
+    Token.prototype._getBorderColor = function() {
+        if (this._controlled) return 0xFF9829;                    // Controlled
+        else if (this._hover) {
+            let d = parseInt(this.data.disposition);
+            if (!game.user.isGM && this.owner) return 0xFF9829;       // Owner
+            else if (this.actor && this.actor.isPC) return 0x33BC4E;  // Party Member
+            else if (d === 1) return colorStringToHex(game.settings.get(mod,"friendly-color"));                        // Friendly NPC
+            else if (d === 0) return colorStringToHex(game.settings.get(mod,"neutral-color"));                        // Neutral NPC
+            else return colorStringToHex(game.settings.get(mod,"hostile-color"));                                     // Hostile NPC
+        }
+        else return null;
+    }
+});
+
+
+
+PIXI.Graphics.prototype.drawDashLine = function(toX, toY, dash = 16, gap = 8) {
+    const lastPosition = this.currentPath.points;
+  
+    const currentPosition = {
+      x: lastPosition[lastPosition.length - 2] || 0,
+      y: lastPosition[lastPosition.length - 1] || 0
+    };
+  
+    const absValues = {
+      toX: Math.abs(toX),
+      toY: Math.abs(toY)
+    };
+  
+    for (
+      ;
+      Math.abs(currentPosition.x) < absValues.toX ||
+      Math.abs(currentPosition.y) < absValues.toY;
+    ) {
+      currentPosition.x =
+        Math.abs(currentPosition.x + dash) < absValues.toX
+          ? currentPosition.x + dash
+          : toX;
+      currentPosition.y =
+        Math.abs(currentPosition.y + dash) < absValues.toY
+          ? currentPosition.y + dash
+          : toY;
+  
+      this.lineTo(currentPosition.x, currentPosition.y);
+  
+      currentPosition.x =
+        Math.abs(currentPosition.x + gap) < absValues.toX
+          ? currentPosition.x + gap
+          : toX;
+      currentPosition.y =
+        Math.abs(currentPosition.y + gap) < absValues.toY
+          ? currentPosition.y + gap
+          : toY;
+  
+      this.moveTo(currentPosition.x, currentPosition.y);
+    }
+  };
+  

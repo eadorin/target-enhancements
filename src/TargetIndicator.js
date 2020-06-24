@@ -210,8 +210,6 @@ export class TargetIndicator {
         this.c.pivot.y = this.token.w/2;
         this.c.position.x = this.token.w/2;
         this.c.position.y = this.token.h/2;
-        console.clear();
-        console.log(this.sprite);
         this.c.addChild(this.sprite);
         this.token.target.addChild(this.c);
 

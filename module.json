@@ -2,7 +2,7 @@
     "name": "target-enhancements",
     "title": "Target Enhancements",
     "description": "Provides a number of enhancements for targetting",
-    "version": "0.9.3",
+    "version": "0.9.4",
     "author": "Eadorin",
     "esmodules": ["pixi-filters.js","target-enhancements.js"],
     "compatibleCoreVersion": "0.6.3",

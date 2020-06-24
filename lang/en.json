@@ -17,5 +17,13 @@
     "target-enhancements.options.enable-ctrl-resize-modifier.name": "Resize token with mousewheel",
     "target-enhancements.options.enable-ctrl-resize-modifier.hint" : "While holding <SHIFT>, user can resize the token using the mousewheel. The token MUST NOT BE SELECTED!",
     "target-enhancements.options.enable-target-portraits.name" : "Enable target portraits",
-    "target-enhancements.options.enable-target-portraits.hint" : "Shows player avatar/npc tokens on targets. Disabling turns on the colored baubles."
+    "target-enhancements.options.enable-target-portraits.hint" : "Shows player avatar/npc tokens on targets. Disabling turns on the colored baubles.",
+    "target-enhancements.options.friendly-color.name": "Friendly color",
+    "target-enhancements.options.friendly-color.hint": "Border color of friendly enemies when you hold ALT or mouseover their tokens",
+    "target-enhancements.options.neutral-color.name": "Neutral color",
+    "target-enhancements.options.neutral-color.hint": "Border color of neutral enemies when you hold ALT or mouseover their tokens",
+    "target-enhancements.options.hostile-color.name": "Hostile color",
+    "target-enhancements.options.hostile-color.hint": "Border color of hostile enemies when you hold ALT or mouseover their tokens",
+    "target-enhancements.options.enable-colorblind-features.name" : "Enable Colorblind-targeting features? (warning:ugly)",
+    "target-enhancements.options.enable-colorblind-features.hint" : "Enables a set of features to help those who are colorblind"
 }

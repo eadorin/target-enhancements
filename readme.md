@@ -1,9 +1,9 @@
 # Target Enhancements -- FoundryVTT Module
 Target Enhancements is a module for FoundryVTT that provides customizations for targeting. As a colorblind player, having icons instead of indistinguishable colored dots makes for a much better experience.
 
-![New Targets](https://github.com/eadorin/target-enhancements/blob/master/screenshots/screenshot_targets.png?raw=true)
-![New Target Inticators](https://github.com/eadorin/target-enhancements/blob/master/screenshots/screenshot_indicator_crosshair.png?raw=true)
-![New Cancel Control](https://github.com/eadorin/target-enhancements/blob/master/screenshots/new_cancel_control.png?raw=true)
+![New Targets](https://github.com/eadorin/target-enhancements/blob/master/img/screenshot_targets.png?raw=true)
+![New Target Inticators](https://github.com/eadorin/target-enhancements/blob/master/img/screenshot_indicator_crosshair.png?raw=true)
+![New Cancel Control](https://github.com/eadorin/target-enhancements/blob/master/img/new_cancel_control.png?raw=true)
 
 
 ## Installation
