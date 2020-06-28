@@ -1,5 +1,11 @@
 # CHANGELOG
 
+
+## [0.9.5] 2020-06-28
+
+### BugFixes
+- issue where targeting indicator wouldn't go away if target reaches zero health (DnD5e)
+
 ## [0.9.4] 2020-06-24
 
 ### BugFixes

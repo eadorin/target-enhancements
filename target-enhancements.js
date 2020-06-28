@@ -335,6 +335,11 @@ class TargetEnhancements {
         // console.log("Token updated:",token.icon);
         token.target.clear();
 
+        // patch for issue #11. Only fixes it for DND I think :(
+        try {
+            if (token_obj.actorData.data.attributes.hp.value == 0) {return;} 
+        } catch (error) {}
+        
 
         if (TargetEnhancements.getTargets(await token.targeted).selfA.length) {
             TargetEnhancements.drawTargetIndicators(token);
