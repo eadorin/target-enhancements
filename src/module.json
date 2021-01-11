@@ -57,7 +57,7 @@
   "packs": [
   ],
   "url": "https://github.com/p4535992/target-enhancements/tree/master",
-  "manifest": "https://github.com/p4535992/target-enhancements/raw/master/module.json",
+  "manifest": "https://raw.githubusercontent.com/p4535992/target-enhancements/master/src/module.json",
   "download": "https://github.com/p4535992/target-enhancements/raw/master/target-enhancements.zip",
   "minimumCoreVersion": "0.7.6",
   "compatibleCoreVersion": "0.7.9",
