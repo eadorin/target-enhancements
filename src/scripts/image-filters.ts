@@ -1,9 +1,12 @@
 
-
+import { PIXI } from './lib/pixi-filters.js';
 /**
  * dedicated class to implement some PIXI.js filters
  */
 export class ImageFilters {
+
+    _filters:any = [];
+
     constructor () {
         this._filters = [];
     }

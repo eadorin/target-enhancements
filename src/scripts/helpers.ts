@@ -16,7 +16,7 @@ export async function getTokenOwner(token, includeGM=false) {
             continue;
         } else {
             if (!u) { ret.push(u);continue;}
-            if (!u.isGM) { ret.push(u);}
+            if (!game.user.isGM) { ret.push(u);}
         }
     }
     return ret;
@@ -27,7 +27,8 @@ export async function getTokenByTokenID(id) {
 }
 export async function getTokenByTokenName(name) {
     // return game.scenes.active.data.tokens.find( x => {return x._name === name});
-    return canvas.tokens.placeables.find( x => { return x.id == id});
+    // return canvas.tokens.placeables.find( x => { return x.id == id});
+    return canvas.tokens.placeables.find( x => { return x.id == game.user.id});
 }
 
 
@@ -40,7 +41,8 @@ export function getInput(prompt) {
                 ok: {
                     label: "OK",
                     callback: () => {
-                        resolve(document.getElementById("dialog_box").value)
+                        //resolve(document.getElementById("dialog_box").value)
+                        resolve(document.getElementById("dialog_box").nodeValue)
                     }
                 }
             },

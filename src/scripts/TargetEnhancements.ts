@@ -5,15 +5,15 @@
  *  canvas.scene.update({"flags.-=target-enhancements":null}); // fixes random issues.
  */
 
-const mod = "target-enhancements";
-window.myx = '';
-import { __filters }  from './src/pixi-filters.js';
-import { ImageFilters } from './src/image-filters.js';
-import { TargetIndicator } from './src/TargetIndicator.js';
-import * as Helpers from './src/helpers.js';
+// const mod = "target-enhancements";
+// window.myx = '';
+import { __filters, PIXI } from './lib/pixi-filters.js';
+import { ImageFilters } from './image-filters.js';
+import { TargetIndicator } from './TargetIndicator.js';
+import * as Helpers from './helpers.js';
 
-import ColorSetting from "./src/lib/colorSetting.js";
-
+import ColorSetting from "./lib/colorSetting.js";
+import { MODULE_NAME } from '../module/settings';
 
 var ready = false;
 
@@ -28,7 +28,7 @@ Array.prototype.partition = function(rule) {
     }, [[], []]);
   };
 
-class TargetEnhancements {
+export class TargetEnhancements {
 
     static icon_size = 40;
     static npc_targeting_key = 'npc-targeting-tokens';  // used by our flag
@@ -43,123 +43,123 @@ class TargetEnhancements {
     static hostile_text = new PIXI.Text('Hostile Unit',{fontFamily : 'Signika', fontSize: 24, fill : 0xFF0000, align : 'center'});
 
     static async ready() {
-        // TODO register game settings
-        ready = true;
+         // TODO register game settings
+         ready = true;
 
-        game.settings.register(mod,'target-indicator',{
-            name: "target-enhancements.options.target-indicator.name",
-            hint: "target-enhancements.options.target-indicator.hint",
-            scope: "player",
-            config: true,
-            default: "0",
-            type: String,
-            choices: {
-                "0" : "target-enhancements.options.target-indicator.choices.0",
-                "1" : "target-enhancements.options.target-indicator.choices.1",
-                "2" : "target-enhancements.options.target-indicator.choices.2",
-                "3" : "target-enhancements.options.target-indicator.choices.3",
-                "4" : "target-enhancements.options.target-indicator.choices.4",
-            }
-        });
+    //     game.settings.register(mod,'target-indicator',{
+    //         name: "target-enhancements.options.target-indicator.name",
+    //         hint: "target-enhancements.options.target-indicator.hint",
+    //         scope: "player",
+    //         config: true,
+    //         default: "0",
+    //         type: String,
+    //         choices: {
+    //             "0" : "target-enhancements.options.target-indicator.choices.0",
+    //             "1" : "target-enhancements.options.target-indicator.choices.1",
+    //             "2" : "target-enhancements.options.target-indicator.choices.2",
+    //             "3" : "target-enhancements.options.target-indicator.choices.3",
+    //             "4" : "target-enhancements.options.target-indicator.choices.4",
+    //         }
+    //     });
 
-        // new ColorSetting(mod, 'friendly-color', {
-        //     name: "target-enhancements.options.friendly-color.name",
-        //     hint: "target-enhancements.options.friendly-color.hint",
-        //     label: "Pick color",
-        //     restricted: false,
-        //     defaultColor: hexToRGBAString(0x43DFDF, 1),
-        //     scope: "client"
-        // });
-        // new ColorSetting(mod, 'neutral-color', {
-        //     name: "target-enhancements.options.neutral-color.name",
-        //     hint: "target-enhancements.options.neutral-color.hint",
-        //     label: "Pick color",
-        //     restricted: false,
-        //     defaultColor: hexToRGBAString(0xF1D836, 1),
-        //     scope: "client"
-        // });
-        // new ColorSetting(mod, 'hostile-color', {
-        //     name: "target-enhancements.options.hostile-color.name",
-        //     hint: "target-enhancements.options.hostile-color.hint",
-        //     label: "Pick color",
-        //     restricted: false,
-        //     defaultColor: hexToRGBAString(0xE72124, 1),
-        //     scope: "client"
-        // });
+    //     // new ColorSetting(mod, 'friendly-color', {
+    //     //     name: "target-enhancements.options.friendly-color.name",
+    //     //     hint: "target-enhancements.options.friendly-color.hint",
+    //     //     label: "Pick color",
+    //     //     restricted: false,
+    //     //     defaultColor: hexToRGBAString(0x43DFDF, 1),
+    //     //     scope: "client"
+    //     // });
+    //     // new ColorSetting(mod, 'neutral-color', {
+    //     //     name: "target-enhancements.options.neutral-color.name",
+    //     //     hint: "target-enhancements.options.neutral-color.hint",
+    //     //     label: "Pick color",
+    //     //     restricted: false,
+    //     //     defaultColor: hexToRGBAString(0xF1D836, 1),
+    //     //     scope: "client"
+    //     // });
+    //     // new ColorSetting(mod, 'hostile-color', {
+    //     //     name: "target-enhancements.options.hostile-color.name",
+    //     //     hint: "target-enhancements.options.hostile-color.hint",
+    //     //     label: "Pick color",
+    //     //     restricted: false,
+    //     //     defaultColor: hexToRGBAString(0xE72124, 1),
+    //     //     scope: "client"
+    //     // });
 
-        game.settings.register(mod,'enable-colorblind-features', {
-            name : "target-enhancements.options.enable-colorblind-features.name",
-            hint : "target-enhancements.options.enable-colorblind-features.hint",
-            scope: "player",
-            config: "true",
-            default: false,
-            type: Boolean
-        });
+    //     game.settings.register(mod,'enable-colorblind-features', {
+    //         name : "target-enhancements.options.enable-colorblind-features.name",
+    //         hint : "target-enhancements.options.enable-colorblind-features.hint",
+    //         scope: "player",
+    //         config: "true",
+    //         default: false,
+    //         type: Boolean
+    //     });
 
-        game.settings.register(mod,'use-player-color', {
-            name : "target-enhancements.options.use-player-color.name",
-            hint : "target-enhancements.options.use-player-color.hint",
-            scope: "player",
-            config: "true",
-            default: true,
-            type: Boolean
-        });
-        game.settings.register(mod,'use-fx-rotate', {
-            name : "target-enhancements.options.use-fx-rotate.name",
-            hint : "target-enhancements.options.use-fx-rotate.hint",
-            scope: "player",
-            config: "true",
-            default: true,
-            type: Boolean
-        });
-        game.settings.register(mod,'use-fx-pulse', {
-            name : "target-enhancements.options.use-fx-pulse.name",
-            hint : "target-enhancements.options.use-fx-pulse.hint",
-            scope: "player",
-            config: "true",
-            default: true,
-            type: Boolean
-        });
+    //     game.settings.register(mod,'use-player-color', {
+    //         name : "target-enhancements.options.use-player-color.name",
+    //         hint : "target-enhancements.options.use-player-color.hint",
+    //         scope: "player",
+    //         config: "true",
+    //         default: true,
+    //         type: Boolean
+    //     });
+    //     game.settings.register(mod,'use-fx-rotate', {
+    //         name : "target-enhancements.options.use-fx-rotate.name",
+    //         hint : "target-enhancements.options.use-fx-rotate.hint",
+    //         scope: "player",
+    //         config: "true",
+    //         default: true,
+    //         type: Boolean
+    //     });
+    //     game.settings.register(mod,'use-fx-pulse', {
+    //         name : "target-enhancements.options.use-fx-pulse.name",
+    //         hint : "target-enhancements.options.use-fx-pulse.hint",
+    //         scope: "player",
+    //         config: "true",
+    //         default: true,
+    //         type: Boolean
+    //     });
         
 
-        game.settings.register(mod,'enable-target-modifier-key', {
-            name : "target-enhancements.options.enable-target-modifier-key.name",
-            hint : "target-enhancements.options.enable-target-modifier-key.hint",
-            scope: "world",
-            config: "true",
-            default: true,
-            type: Boolean
-        });
-        game.settings.register(mod,'enable-ctrl-resize-modifier', {
-            name : "target-enhancements.options.enable-ctrl-resize-modifier.name",
-            hint : "target-enhancements.options.enable-ctrl-resize-modifier.hint",
-            scope: "world",
-            config: "true",
-            default: true,
-            type: Boolean
-        });
+    //     game.settings.register(mod,'enable-target-modifier-key', {
+    //         name : "target-enhancements.options.enable-target-modifier-key.name",
+    //         hint : "target-enhancements.options.enable-target-modifier-key.hint",
+    //         scope: "world",
+    //         config: "true",
+    //         default: true,
+    //         type: Boolean
+    //     });
+    //     game.settings.register(mod,'enable-ctrl-resize-modifier', {
+    //         name : "target-enhancements.options.enable-ctrl-resize-modifier.name",
+    //         hint : "target-enhancements.options.enable-ctrl-resize-modifier.hint",
+    //         scope: "world",
+    //         config: "true",
+    //         default: true,
+    //         type: Boolean
+    //     });
         
 
-        game.settings.register(mod,'enable-target-portraits', {
-            name : "target-enhancements.options.enable-target-portraits.name",
-            hint : "target-enhancements.options.enable-target-portraits.hint",
-            scope: "world",
-            config: "true",
-            default: true,
-            type: Boolean
-        });
+    //     game.settings.register(mod,'enable-target-portraits', {
+    //         name : "target-enhancements.options.enable-target-portraits.name",
+    //         hint : "target-enhancements.options.enable-target-portraits.hint",
+    //         scope: "world",
+    //         config: "true",
+    //         default: true,
+    //         type: Boolean
+    //     });
 
         TargetEnhancements.registerClickModifier(); // consider moving to onHoverToken()
 
  
         // customBorderColors();
         
-        if (game.settings.get(mod,'enable-target-modifier-key')) {
+        if (game.settings.get(MODULE_NAME,'enable-target-modifier-key')) {
             for (let x = canvas.tokens.placeables.length -1; x >=0; x--) {
                 let token = canvas.tokens.placeables[x];
                 token.on('mousedown',TargetEnhancements.handleTokenClick);
                 try {
-                    token.data.scale = token.getFlag(mod,TargetEnhancements.resizeFlagKey) || 1;
+                    token.data.scale = token.getFlag(MODULE_NAME,TargetEnhancements.resizeFlagKey) || 1;
                     token.refresh();
                 } catch (ex) {}
                 
@@ -174,10 +174,10 @@ class TargetEnhancements {
      * Event listener on keydown to enable resize modifier
      */
     static async registerResizeModifier() {
-        if (game.settings.get(mod,'enable-ctrl-resize-modifier')) {
+        if (game.settings.get(MODULE_NAME,'enable-ctrl-resize-modifier')) {
             $(document).keydown(function(event) {
                 // resize using the 'r' key
-                if (event.which == "82") {
+                if (event.which == 82) {
                     TargetEnhancements.resizeModKeyPressed = true;
                 }
             });
@@ -191,10 +191,10 @@ class TargetEnhancements {
      * Event listener on keydown to enable targeting modifier
      */
     static async registerClickModifier() {
-        if (game.settings.get(mod,'enable-target-modifier-key')) {
+        if (game.settings.get(MODULE_NAME,'enable-target-modifier-key')) {
             $(document).keydown(function(event) {
                 // target with the 't' key
-                if (event.which == "84") {
+                if (event.which == 84) {
                     TargetEnhancements.modKeyPressed = true;
                     document.body.style.cursor = 'crosshair';
                 }
@@ -211,7 +211,7 @@ class TargetEnhancements {
      */
     static async handleTokenClick() {
         let token = await Helpers.getTokenByTokenID(TargetEnhancements.clickedToken);
-        if (game.settings.get(mod,'enable-target-modifier-key')) {
+        if (game.settings.get(MODULE_NAME,'enable-target-modifier-key')) {
             if (TargetEnhancements.modKeyPressed) {
                 token.target.clear();
                 if (!token.targeted.has(game.user)) {
@@ -245,8 +245,8 @@ class TargetEnhancements {
         // customBorderColors();
         
         
-        let text = "";
-        var line = new PIXI.Graphics();
+        let text:any = "";
+        var line:any = new PIXI.Graphics();
         switch (token.data.disposition) {
            
             case 1 :
@@ -277,7 +277,7 @@ class TargetEnhancements {
 
 
 
-        if (game.settings.get(mod,'enable-colorblind-features')) {
+        if (game.settings.get(MODULE_NAME,'enable-colorblind-features')) {
             if (tf) {
                 token.addChild(text);
                 token.addChild(line);
@@ -303,7 +303,7 @@ class TargetEnhancements {
      */
     static async resizeHandler(event) {
         let oe = event.originalEvent;
-        if (game.settings.get(mod,'enable-ctrl-resize-modifier')) {
+        if (game.settings.get(MODULE_NAME,'enable-ctrl-resize-modifier')) {
             // 82 is the 'r' key
             if (TargetEnhancements.resizeModKeyPressed) {
                 let token = await Helpers.getTokenByTokenID(TargetEnhancements.resizeToken);
@@ -316,7 +316,7 @@ class TargetEnhancements {
                     token.icon.scale.y -= .05;
                     token.data.scale -= 0.2;
                 }
-                token.setFlag(mod,TargetEnhancements.resizeFlagKey,token.data.scale);
+                token.setFlag(MODULE_NAME,TargetEnhancements.resizeFlagKey,token.data.scale);
             }
             
         }
@@ -351,7 +351,7 @@ class TargetEnhancements {
      * @param {Token} token -- the Token
      */
     static async drawTargetIndicators(token) {
-        let selectedIndicator = game.settings.get(mod,"target-indicator");
+        let selectedIndicator = game.settings.get(MODULE_NAME,"target-indicator");
         // playing with different filters...ignore this
         // token.target.filters = new ImageFilters().TiltShift().filters;
         // token.icon.filters = new ImageFilters().Glow().filters;
@@ -388,10 +388,10 @@ class TargetEnhancements {
      */
     static async npcTokensTargetingHandler() {
         // user clicked before GM targeted anything
-        if (!canvas.scene.getFlag(mod,TargetEnhancements.npc_targeting_key)) {
+        if (!canvas.scene.getFlag(MODULE_NAME,TargetEnhancements.npc_targeting_key)) {
             return false;
         }
-        return canvas.scene.getFlag(mod,TargetEnhancements.npc_targeting_key);
+        return canvas.scene.getFlag(MODULE_NAME,TargetEnhancements.npc_targeting_key);
     }
 
 
@@ -410,13 +410,13 @@ class TargetEnhancements {
         let mySet = [];
 
         // get flag if exists, if not create it
-        if (typeof canvas.scene.getFlag(mod, (TargetEnhancements.npc_targeting_key)) === 'undefined'){
-            await canvas.scene.setFlag(mod, (TargetEnhancements.npc_targeting_key), mySet);
+        if (typeof canvas.scene.getFlag(MODULE_NAME, (TargetEnhancements.npc_targeting_key)) === 'undefined'){
+            await canvas.scene.setFlag(MODULE_NAME, (TargetEnhancements.npc_targeting_key), mySet);
         }
 
         // not really a set, an array of npc token info
-        mySet = canvas.scene.getFlag(mod,TargetEnhancements.npc_targeting_key);
-        console.log(mod,mySet);
+        mySet = canvas.scene.getFlag(MODULE_NAME,TargetEnhancements.npc_targeting_key);
+        console.log(MODULE_NAME,mySet);
 
         // cull out tokens not actively controlled.
         let myObj = {id:token.id,img:token.data.img,name:token.data.name,type:"npc"};
@@ -430,8 +430,8 @@ class TargetEnhancements {
         let toStore = Array.from(mySet);
 
         // update the flag. Have to unset first b/c sometimes it just doesn't take the setting
-        canvas.scene.unsetFlag(mod,TargetEnhancements.npc_targeting_key).then( () => {
-            canvas.scene.setFlag(mod, (TargetEnhancements.npc_targeting_key) , toStore);
+        canvas.scene.unsetFlag(MODULE_NAME,TargetEnhancements.npc_targeting_key).then( () => {
+            canvas.scene.setFlag(MODULE_NAME, (TargetEnhancements.npc_targeting_key) , toStore);
         })
         await token.target.clear();
         
@@ -496,7 +496,7 @@ class TargetEnhancements {
 
 
         // if not using our indicators, then redraw the baubles
-        if (!game.settings.get(mod,"enable-target-portraits")) {
+        if (!game.settings.get(MODULE_NAME,"enable-target-portraits")) {
             for ( let [i, u] of othersArray.entries() ) {
                 let color = colorStringToHex(u.data.color);
                 token.target.beginFill(color, 1.0).lineStyle(2, 0x0000000).drawCircle(2 + (i * 8), 0, 6);
@@ -515,7 +515,7 @@ class TargetEnhancements {
 
         // TODO: update which tokens are now targeting the token, store this in a custom property or in a canvas flag
  
-        if (!game.settings.get(mod,"enable-target-portraits")){return;}
+        if (!game.settings.get(MODULE_NAME,"enable-target-portraits")){return;}
         // get our icons & add them to the display
         let tokensContainer = await TargetEnhancements.getTargetIcons(targetingItems,token);
         token.target.addChild(tokensContainer);
@@ -533,7 +533,7 @@ class TargetEnhancements {
         this.icon_size = canvas.dimensions.size / 3.5;
         let num_icons = others.length;
 
-        let tc = await new PIXI.Container();
+        let tc:any = await new PIXI.Container();
 
 
         for ( let [i, u] of others.entries() ) {
@@ -550,8 +550,8 @@ class TargetEnhancements {
      * @param {Token} token -- PIXI.js container for height & width (the token)
      */
     static async getIcon(user,idx, token) {
-        let icon = {};
-        let padding = 2;
+        let icon:any = {};
+        let padding:number = 2;
 
 
         // custom in case we need it
@@ -676,15 +676,17 @@ class TargetEnhancements {
 
     static preUpdateSceneEventHandler(sene,flags,diff,id) {
         game.user.targets.forEach( t => {
-            t.target.clear();
+            //t.target.clear();
+            t.targeted.clear();
             TargetEnhancements.drawTargetIndicators(t);
         });
     }
 
     static renderTokenEventHandler(a, div, data) {
         if (data instanceof Token) {
-            if (token.getFlag(mod,TargetEnhancements.resizeFlagKey)) {
-                token.data.scale = token.getFlag(mod,TargetEnhancements.resizeFlagKey);
+            let token:Token = data;
+            if (token.getFlag(MODULE_NAME,TargetEnhancements.resizeFlagKey)) {
+                token.data.scale = token.getFlag(MODULE_NAME,TargetEnhancements.resizeFlagKey);
             } 
         }
     }
@@ -707,7 +709,7 @@ class TargetEnhancements {
             controlOptions:{releaseOthers:true,updateSight:true}
         });
 
-        if (user.isGM) { canvas.scene.unsetFlag(mod,TargetEnhancements.npc_targeting_key);}
+        if (user.isGM) { canvas.scene.unsetFlag(MODULE_NAME,TargetEnhancements.npc_targeting_key);}
 
         // clear all Targets
         // canvas.tokens.objects.children.forEach( t => {
@@ -728,6 +730,24 @@ class TargetEnhancements {
      * @param {array} controls -- the current controls hud array
      */
     static getSceneControlButtonsHandler(controls) {
+
+        let control = controls.find(c => c.name === "token") || controls[0];
+  
+        control.tools.push({
+            name: "cancelTargets", 
+            title: "Clear Targets/Selection",
+            icon:"fa fa-times-circle", 
+            //visible: game.settings.get("cozy-player", "toolbarShowSkills"),
+            button:true,
+            onClick: () => {
+                control.activeTool = "select";
+                //Hooks.call("clearTokenTargets",game.user,TokenLayer.instance);
+                clearTargets()
+                return;
+            },
+            layer: "TokenLayer"
+        });
+        /*
         var icon1 = {
             name: "cancelTargets", 
             title: "Clear Targets/Selection",
@@ -736,23 +756,33 @@ class TargetEnhancements {
             onClick: function() { Hooks.call("clearTokenTargets",game.user,TokenLayer.instance);},
             layer: "TokenLayer"
         };
-    
         controls[0].tools.push(icon1);
+        */
     }
-    
+}
+
+
+// Clear Targets https://github.com/psyny/FoundryVTT/blob/master/CozyPlayer/cozy-player/scripts/hotkeys.js
+function clearTargets() {
+    const targets = game.user.targets.values();
+    for(let target = targets.next(); !target.done; target = targets.next())
+    {
+    target.value.setTarget(false, { user: game.user, releaseOthers: false });
+    }
+    game.user.targets = new Set();
 }
 
 /** Hooks **/
-Hooks.on("ready", TargetEnhancements.ready);
-Hooks.on("targetToken", TargetEnhancements.targetTokenEventHandler);
-Hooks.on("hoverToken", TargetEnhancements.hoverTokenEventHandler);
-Hooks.on("updateToken",TargetEnhancements.updateTokenEventHandler);
-Hooks.on("render",TargetEnhancements.renderTokenEventHandler);
-Hooks.on("preUpdateScene",TargetEnhancements.preUpdateSceneEventHandler);
-Hooks.on("renderSceneControls",TargetEnhancements.preUpdateSceneEventHandler);
-Hooks.on("controlToken",TargetEnhancements.controlTokenEventHandler);
-Hooks.on("clearTokenTargets",TargetEnhancements.clearTokenTargetsHandler);
-Hooks.on("getSceneControlButtons",TargetEnhancements.getSceneControlButtonsHandler);
+// Hooks.on("ready", TargetEnhancements.ready);
+// Hooks.on("targetToken", TargetEnhancements.targetTokenEventHandler);
+// Hooks.on("hoverToken", TargetEnhancements.hoverTokenEventHandler);
+// Hooks.on("updateToken",TargetEnhancements.updateTokenEventHandler);
+// Hooks.on("render",TargetEnhancements.renderTokenEventHandler);
+// Hooks.on("preUpdateScene",TargetEnhancements.preUpdateSceneEventHandler);
+// Hooks.on("renderSceneControls",TargetEnhancements.preUpdateSceneEventHandler);
+// Hooks.on("controlToken",TargetEnhancements.controlTokenEventHandler);
+// Hooks.on("clearTokenTargets",TargetEnhancements.clearTokenTargetsHandler);
+// Hooks.on("getSceneControlButtons",TargetEnhancements.getSceneControlButtonsHandler);
 
 
 /**
@@ -771,15 +801,15 @@ export function getKeyByValue(object, value) {
 
 
 (function customBorderColors() {
-    Token.prototype._getBorderColor = function() {
+    Token.prototype['_getBorderColor'] = function() {
         if (this._controlled) return 0xFF9829;                    // Controlled
         else if (this._hover) {
             let d = parseInt(this.data.disposition);
             if (!game.user.isGM && this.owner) return 0xFF9829;       // Owner
             else if (this.actor && this.actor.isPC) return 0x33BC4E;  // Party Member
-            else if (d === 1) return colorStringToHex(game.settings.get(mod,"friendly-color"));                        // Friendly NPC
-            else if (d === 0) return colorStringToHex(game.settings.get(mod,"neutral-color"));                        // Neutral NPC
-            else return colorStringToHex(game.settings.get(mod,"hostile-color"));                                     // Hostile NPC
+            else if (d === 1) return colorStringToHex(game.settings.get(MODULE_NAME,"friendly-color"));                        // Friendly NPC
+            else if (d === 0) return colorStringToHex(game.settings.get(MODULE_NAME,"neutral-color"));                        // Neutral NPC
+            else return colorStringToHex(game.settings.get(MODULE_NAME,"hostile-color"));                                     // Hostile NPC
         }
         else return null;
     }
@@ -787,7 +817,7 @@ export function getKeyByValue(object, value) {
 
 
 
-PIXI.Graphics.prototype.drawDashLine = function(toX, toY, dash = 16, gap = 8) {
+PIXI.Graphics.prototype['drawDashLine'] = function(toX, toY, dash = 16, gap = 8) {
     const lastPosition = this.currentPath.points;
   
     const currentPosition = {

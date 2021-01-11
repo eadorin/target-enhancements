@@ -1,2 +1,10 @@
-foundry.js
-_notes.md
+templates/roll.html
+templates/itemSheet.html.save
+templates/characterSheet.html.save
+jsconfig.json
+.gitignore
+node_modules
+/node_modules
+/dist
+/package
+/systems

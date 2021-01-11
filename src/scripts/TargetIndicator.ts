@@ -3,13 +3,22 @@
  */
 
 import { SpriteID } from './sprite-id.js';
-const mod = "target-enhancements";
+import { MODULE_NAME } from '../module/settings'
+//const mod = "target-enhancements";
 
 export class TargetIndicator {
 
+    token:any;
+    sprite:any;
+    owner:any;
+    indicator_type:any;
+    c:PIXI.Container;
+    i:PIXI.Graphics;
+    fillColor:number;
+
     constructor(token,indicator_type="default") {
         this.token = token;
-        this.sprite = false;
+        //this.sprite = false;
         this.owner = token.owner;
         this.indicator_type = indicator_type;
 
@@ -17,8 +26,8 @@ export class TargetIndicator {
         this.i = new PIXI.Graphics();
         token.indicator = this;
 
-        if (game.settings.get(mod,'use-player-color')) {
-            this.fillColor = colorStringToHex(game.user.color);
+        if (game.settings.get(MODULE_NAME,'use-player-color')) {
+            this.fillColor = colorStringToHex(game.user.options.color);
         } else {
             this.fillColor = 0xFF9829;
         }
@@ -213,10 +222,10 @@ export class TargetIndicator {
         this.c.addChild(this.sprite);
         this.token.target.addChild(this.c);
 
-        if (game.settings.get(mod,'use-fx-pulse')) {
+        if (game.settings.get(MODULE_NAME,'use-fx-pulse')) {
             this.pulse();
         }
-        if (game.settings.get(mod,'use-fx-rotate')) {
+        if (game.settings.get(MODULE_NAME,'use-fx-rotate')) {
             this.rotate();
         }
         
