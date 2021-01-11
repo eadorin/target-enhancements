@@ -46,14 +46,14 @@
     "scripts/lib/pixi-filters.js",
     "scripts/lib/vanilla-picker.min.js",
     "scripts/lib/vanilla-picker.min.mjs",
-    "scripts/helpers.js"
+    "scripts/helpers.js",
+    "scripts/image-filter.js",
+    "scripts/sprite-id.js",
+    "scripts/TargetEnhancements.js",
+    "scripts/TargetIndicator.js"
   ],
   "esmodules": [
-      "target-enhancements.js",
-      "scripts/image-filter.js",
-      "scripts/sprite-id.js",
-      "scripts/TargetEnhancements.js",
-      "scripts/TargetIndicator"
+      "target-enhancements.js"
   ],
   "styles": [
       "styles/target-enhancements.css",

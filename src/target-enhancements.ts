@@ -12,7 +12,7 @@
 // Import JavaScript modules
 
 // Import TypeScript modules
-import { registerSettings } from './module/settings.js';
+import { registerSettings, MODULE_NAME } from './module/settings.js';
 import { preloadTemplates } from './module/preloadTemplates.js';
 import { TargetEnhancements } from './scripts/TargetEnhancements.js';
 
@@ -55,8 +55,19 @@ Hooks.once('setup', function () {
 	// Do anything after initialization but before ready
   registerSettings();
   
-  // ready = true;
-
+  TargetEnhancements.registerClickModifier(); // consider moving to onHoverToken()
+  // customBorderColors();
+  if (game.settings.get(MODULE_NAME,'enable-target-modifier-key')) {
+      for (let x = canvas.tokens.placeables.length -1; x >=0; x--) {
+          let token = canvas.tokens.placeables[x];
+          token.on('mousedown',TargetEnhancements.handleTokenClick);
+          try {
+              token.data.scale = token.getFlag(MODULE_NAME,TargetEnhancements.resizeFlagKey) || 1;
+              token.refresh();
+          } catch (ex) {}
+          
+      }
+  }
   if (!game.user.isGM) { return; }
   TargetEnhancements.registerResizeModifier();
   $('body').on('mousewheel',TargetEnhancements.resizeHandler);
@@ -69,7 +80,7 @@ Hooks.once('setup', function () {
 Hooks.once('ready', function () {
 	// Do anything once the module is ready
 	if (!game.modules.get("lib-wrapper")?.active && game.user.isGM){
-    	ui.notifications.warn("The 'target-enhancements' module recommends to install and activate the 'libWrapper' module.");
+    ui.notifications.warn("The 'target-enhancements' module recommends to install and activate the 'libWrapper' module.");
   }
   if (!game.modules.get("colorsettings")?.active && game.user.isGM){
     ui.notifications.warn('Please make sure you have the "lib - ColorSettings" module installed and enabled.');
