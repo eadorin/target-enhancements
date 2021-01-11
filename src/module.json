@@ -3,7 +3,7 @@
   "title": "Target Enhancements",
   "description": "Provides a number of enhancements for targetting",
   "version": "1.0.0",
-  "author": "tposney",
+  "author": "Eadorin",
   "type": "module",
   "includes": [
     "./assets/**",
@@ -37,29 +37,25 @@
       "path": "lang/en.json" 
     }
   ],
-  "systems": [
-
-  ],
   "scripts": [
-    "scripts/lib/colorSetting.js",
-    "scripts/lib/html2canvas.esm.min.js",
-    "scripts/lib/pixi-filters.js",
-    "scripts/lib/vanilla-picker.min.js",
-    "scripts/lib/vanilla-picker.min.mjs",
-    "scripts/helpers.js",
-    "scripts/image-filter.js",
-    "scripts/sprite-id.js",
-    "scripts/TargetEnhancements.js",
-    "scripts/TargetIndicator.js"
   ],
   "esmodules": [
+      "pixi-filters.js",
+      "scripts/lib/colorsettings/colorSetting.js",
+      "scripts/lib/colorsettings/lib/html2canvas.esm.min.js",
+      "scripts/lib/colorsettings/lib/vanilla-picker.min.js",
+      "scripts/lib/colorsettings/lib/vanilla-picker.min.mjs",
+      "scripts/lib/pixi-filters.js",
+      "scripts/helpers.js",
+      "scripts/image-filter.js",
+      "scripts/sprite-id.js",
+      "scripts/TargetEnhancements.js",
+      "scripts/TargetIndicator.js",
       "target-enhancements.js"
   ],
   "styles": [
       "styles/target-enhancements.css",
       "styles/lib/css/colorpicker.css" 
-  ],
-  "packs": [
   ],
   "url": "https://github.com/p4535992/target-enhancements/tree/master",
   "manifest": "https://raw.githubusercontent.com/p4535992/target-enhancements/master/src/module.json",

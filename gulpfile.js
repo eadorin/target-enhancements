@@ -146,12 +146,12 @@ function buildJS() {
 	return gulp.src('src/**/*.js').pipe(gulp.dest('dist'));
 }
 
-/**
- * Build JavaScript
- */
-function buildJS2() {
-	return gulp.src('src/**/**/*.js').pipe(gulp.dest('dist'));
-}
+// /**
+//  * Build JavaScript
+//  */
+// function buildJS2() {
+// 	return gulp.src('src/**/**/*.js').pipe(gulp.dest('dist'));
+// }
 
 /**
  * Build JavaScript
@@ -160,12 +160,12 @@ function buildMJS() {
 	return gulp.src('src/**/*.mjs').pipe(gulp.dest('dist'));
 }
 
-/**
- * Build JavaScript
- */
-function buildMJS2() {
-	return gulp.src('src/**/**/*.mjs').pipe(gulp.dest('dist'));
-}
+// /**
+//  * Build JavaScript
+//  */
+// function buildMJS2() {
+// 	return gulp.src('src/**/**/*.mjs').pipe(gulp.dest('dist'));
+// }
 
 /**
  * Build Less

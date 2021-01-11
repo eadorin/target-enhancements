@@ -12,7 +12,7 @@ import { ImageFilters } from './image-filters.js';
 import { TargetIndicator } from './TargetIndicator.js';
 import * as Helpers from './helpers.js';
 
-import ColorSetting from "./lib/colorSetting.js";
+// import ColorSetting from "./lib/colorsetting/colorSetting.js";
 import { MODULE_NAME } from '../module/settings';
 
 var ready = false;

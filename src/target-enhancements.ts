@@ -85,13 +85,14 @@ Hooks.once('ready', function () {
   if (!game.modules.get("colorsettings")?.active && game.user.isGM){
     ui.notifications.warn('Please make sure you have the "lib - ColorSettings" module installed and enabled.');
   }
+  TargetEnhancements.ready;
 });
 
 // Add any additional hooks if necessary
 
 // setup all the hooks
 
-Hooks.on("ready", TargetEnhancements.ready);
+// Hooks.on("ready", TargetEnhancements.ready);
 Hooks.on("targetToken", TargetEnhancements.targetTokenEventHandler);
 Hooks.on("hoverToken", TargetEnhancements.hoverTokenEventHandler);
 Hooks.on("updateToken",TargetEnhancements.updateTokenEventHandler);
