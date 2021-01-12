@@ -34,7 +34,7 @@ export let setDebugLevel = (debugText: string) => {
 /* ------------------------------------ */
 /* Initialize module					*/
 /* ------------------------------------ */
-Hooks.once('init', async function () {
+Hooks.once('init', async () => {
 	console.log('target-enhancements | Initializing target-enhancements');
 
 	// Assign custom classes and constants here
@@ -51,7 +51,7 @@ Hooks.once('init', async function () {
 /* ------------------------------------ */
 /* Setup module							*/
 /* ------------------------------------ */
-Hooks.once('setup', function () {
+Hooks.once('setup', () => {
 	// Do anything after initialization but before ready
   registerSettings();
   
@@ -77,7 +77,7 @@ Hooks.once('setup', function () {
 /* ------------------------------------ */
 /* When ready							*/
 /* ------------------------------------ */
-Hooks.once('ready', function () {
+Hooks.once('ready', () => {
 	// Do anything once the module is ready
 	if (!game.modules.get("lib-wrapper")?.active && game.user.isGM){
     ui.notifications.warn("The 'target-enhancements' module recommends to install and activate the 'libWrapper' module.");
