@@ -38,14 +38,9 @@
     }
   ],
   "scripts": [
+    "scripts/libs/filters/pixi-filters.js"
   ],
   "esmodules": [
-      "pixi-filters.js",
-      "scripts/lib/colorsettings/colorSetting.js",
-      "scripts/lib/colorsettings/lib/html2canvas.esm.min.js",
-      "scripts/lib/colorsettings/lib/vanilla-picker.min.js",
-      "scripts/lib/colorsettings/lib/vanilla-picker.min.mjs",
-      "scripts/lib/pixi-filters.js",
       "scripts/helpers.js",
       "scripts/image-filter.js",
       "scripts/sprite-id.js",
@@ -54,13 +49,21 @@
       "target-enhancements.js"
   ],
   "styles": [
-      "styles/target-enhancements.css",
-      "styles/lib/css/colorpicker.css" 
+      "styles/target-enhancements.css"
   ],
+  "socket": true,
   "url": "https://github.com/p4535992/target-enhancements/tree/master",
   "manifest": "https://raw.githubusercontent.com/p4535992/target-enhancements/master/src/module.json",
   "download": "https://github.com/p4535992/target-enhancements/raw/master/target-enhancements.zip",
   "minimumCoreVersion": "0.7.6",
   "compatibleCoreVersion": "0.7.9",
-  "changelog": "https:github.com/p4535992/target-enhancements/blob/v1.1/changelog.md"
+  "changelog": "https:github.com/p4535992/target-enhancements/blob/v1.1/changelog.md",
+  "dependencies": [
+    {
+      "name": "colorsettings"
+    },
+    {
+      "name": "lib-wrapper"
+    }
+  ]
 }

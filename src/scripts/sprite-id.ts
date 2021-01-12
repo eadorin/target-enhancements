@@ -1,11 +1,9 @@
-import { PIXI } from './lib/pixi-filters.js';
-// import { Sprite } from '@pixi/sprite';
-import { Sprite } from './lib/pixi-filters.js';
+// import { PIXI } from './libs/filters/pixi-filters.js';
 /**
  * SpriteID wrapper around PIXI.sprite
  * v0.1
  */
-export class SpriteID extends Sprite {
+export class SpriteID extends PIXI.Sprite {
 
     sprite_type:string;
     id:string;

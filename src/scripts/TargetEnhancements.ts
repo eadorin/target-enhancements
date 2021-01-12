@@ -7,12 +7,13 @@
 
 // const mod = "target-enhancements";
 // window.myx = '';
-import { __filters, PIXI } from './lib/pixi-filters.js';
+// import { __filters, PIXI } from './lib/pixi-filters.js';
+// import { PIXI } from './libs/filters/pixi-filters.js';
 import { ImageFilters } from './image-filters.js';
 import { TargetIndicator } from './TargetIndicator.js';
 import * as Helpers from './helpers.js';
-
-// import ColorSetting from "./lib/colorsetting/colorSetting.js";
+//@ts-ignore
+//import ColorSetting from "../../colorsettings/colorSetting.js";
 import { MODULE_NAME } from '../module/settings';
 
 var ready = false;
@@ -670,7 +671,9 @@ export class TargetEnhancements {
      */
     static applyFilters() {
        var filters = new ImageFilters();
-       return filters.DropShadow().Outline(3).filters;
+       // TODO FIND A WAY TO INTREGATED THESE IN 'foundry-pc-types'
+       //return filters.DropShadow().Outline(3).filters;
+       return filters.Alpha().filters;
     }
 
 
