@@ -150,22 +150,22 @@ export class TargetEnhancements {
     //         type: Boolean
     //     });
 
-        TargetEnhancements.registerClickModifier(); // consider moving to onHoverToken()
+        // TargetEnhancements.registerClickModifier(); // consider moving to onHoverToken()
 
  
         // customBorderColors();
         
-        if (game.settings.get(MODULE_NAME,'enable-target-modifier-key')) {
-            for (let x = canvas.tokens.placeables.length -1; x >=0; x--) {
-                let token = canvas.tokens.placeables[x];
-                token.on('mousedown',TargetEnhancements.handleTokenClick);
-                try {
-                    token.data.scale = token.getFlag(MODULE_NAME,TargetEnhancements.resizeFlagKey) || 1;
-                    token.refresh();
-                } catch (ex) {}
+        // if (game.settings.get(MODULE_NAME,'enable-target-modifier-key')) {
+        //     for (let x = canvas.tokens.placeables.length -1; x >=0; x--) {
+        //         let token = canvas.tokens.placeables[x];
+        //         token.on('mousedown',TargetEnhancements.handleTokenClick);
+        //         try {
+        //             token.data.scale = token.getFlag(MODULE_NAME,TargetEnhancements.resizeFlagKey) || 1;
+        //             token.refresh();
+        //         } catch (ex) {}
                 
-            }
-        }
+        //     }
+        // }
         if (!game.user.isGM) { return; }
         TargetEnhancements.registerResizeModifier();
         $('body').on('mousewheel',TargetEnhancements.resizeHandler);
@@ -204,6 +204,18 @@ export class TargetEnhancements {
                 TargetEnhancements.modKeyPressed = false;
                 document.body.style.cursor = 'default';
             });
+        //}
+        // consider moving to onHoverToken()
+        //if (game.settings.get(MODULE_NAME,'enable-target-modifier-key')) {
+            for (let x = canvas.tokens.placeables.length -1; x >=0; x--) {
+                let token = canvas.tokens.placeables[x];
+                token.on('mousedown',TargetEnhancements.handleTokenClick);
+                try {
+                    token.data.scale = token.getFlag(MODULE_NAME,TargetEnhancements.resizeFlagKey) || 1;
+                    token.refresh();
+                } catch (ex) {}
+                
+            }
         }
     }
     
@@ -744,11 +756,11 @@ export class TargetEnhancements {
             button:true,
             onClick: () => {
                 control.activeTool = "select";
-                //Hooks.call("clearTokenTargets",game.user,TokenLayer.instance);
-                clearTargets()
+                Hooks.call("clearTokenTargets",game.user,clearTargets());
+                clearTargets();
                 return;
             },
-            layer: "TokenLayer"
+            // layer: "TokenLayer"
         });
         /*
         var icon1 = {
