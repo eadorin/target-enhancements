@@ -624,7 +624,7 @@ export class TargetEnhancements {
                 Helpers.clearTargets();
                 return;
             },
-            // layer: "TokenLayer"
+            layer: "TokenLayer"
         });
         /*
         var icon1 = {

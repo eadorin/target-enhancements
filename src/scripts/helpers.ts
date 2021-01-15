@@ -50,12 +50,6 @@ export function getInput(prompt) {
     });
 }
 
-//  /*** Utility Stuff, will be hoisted ***/
-//  export function getKeyByValue(object, value) {
-//     return Object.keys(object).filter(key => object[key] === value);
-// }
-
-
 /*
  Clear Targets https://github.com/psyny/FoundryVTT/blob/master/CozyPlayer/cozy-player/scripts/hotkeys.js
 */
