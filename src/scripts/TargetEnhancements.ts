@@ -15,11 +15,7 @@ import * as Helpers from './helpers.js';
 //@ts-ignore
 //import ColorSetting from "../../colorsettings/colorSetting.js";
 import { MODULE_NAME } from '../module/settings';
-
-var ready = false;
-
-
-
+import { EasyTarget } from './easyTarget.js';
 
 Array.prototype.partition = function(rule) {
     return this.reduce((acc, val) => {
@@ -43,132 +39,8 @@ export class TargetEnhancements {
     static neutral_text = new PIXI.Text('Neutral Unit',{fontFamily : 'Signika', fontSize: 24, fill : 0xff1010, align : 'center'});
     static hostile_text = new PIXI.Text('Hostile Unit',{fontFamily : 'Signika', fontSize: 24, fill : 0xFF0000, align : 'center'});
 
-    static async ready() {
-         // TODO register game settings
-         ready = true;
-
-    //     game.settings.register(mod,'target-indicator',{
-    //         name: "target-enhancements.options.target-indicator.name",
-    //         hint: "target-enhancements.options.target-indicator.hint",
-    //         scope: "player",
-    //         config: true,
-    //         default: "0",
-    //         type: String,
-    //         choices: {
-    //             "0" : "target-enhancements.options.target-indicator.choices.0",
-    //             "1" : "target-enhancements.options.target-indicator.choices.1",
-    //             "2" : "target-enhancements.options.target-indicator.choices.2",
-    //             "3" : "target-enhancements.options.target-indicator.choices.3",
-    //             "4" : "target-enhancements.options.target-indicator.choices.4",
-    //         }
-    //     });
-
-    //     // new ColorSetting(mod, 'friendly-color', {
-    //     //     name: "target-enhancements.options.friendly-color.name",
-    //     //     hint: "target-enhancements.options.friendly-color.hint",
-    //     //     label: "Pick color",
-    //     //     restricted: false,
-    //     //     defaultColor: hexToRGBAString(0x43DFDF, 1),
-    //     //     scope: "client"
-    //     // });
-    //     // new ColorSetting(mod, 'neutral-color', {
-    //     //     name: "target-enhancements.options.neutral-color.name",
-    //     //     hint: "target-enhancements.options.neutral-color.hint",
-    //     //     label: "Pick color",
-    //     //     restricted: false,
-    //     //     defaultColor: hexToRGBAString(0xF1D836, 1),
-    //     //     scope: "client"
-    //     // });
-    //     // new ColorSetting(mod, 'hostile-color', {
-    //     //     name: "target-enhancements.options.hostile-color.name",
-    //     //     hint: "target-enhancements.options.hostile-color.hint",
-    //     //     label: "Pick color",
-    //     //     restricted: false,
-    //     //     defaultColor: hexToRGBAString(0xE72124, 1),
-    //     //     scope: "client"
-    //     // });
-
-    //     game.settings.register(mod,'enable-colorblind-features', {
-    //         name : "target-enhancements.options.enable-colorblind-features.name",
-    //         hint : "target-enhancements.options.enable-colorblind-features.hint",
-    //         scope: "player",
-    //         config: "true",
-    //         default: false,
-    //         type: Boolean
-    //     });
-
-    //     game.settings.register(mod,'use-player-color', {
-    //         name : "target-enhancements.options.use-player-color.name",
-    //         hint : "target-enhancements.options.use-player-color.hint",
-    //         scope: "player",
-    //         config: "true",
-    //         default: true,
-    //         type: Boolean
-    //     });
-    //     game.settings.register(mod,'use-fx-rotate', {
-    //         name : "target-enhancements.options.use-fx-rotate.name",
-    //         hint : "target-enhancements.options.use-fx-rotate.hint",
-    //         scope: "player",
-    //         config: "true",
-    //         default: true,
-    //         type: Boolean
-    //     });
-    //     game.settings.register(mod,'use-fx-pulse', {
-    //         name : "target-enhancements.options.use-fx-pulse.name",
-    //         hint : "target-enhancements.options.use-fx-pulse.hint",
-    //         scope: "player",
-    //         config: "true",
-    //         default: true,
-    //         type: Boolean
-    //     });
-        
-
-    //     game.settings.register(mod,'enable-target-modifier-key', {
-    //         name : "target-enhancements.options.enable-target-modifier-key.name",
-    //         hint : "target-enhancements.options.enable-target-modifier-key.hint",
-    //         scope: "world",
-    //         config: "true",
-    //         default: true,
-    //         type: Boolean
-    //     });
-    //     game.settings.register(mod,'enable-ctrl-resize-modifier', {
-    //         name : "target-enhancements.options.enable-ctrl-resize-modifier.name",
-    //         hint : "target-enhancements.options.enable-ctrl-resize-modifier.hint",
-    //         scope: "world",
-    //         config: "true",
-    //         default: true,
-    //         type: Boolean
-    //     });
-        
-
-    //     game.settings.register(mod,'enable-target-portraits', {
-    //         name : "target-enhancements.options.enable-target-portraits.name",
-    //         hint : "target-enhancements.options.enable-target-portraits.hint",
-    //         scope: "world",
-    //         config: "true",
-    //         default: true,
-    //         type: Boolean
-    //     });
-
-        // TargetEnhancements.registerClickModifier(); // consider moving to onHoverToken()
-
- 
-        // customBorderColors();
-        
-        // if (game.settings.get(MODULE_NAME,'enable-target-modifier-key')) {
-        //     for (let x = canvas.tokens.placeables.length -1; x >=0; x--) {
-        //         let token = canvas.tokens.placeables[x];
-        //         token.on('mousedown',TargetEnhancements.handleTokenClick);
-        //         try {
-        //             token.data.scale = token.getFlag(MODULE_NAME,TargetEnhancements.resizeFlagKey) || 1;
-        //             token.refresh();
-        //         } catch (ex) {}
-                
-        //     }
-        // }
-        if (!game.user.isGM) { return; }
-        TargetEnhancements.registerResizeModifier();
-        $('body').on('mousewheel',TargetEnhancements.resizeHandler);
+    static async initHandler(){
+        EasyTarget.patch();
     }
 
     /**
@@ -191,7 +63,8 @@ export class TargetEnhancements {
     /**
      * Event listener on keydown to enable targeting modifier
      */
-    static async registerClickModifier() {
+    //static async registerClickModifier() {
+    static async canvasReadyHandler() {
         if (game.settings.get(MODULE_NAME,'enable-target-modifier-key')) {
             $(document).keydown(function(event) {
                 // target with the 't' key
@@ -204,9 +77,9 @@ export class TargetEnhancements {
                 TargetEnhancements.modKeyPressed = false;
                 document.body.style.cursor = 'default';
             });
-        //}
-        // consider moving to onHoverToken()
-        //if (game.settings.get(MODULE_NAME,'enable-target-modifier-key')) {
+    
+            // consider moving to onHoverToken()
+
             for (let x = canvas.tokens.placeables.length -1; x >=0; x--) {
                 let token = canvas.tokens.placeables[x];
                 token.on('mousedown',TargetEnhancements.handleTokenClick);
@@ -217,8 +90,15 @@ export class TargetEnhancements {
                 
             }
         }
+
+        if (!game.user.isGM) { 
+            return; 
+        }
+        TargetEnhancements.registerResizeModifier();
+        $('body').on('mousewheel',TargetEnhancements.resizeHandler);
+
     }
-    
+
     /**
      * If using the modifier to target a mob, sets them as a target
      */
@@ -241,8 +121,9 @@ export class TargetEnhancements {
      * @param {Token} token -- Token instance passed in
      * @param {*} tf 
      */
-    static async hoverTokenEventHandler(token,tf) { 
+    static async hoverTokenEventHandler(token,hovered) { 
         token.target.clear();
+
         if (TargetEnhancements.getTargets(await token.targeted).selfA.length) {
 
             // only redraw if not already existing
@@ -291,7 +172,7 @@ export class TargetEnhancements {
 
 
         if (game.settings.get(MODULE_NAME,'enable-colorblind-features')) {
-            if (tf) {
+            if (hovered) {
                 token.addChild(text);
                 token.addChild(line);
             } else {
@@ -376,8 +257,6 @@ export class TargetEnhancements {
          }
     }
 
-
- 
     /**
      * Splits the <set> of targets of a token into two arrays
      * @param {set} tokenTargets 
@@ -414,7 +293,6 @@ export class TargetEnhancements {
      * @param {boolean} opt  -- taking control of the token or dropping it
      */
     static async controlTokenEventHandler(token, opt) {
-
 
         // exit out if not GM. Need to change this to check for token ownership
         if (!game.user.isGM) { return false; }
@@ -484,9 +362,6 @@ export class TargetEnhancements {
             }
         // } 
 
-
-      
-
         // if for some reason we still don't have a size
         if (!tokenTargets.size) return;
 
@@ -519,7 +394,9 @@ export class TargetEnhancements {
         //-----------------------------
         //           Target
         //-----------------------------
-        if (userArray.length) { TargetEnhancements.drawTargetIndicators(token);}
+        if (userArray.length) { 
+            TargetEnhancements.drawTargetIndicators(token);
+        }
 
         //-----------------------------
         //           Tokens
@@ -528,7 +405,9 @@ export class TargetEnhancements {
 
         // TODO: update which tokens are now targeting the token, store this in a custom property or in a canvas flag
  
-        if (!game.settings.get(MODULE_NAME,"enable-target-portraits")){return;}
+        if (!game.settings.get(MODULE_NAME,"enable-target-portraits")){
+            return;
+        }
         // get our icons & add them to the display
         let tokensContainer = await TargetEnhancements.getTargetIcons(targetingItems,token);
         token.target.addChild(tokensContainer);
@@ -566,7 +445,6 @@ export class TargetEnhancements {
         let icon:any = {};
         let padding:number = 2;
 
-
         // custom in case we need it
         //icon.token_id = token.id;
        // icon.user_id = user.id;
@@ -595,8 +473,7 @@ export class TargetEnhancements {
         icon.anchor.y = 0;
         icon.width  = this.icon_size;
         icon.height = this.icon_size;
-
-    
+   
         //-----------------------------
         //      Icon Positioning
         //-----------------------------
@@ -633,8 +510,6 @@ export class TargetEnhancements {
                 icon.position.x = this.icon_size * idx + padding;
             }
         }
-        
-        
 
         // Bottom to fit, top
         //-----------------------------
@@ -661,10 +536,6 @@ export class TargetEnhancements {
             oc.drawCircle(icon.position.x + this.icon_size / 2, icon.position.y + this.icon_size / 2, this.icon_size + .5);
 
         }
-
-
-
- 
 
         // apply any selected filters
         icon.filters = await TargetEnhancements.applyFilters();
@@ -714,8 +585,8 @@ export class TargetEnhancements {
     static clearTokenTargetsHandler(user,tokenlayer) {
 
         user.targets.forEach( t => t.setTarget(false, {user: user, releaseOthers: true, groupSelection:false }));
-    
-
+        // TODO SEEM DEPRECATED ASK FOR HELP
+        /*
         tokenlayer.selectObjects({
             x:0,
             y:0,
@@ -723,19 +594,12 @@ export class TargetEnhancements {
             releaseOptions:{},
             controlOptions:{releaseOthers:true,updateSight:true}
         });
+        */
+        if (user.isGM) { 
+            canvas.scene.unsetFlag(MODULE_NAME,TargetEnhancements.npc_targeting_key);
+        }
 
-        if (user.isGM) { canvas.scene.unsetFlag(MODULE_NAME,TargetEnhancements.npc_targeting_key);}
-
-        // clear all Targets
-        // canvas.tokens.objects.children.forEach( t => {
-        //     if (t instanceof Token) {
-        //         try {
-                   
-        //         } catch (ex) {
-
-        //         }
-        //     }
-        // });
+        Helpers.clearTargets();
 
         return true;
     }
@@ -756,8 +620,8 @@ export class TargetEnhancements {
             button:true,
             onClick: () => {
                 control.activeTool = "select";
-                Hooks.call("clearTokenTargets",game.user,clearTargets());
-                clearTargets();
+                Hooks.call("clearTokenTargets",game.user,Helpers.clearTargets());
+                Helpers.clearTargets();
                 return;
             },
             // layer: "TokenLayer"
@@ -774,31 +638,8 @@ export class TargetEnhancements {
         controls[0].tools.push(icon1);
         */
     }
+
 }
-
-
-// Clear Targets https://github.com/psyny/FoundryVTT/blob/master/CozyPlayer/cozy-player/scripts/hotkeys.js
-function clearTargets() {
-    const targets = game.user.targets.values();
-    for(let target = targets.next(); !target.done; target = targets.next())
-    {
-    target.value.setTarget(false, { user: game.user, releaseOthers: false });
-    }
-    game.user.targets = new Set();
-}
-
-/** Hooks **/
-// Hooks.on("ready", TargetEnhancements.ready);
-// Hooks.on("targetToken", TargetEnhancements.targetTokenEventHandler);
-// Hooks.on("hoverToken", TargetEnhancements.hoverTokenEventHandler);
-// Hooks.on("updateToken",TargetEnhancements.updateTokenEventHandler);
-// Hooks.on("render",TargetEnhancements.renderTokenEventHandler);
-// Hooks.on("preUpdateScene",TargetEnhancements.preUpdateSceneEventHandler);
-// Hooks.on("renderSceneControls",TargetEnhancements.preUpdateSceneEventHandler);
-// Hooks.on("controlToken",TargetEnhancements.controlTokenEventHandler);
-// Hooks.on("clearTokenTargets",TargetEnhancements.clearTokenTargetsHandler);
-// Hooks.on("getSceneControlButtons",TargetEnhancements.getSceneControlButtonsHandler);
-
 
 /**
  * Bugs
@@ -806,15 +647,6 @@ function clearTargets() {
  *  - clear target button doesn't always update clients // event handler isn't firing
  *      game.users.updateTokenTargets(); // resolved by setting groupSelection to False -- forces token updates
  */
-
-
-
- /*** Utility Stuff, will be hoisted ***/
-export function getKeyByValue(object, value) {
-    return Object.keys(object).filter(key => object[key] === value);
-}
-
-
 (function customBorderColors() {
     Token.prototype['_getBorderColor'] = function() {
         if (this._controlled) return 0xFF9829;                    // Controlled

@@ -45,7 +45,8 @@ Hooks.once('init', async () => {
 	// Preload Handlebars templates
 	await preloadTemplates();
 
-	// Register custom sheets (if any)
+  // Register custom sheets (if any)
+  TargetEnhancements.initHandler();
 });
 
 /* ------------------------------------ */
@@ -54,10 +55,6 @@ Hooks.once('init', async () => {
 Hooks.once('setup', () => {
 	// Do anything after initialization but before ready
   registerSettings();
-  
-  if (!game.user.isGM) { return; }
-  TargetEnhancements.registerResizeModifier();
-  $('body').on('mousewheel',TargetEnhancements.resizeHandler);
 
 });
 
@@ -65,21 +62,21 @@ Hooks.once('setup', () => {
 /* When ready							*/
 /* ------------------------------------ */
 Hooks.once('ready', () => {
-	// Do anything once the module is ready
+  // Do anything once the module is ready
 	if (!game.modules.get("lib-wrapper")?.active && game.user.isGM){
     ui.notifications.warn("The 'target-enhancements' module recommends to install and activate the 'libWrapper' module.");
   }
   if (!game.modules.get("colorsettings")?.active && game.user.isGM){
     ui.notifications.warn('Please make sure you have the "lib - ColorSettings" module installed and enabled.');
   }
-  TargetEnhancements.ready;
+  
+
 });
 
 // Add any additional hooks if necessary
 
 // setup all the hooks
 
-// Hooks.on("ready", TargetEnhancements.ready);
 Hooks.on("targetToken", TargetEnhancements.targetTokenEventHandler);
 Hooks.on("hoverToken", TargetEnhancements.hoverTokenEventHandler);
 Hooks.on("updateToken",TargetEnhancements.updateTokenEventHandler);
@@ -90,4 +87,4 @@ Hooks.on("controlToken",TargetEnhancements.controlTokenEventHandler);
 Hooks.on("clearTokenTargets",TargetEnhancements.clearTokenTargetsHandler);
 Hooks.on("getSceneControlButtons",TargetEnhancements.getSceneControlButtonsHandler);
 
-Hooks.on("canvasReady",TargetEnhancements.registerClickModifier);
+Hooks.on("canvasReady",TargetEnhancements.canvasReadyHandler);

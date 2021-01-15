@@ -31,7 +31,6 @@ export async function getTokenByTokenName(name) {
     return canvas.tokens.placeables.find( x => { return x.id == game.user.id});
 }
 
-
 export function getInput(prompt) {
     return new Promise(resolve => {
         new Dialog({
@@ -51,5 +50,20 @@ export function getInput(prompt) {
     });
 }
 
+//  /*** Utility Stuff, will be hoisted ***/
+//  export function getKeyByValue(object, value) {
+//     return Object.keys(object).filter(key => object[key] === value);
+// }
 
 
+/*
+ Clear Targets https://github.com/psyny/FoundryVTT/blob/master/CozyPlayer/cozy-player/scripts/hotkeys.js
+*/
+export function clearTargets() {
+    const targets = game.user.targets.values();
+    for(let target = targets.next(); !target.done; target = targets.next())
+    {
+        target.value.setTarget(false, { user: game.user, releaseOthers: false });
+    }
+    game.user.targets = new Set();
+}
