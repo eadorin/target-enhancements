@@ -2,7 +2,7 @@
 // Special thanks to Reaver.
 import { toNamespacedPath } from 'path';
 import { MODULE_NAME } from '../module/settings.js';
-import {libWrapper} from './libs/shim.js'
+import {libWrapper} from './libs/libWrapper/shim.js'
 export const EasyTarget = {
 	getTemplateShape: function (template) {
 		let shape = template.data.t;
@@ -155,7 +155,7 @@ export const EasyTarget = {
 			}
 		};
 
-		if (game.modules.get('lib-wrapper')?.active) {
+		// if (game.modules.get('lib-wrapper')?.active) {
 			libWrapper.register(MODULE_NAME, 'Token.prototype.setTarget', tokenSetTarget, 'WRAPPER');
 			libWrapper.register(MODULE_NAME, 'Token.prototype._onClickLeft', tokenOnClickLeft, 'WRAPPER');
 			libWrapper.register(MODULE_NAME, 'Token.prototype._canControl', tokenCanControl, 'WRAPPER');
@@ -164,51 +164,51 @@ export const EasyTarget = {
 			libWrapper.register(MODULE_NAME, 'Canvas.prototype._onDragLeftDrop', canvasOnDragLeftDrop, 'WRAPPER');
 			libWrapper.register(MODULE_NAME, 'TemplateLayer.prototype._onDragLeftDrop', templateLayerOnDragLeftDrop, 'WRAPPER');
 			libWrapper.register(MODULE_NAME, 'KeyboardManager.prototype._onKeyC', keyboardManagerOnKeyC, 'MIXED');
-		} else {
-			const cachedTokenSetTarget = Token.prototype['setTarget'];
-			Token.prototype['setTarget'] = function () {
-				return tokenSetTarget.call(this, cachedTokenSetTarget.bind(this), ...arguments);
-			};
+		// } else {
+		// 	const cachedTokenSetTarget = Token.prototype['setTarget'];
+		// 	Token.prototype['setTarget'] = function () {
+		// 		return tokenSetTarget.call(this, cachedTokenSetTarget.bind(this), ...arguments);
+		// 	};
 
-			const cachedTokenOnClickLeft = Token.prototype['_onClickLeft'];
-			Token.prototype['_onClickLeft'] = function () {
-				return tokenOnClickLeft.call(this, cachedTokenOnClickLeft.bind(this), ...arguments);
-			};
+		// 	const cachedTokenOnClickLeft = Token.prototype['_onClickLeft'];
+		// 	Token.prototype['_onClickLeft'] = function () {
+		// 		return tokenOnClickLeft.call(this, cachedTokenOnClickLeft.bind(this), ...arguments);
+		// 	};
 
-			const cachedTokenCanControl = Token.prototype['_canControl'];
-			Token.prototype['_canControl'] = function () {
-				return tokenCanControl.call(this, cachedTokenCanControl.bind(this), ...arguments);
-            };
+		// 	const cachedTokenCanControl = Token.prototype['_canControl'];
+		// 	Token.prototype['_canControl'] = function () {
+		// 		return tokenCanControl.call(this, cachedTokenCanControl.bind(this), ...arguments);
+        //     };
             
-            //TODO ASK FOR HELP TO ANYONE
+        //     //TODO ASK FOR HELP TO ANYONE
 
-			// const cachedTokenLayerTargetObjects = TokenLayer.prototype.targetObjects;
-			// TokenLayer.prototype.targetObjects = function () {
-			// 	return tokenLayerTargetObjects.call(this, cachedTokenLayerTargetObjects.bind(this), ...arguments);
-			// };
+		// 	// const cachedTokenLayerTargetObjects = TokenLayer.prototype.targetObjects;
+		// 	// TokenLayer.prototype.targetObjects = function () {
+		// 	// 	return tokenLayerTargetObjects.call(this, cachedTokenLayerTargetObjects.bind(this), ...arguments);
+		// 	// };
 
-			const cachedCanvasOnClickLeft = canvas.prototype._onClickLeft;
-			canvas.prototype._onClickLeft = function () {
-				return canvasOnClickLeft.call(this, cachedCanvasOnClickLeft.bind(this), ...arguments);
-			};
+		// 	const cachedCanvasOnClickLeft = canvas.prototype._onClickLeft;
+		// 	canvas.prototype._onClickLeft = function () {
+		// 		return canvasOnClickLeft.call(this, cachedCanvasOnClickLeft.bind(this), ...arguments);
+		// 	};
 
-			const cachedCanvasOnDragLeftDrop = canvas.prototype._onDragLeftDrop;
-			canvas.prototype._onDragLeftDrop = function () {
-				return canvasOnDragLeftDrop.call(this, cachedCanvasOnDragLeftDrop.bind(this), ...arguments);
-            };
+		// 	const cachedCanvasOnDragLeftDrop = canvas.prototype._onDragLeftDrop;
+		// 	canvas.prototype._onDragLeftDrop = function () {
+		// 		return canvasOnDragLeftDrop.call(this, cachedCanvasOnDragLeftDrop.bind(this), ...arguments);
+        //     };
             
-            //TODO ASK FOR HELP TO ANYONE
+        //     //TODO ASK FOR HELP TO ANYONE
 
-			// const cachedTemplateLayerOnDragLeftDrop = TemplateLayer.prototype._onDragLeftDrop;
-			// TemplateLayer.prototype._onDragLeftDrop = function () {
-			// 	return templateLayerOnDragLeftDrop.call(this, cachedTemplateLayerOnDragLeftDrop.bind(this), ...arguments);
-			// };
+		// 	// const cachedTemplateLayerOnDragLeftDrop = TemplateLayer.prototype._onDragLeftDrop;
+		// 	// TemplateLayer.prototype._onDragLeftDrop = function () {
+		// 	// 	return templateLayerOnDragLeftDrop.call(this, cachedTemplateLayerOnDragLeftDrop.bind(this), ...arguments);
+		// 	// };
 
-			const cachedKeyboardManagerOnKeyC = KeyboardManager.prototype['_onKeyC'];
-			KeyboardManager.prototype['_onKeyC'] = function () {
-				return keyboardManagerOnKeyC.call(this, cachedKeyboardManagerOnKeyC.bind(this), ...arguments);
-			};
-		}
+		// 	const cachedKeyboardManagerOnKeyC = KeyboardManager.prototype['_onKeyC'];
+		// 	KeyboardManager.prototype['_onKeyC'] = function () {
+		// 		return keyboardManagerOnKeyC.call(this, cachedKeyboardManagerOnKeyC.bind(this), ...arguments);
+		// 	};
+		// }
 	},
 
 	releaseBehaviour: function (oe) {

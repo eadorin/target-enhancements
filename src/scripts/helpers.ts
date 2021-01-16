@@ -23,12 +23,13 @@ export async function getTokenOwner(token, includeGM=false) {
 }
 
 export async function getTokenByTokenID(id) {
-    return canvas.tokens.placeables.find( x => {return x.id === id});
+    return game.scenes.active.data['tokens'].find( x => {return x.id === id});
+    //return canvas.tokens.placeables.find( x => {return x.id === id});
 }
 export async function getTokenByTokenName(name) {
-    // return game.scenes.active.data.tokens.find( x => {return x._name === name});
+    return game.scenes.active.data['tokens'].find( x => {return x._name === name});
     // return canvas.tokens.placeables.find( x => { return x.id == id});
-    return canvas.tokens.placeables.find( x => { return x.id == game.user.id});
+    //return canvas.tokens.placeables.find( x => { return x.id == game.user.id});
 }
 
 export function getInput(prompt) {
