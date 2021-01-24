@@ -227,7 +227,7 @@ export class TargetEnhancements {
     static async updateTokenEventHandler(scene,token_obj,update,dif,userId) { 
         let token = canvas.tokens.get(token_obj._id);
         // console.log("Token updated:",token.icon);
-        token.target.clear();
+        token?.target?.clear();
 
         // patch for issue #11. Only fixes it for DND I think :(
         try {
@@ -235,7 +235,7 @@ export class TargetEnhancements {
         } catch (error) {}
         
 
-        if (TargetEnhancements.getTargets(await token.targeted).selfA.length) {
+        if (token?.targeted && TargetEnhancements.getTargets(await token.targeted).selfA.length) {
             TargetEnhancements.drawTargetIndicators(token);
         }
     };
