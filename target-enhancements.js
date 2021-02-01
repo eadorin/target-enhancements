@@ -42,6 +42,9 @@ class TargetEnhancements {
     static neutral_text = new PIXI.Text('Neutral Unit',{fontFamily : 'Signika', fontSize: 24, fill : 0xff1010, align : 'center'});
     static hostile_text = new PIXI.Text('Hostile Unit',{fontFamily : 'Signika', fontSize: 24, fill : 0xFF0000, align : 'center'});
 
+    // Collection of running tickers to be used when a token is deleted
+    static tickerFunctions = {};
+
     static async ready() {
         // TODO register game settings
         ready = true;
@@ -358,8 +361,8 @@ class TargetEnhancements {
 
          // only redraw if not already existing
          if (token.target.children.length <= 0) {
-            let indicator = new TargetIndicator(token);
-            indicator.create(selectedIndicator);
+            TargetEnhancements.tickerFunctions[token.data._id] = new TargetIndicator(token);
+            TargetEnhancements.tickerFunctions[token.data._id].create(selectedIndicator);
          }
     }
 
@@ -753,6 +756,20 @@ Hooks.on("renderSceneControls",TargetEnhancements.preUpdateSceneEventHandler);
 Hooks.on("controlToken",TargetEnhancements.controlTokenEventHandler);
 Hooks.on("clearTokenTargets",TargetEnhancements.clearTokenTargetsHandler);
 Hooks.on("getSceneControlButtons",TargetEnhancements.getSceneControlButtonsHandler);
+
+/*
+ * This adds handling to untarget and remove any animations 
+ * The tokenDelete event is called after a token is destroyed which is too late to handle un-targeting
+ */
+const onDelete = Token.prototype._onDelete;
+Token.prototype._onDelete = function(options, userId) {
+    if (TargetEnhancements.tickerFunctions[this.data._id]) {
+        TargetEnhancements.tickerFunctions[this.data._id].destroy();
+        delete TargetEnhancements.tickerFunctions[this.data._id];
+    }
+    this.targeted.forEach((user) => user.targets.forEach((t) => t.setTarget(false, {user: user, releaseOthers: true, groupSelection:false })))
+    return onDelete.apply(this, options, userId);
+} 
 
 
 /**
