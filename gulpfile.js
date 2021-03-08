@@ -140,27 +140,6 @@ function buildTS() {
 }
 
 /**
- * Build JavaScript
- */
-function buildJS() {
-	return gulp.src('src/**/*.js').pipe(gulp.dest('dist'));
-}
-
-/**
- * Build JavaScript
- */
-function buildMJS() {
-	return gulp.src('src/**/*.mjs').pipe(gulp.dest('dist'));
-}
-
-// /**
-//  * Build JavaScript
-//  */
-// function buildMJS2() {
-// 	return gulp.src('src/**/**/*.mjs').pipe(gulp.dest('dist'));
-// }
-
-/**
  * Build Less
  */
 function buildLess() {
@@ -189,7 +168,7 @@ async function copyFiles() {
 		'module.json',
 		'system.json',
 		'template.json',
-		// Added not default
+		// Added to default
 		'packs',
 		'icons'
 	];
@@ -212,8 +191,6 @@ function buildWatch() {
 	gulp.watch('src/**/*.ts', { ignoreInitial: false }, buildTS);
 	gulp.watch('src/**/*.less', { ignoreInitial: false }, buildLess);
 	gulp.watch('src/**/*.scss', { ignoreInitial: false }, buildSASS);
-	gulp.watch('src/**/*.js', { ignoreInitial: false }, buildJS);
-	gulp.watch('src/**/*.mjs', { ignoreInitial: false }, buildMJS);
 	gulp.watch(
 		['src/fonts', 'src/lang', 'src/templates', 'src/*.json'],
 		{ ignoreInitial: false },
@@ -244,7 +221,7 @@ async function clean() {
 			'module.json',
 			'system.json',
 			'template.json',
-			// Added not default
+			// Added to default
 			'packs',
 			'icons'
 		);
@@ -516,7 +493,7 @@ function gitTag() {
 
 const execGit = gulp.series(gitAdd, gitCommit, gitTag);
 
-const execBuild = gulp.parallel(buildTS, buildJS, buildMJS, buildLess, buildSASS, copyFiles);
+const execBuild = gulp.parallel(buildTS, buildLess, buildSASS, copyFiles);
 
 exports.build = gulp.series(clean, execBuild);
 exports.watch = buildWatch;

@@ -13,7 +13,7 @@
   "author": "",
   "license": "",
   "devDependencies": {
-    "archiver": "^5.3.0",
+    "archiver": "5.3.0",
     "chalk": "^4.1.0",
     "foundry-pc-types": "gitlab:foundry-projects/foundry-pc/foundry-pc-types",
     "fs-extra": "^9.0.1",

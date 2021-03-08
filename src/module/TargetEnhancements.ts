@@ -8,7 +8,7 @@
 // const mod = "target-enhancements";
 // window.myx = '';
 // import { __filters, PIXI } from './lib/pixi-filters.js';
-import { PIXI } from './libs/filters/pixi-filters.js';
+// import { PIXI } from './libs/filters/pixi-filters.js';
 import { ImageFilters } from './image-filters';
 import { TargetIndicator } from './TargetIndicator';
 import * as Helpers from './helpers';

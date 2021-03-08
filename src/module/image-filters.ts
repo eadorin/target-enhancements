@@ -1,5 +1,5 @@
 
-import { PIXI } from './libs/filters/pixi-filters.js';
+// import { PIXI } from './libs/filters/pixi-filters.js';
 /**
  * dedicated class to implement some PIXI.js filters
  */

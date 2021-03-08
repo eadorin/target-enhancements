@@ -5,6 +5,7 @@
   "version": "1.0.0",
   "author": "Eadorin",
   "type": "module",
+  "socket": true,
   "includes": [
     "./assets/**",
     "./lang/**",
@@ -38,17 +39,13 @@
     }
   ],
   "scripts": [
-    "./module/libs/pixi-filters.js",
-    "./module/libs/filters/pixi-filters.js",
-    "./module/libs/libWrapper/shim.js"
   ],
   "esmodules": [
     "target-enhancements.js"
   ],
   "styles": [
-      "styles/target-enhancements.css"
+      "./styles/target-enhancements.css"
   ],
-  "socket": true,
   "url": "https://github.com/p4535992/target-enhancements/tree/master",
   "manifest": "https://raw.githubusercontent.com/p4535992/target-enhancements/master/src/module.json",
   "download": "https://github.com/p4535992/target-enhancements/raw/master/target-enhancements.zip",

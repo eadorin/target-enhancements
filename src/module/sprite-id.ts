@@ -1,4 +1,4 @@
-import { PIXI } from './libs/filters/pixi-filters.js';
+// import { PIXI } from './libs/filters/pixi-filters.js';
 /**
  * SpriteID wrapper around PIXI.sprite
  * v0.1
