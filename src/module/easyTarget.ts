@@ -2,7 +2,7 @@
 // Special thanks to Reaver.
 
 import { MODULE_NAME } from './settings';
-// import {libWrapper} from './libs/libWrapper/shim.js'
+import {libWrapper} from './libs/shim.js'
 export const EasyTarget = {
 	getTemplateShape: function (template) {
 		let shape = template.data.t;
@@ -155,16 +155,18 @@ export const EasyTarget = {
 			}
 		};
 
-		// if (game.modules.get('lib-wrapper')?.active) {
-			// libWrapper.register(MODULE_NAME, 'Token.prototype.setTarget', tokenSetTarget, 'WRAPPER');
-			// libWrapper.register(MODULE_NAME, 'Token.prototype._onClickLeft', tokenOnClickLeft, 'WRAPPER');
-			// libWrapper.register(MODULE_NAME, 'Token.prototype._canControl', tokenCanControl, 'WRAPPER');
-			// libWrapper.register(MODULE_NAME, 'TokenLayer.prototype.targetObjects', tokenLayerTargetObjects, 'WRAPPER');
-			// libWrapper.register(MODULE_NAME, 'Canvas.prototype._onClickLeft', canvasOnClickLeft, 'WRAPPER');
-			// libWrapper.register(MODULE_NAME, 'Canvas.prototype._onDragLeftDrop', canvasOnDragLeftDrop, 'WRAPPER');
-			// libWrapper.register(MODULE_NAME, 'TemplateLayer.prototype._onDragLeftDrop', templateLayerOnDragLeftDrop, 'WRAPPER');
-			// libWrapper.register(MODULE_NAME, 'KeyboardManager.prototype._onKeyC', keyboardManagerOnKeyC, 'MIXED');
-		// } else {
+		if (game.modules.get('lib-wrapper')?.active) {
+			libWrapper.register(MODULE_NAME, 'Token.prototype.setTarget', tokenSetTarget, 'WRAPPER');
+			libWrapper.register(MODULE_NAME, 'Token.prototype._onClickLeft', tokenOnClickLeft, 'WRAPPER');
+			libWrapper.register(MODULE_NAME, 'Token.prototype._canControl', tokenCanControl, 'WRAPPER');
+			libWrapper.register(MODULE_NAME, 'TokenLayer.prototype.targetObjects', tokenLayerTargetObjects, 'WRAPPER');
+			libWrapper.register(MODULE_NAME, 'Canvas.prototype._onClickLeft', canvasOnClickLeft, 'WRAPPER');
+			libWrapper.register(MODULE_NAME, 'Canvas.prototype._onDragLeftDrop', canvasOnDragLeftDrop, 'WRAPPER');
+			libWrapper.register(MODULE_NAME, 'TemplateLayer.prototype._onDragLeftDrop', templateLayerOnDragLeftDrop, 'WRAPPER');
+			libWrapper.register(MODULE_NAME, 'KeyboardManager.prototype._onKeyC', keyboardManagerOnKeyC, 'MIXED');
+		} else {
+			console.error("YOU MUST US lib-wrapper");
+
 		// 	const cachedTokenSetTarget = Token.prototype.setTarget;
 		// 	Token.prototype.setTarget = function () {
 		// 		return tokenSetTarget.call(this, cachedTokenSetTarget.bind(this), ...arguments);
@@ -204,7 +206,7 @@ export const EasyTarget = {
 		// 	KeyboardManager.prototype._onKeyC = function () {
 		// 		return keyboardManagerOnKeyC.call(this, cachedKeyboardManagerOnKeyC.bind(this), ...arguments);
 		// 	};
-		// }
+		}
 	},
 
 	releaseBehaviour: function (oe) {
@@ -256,7 +258,8 @@ export const EasyTarget = {
 document.addEventListener('keydown', event => {
 	if (event.altKey && event.key === 'C') {
 		game.user.targets.forEach(token =>
-			token['setTarget'](false, {releaseOthers: false, groupSelection: true}));
+			token['setTarget'](false, {releaseOthers: false, groupSelection: true})
+		);
 		game.user['broadcastActivity']({targets: game.user.targets['ids']});
 	}
 });
