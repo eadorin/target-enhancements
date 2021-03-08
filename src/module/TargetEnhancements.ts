@@ -8,14 +8,13 @@
 // const mod = "target-enhancements";
 // window.myx = '';
 // import { __filters, PIXI } from './lib/pixi-filters.js';
-// import { PIXI } from './libs/filters/pixi-filters.js';
-import { ImageFilters } from './image-filters.js';
-import { TargetIndicator } from './TargetIndicator.js';
-import * as Helpers from './helpers.js';
+import { PIXI } from './libs/filters/pixi-filters.js';
+import { ImageFilters } from './image-filters';
+import { TargetIndicator } from './TargetIndicator';
+import * as Helpers from './helpers';
 //@ts-ignore
-//import ColorSetting from "../../colorsettings/colorSetting.js";
-import { MODULE_NAME } from '../module/settings';
-import { EasyTarget } from './easyTarget.js';
+// import ColorSetting from "../../colorsettings/colorSetting.js";
+import { MODULE_NAME } from './settings';
 
 Array.prototype.partition = function(rule) {
     return this.reduce((acc, val) => {
@@ -39,9 +38,9 @@ export class TargetEnhancements {
     static neutral_text = new PIXI.Text('Neutral Unit',{fontFamily : 'Signika', fontSize: 24, fill : 0xff1010, align : 'center'});
     static hostile_text = new PIXI.Text('Hostile Unit',{fontFamily : 'Signika', fontSize: 24, fill : 0xFF0000, align : 'center'});
 
-    static async initHandler(){
-        EasyTarget.patch();
-    }
+    // static async initHandler(){
+    //     EasyTarget.patch();
+    // }
 
     /**
      * Event listener on keydown to enable resize modifier
@@ -227,7 +226,7 @@ export class TargetEnhancements {
     static async updateTokenEventHandler(scene,token_obj,update,dif,userId) { 
         let token = canvas.tokens.get(token_obj._id);
         // console.log("Token updated:",token.icon);
-        token.target.clear();
+        token?.target?.clear();
 
         // patch for issue #11. Only fixes it for DND I think :(
         try {
@@ -235,7 +234,7 @@ export class TargetEnhancements {
         } catch (error) {}
         
 
-        if (TargetEnhancements.getTargets(await token.targeted).selfA.length) {
+        if (token?.targeted && TargetEnhancements.getTargets(await token.targeted).selfA.length) {
             TargetEnhancements.drawTargetIndicators(token);
         }
     };

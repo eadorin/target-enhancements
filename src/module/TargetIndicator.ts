@@ -27,7 +27,7 @@ export class TargetIndicator {
         token.indicator = this;
 
         if (game.settings.get(MODULE_NAME,'use-player-color')) {
-            this.fillColor = colorStringToHex(game.user.options.color);
+            this.fillColor = colorStringToHex(game.user.options['color']);
         } else {
             this.fillColor = 0xFF9829;
         }

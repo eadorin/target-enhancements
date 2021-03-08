@@ -146,13 +146,6 @@ function buildJS() {
 	return gulp.src('src/**/*.js').pipe(gulp.dest('dist'));
 }
 
-// /**
-//  * Build JavaScript
-//  */
-// function buildJS2() {
-// 	return gulp.src('src/**/**/*.js').pipe(gulp.dest('dist'));
-// }
-
 /**
  * Build JavaScript
  */
@@ -253,7 +246,6 @@ async function clean() {
 			'template.json',
 			// Added not default
 			'packs',
-			'styles',
 			'icons'
 		);
 	}

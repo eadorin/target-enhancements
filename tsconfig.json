@@ -1,20 +1,7 @@
 {
-  "compilerOptions": {
-    "rootDir": "src",
-    "outDir": "dist",
-    "moduleResolution": "node",
+	"compilerOptions": {
     "target": "ES2017",
     "lib": ["DOM", "ES6", "ES2017", "ES2018"],
-    "types": [
-      "foundry-pc-types", 
-      "node"
-    ],
-    "allowUmdGlobalAccess": true
-  },
-  "exclude": [
-    "node_modules"
-  ],
-  "include": [
-    "src/**/*"
-  ]
+		"types": ["foundry-pc-types"]
+	}
 }

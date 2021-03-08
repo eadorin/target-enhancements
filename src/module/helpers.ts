@@ -10,7 +10,7 @@ export async function getTokenOwner(token, includeGM=false) {
     let owners = getKeyByValue(token.actor.data.permission,3);
     let ret = [];
     for (let y = 0; y < owners.length; y++) {
-        let u = await Users.instance.get(owners[y]);
+        let u = await Users['instance'].get(owners[y]);
         if (includeGM) {
             ret.push(u);
             continue;
@@ -47,7 +47,7 @@ export function getInput(prompt) {
                 }
             },
             default:"ok"
-        }).render(true);
+        })['render'](true);
     });
 }
 
