@@ -5,6 +5,7 @@ Target Enhancements is a module for FoundryVTT that provides customizations for 
 ![New Target Inticators](https://github.com/eadorin/target-enhancements/blob/master/img/screenshot_indicator_crosshair.png?raw=true)
 ![New Cancel Control](https://github.com/eadorin/target-enhancements/blob/master/img/new_cancel_control.png?raw=true)
 
+## [BOUNTY ON TRELLO](https://trello.com/c/KvEZVMtw/213-modulebountyrevive-target-enhancements)
 
 ## Installation
 Simply use the install module screen within the FoundryVTT setup

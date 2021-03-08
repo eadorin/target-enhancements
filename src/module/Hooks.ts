@@ -39,6 +39,28 @@ export let initHooks = () => {
   Hooks.on("getSceneControlButtons",TargetEnhancements.getSceneControlButtonsHandler);
   Hooks.on("canvasReady",TargetEnhancements.canvasReadyHandler);
 
+  /*
+  * This adds handling to untarget and remove any animations 
+  * The tokenDelete event is called after a token is destroyed which is too late to handle un-targeting
+  */
+  // const onDelete = Token.prototype['_onDelete'];
+  // Tokenprototype['_onDelete'] = function(options, userId) {
+  const onDelete = Token.prototype.delete;
+  Token.prototype.delete = function(options, userId) {
+      
+      if (TargetEnhancements.tickerFunctions[this.data._id]) {
+          TargetEnhancements.tickerFunctions[this.data._id].destroy();
+          delete TargetEnhancements.tickerFunctions[this.data._id];
+      }
+      this.targeted.forEach((user) => 
+          user.targets.forEach((t) => 
+              t.setTarget(false, {user: user, releaseOthers: true, groupSelection:false })
+          )
+      );
+      //return onDelete.apply(this, options, userId);
+      return onDelete.apply(options, userId);
+  }
+
   // TODO INTEGRATED LIB WRAPPER
 
   // Hooks.on("targetToken", () => {

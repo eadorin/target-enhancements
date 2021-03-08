@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## [1.0.0] (In developing)
+
+[BOUNTY ON TRELLO](https://trello.com/c/KvEZVMtw/213-modulebountyrevive-target-enhancements)
+
+Setup with easy target
+Converted to typescript project
+Minor bug fix
 
 ## [0.9.5] 2020-06-28
 

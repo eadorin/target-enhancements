@@ -165,7 +165,7 @@ export const EasyTarget = {
 			libWrapper.register(MODULE_NAME, 'TemplateLayer.prototype._onDragLeftDrop', templateLayerOnDragLeftDrop, 'WRAPPER');
 			libWrapper.register(MODULE_NAME, 'KeyboardManager.prototype._onKeyC', keyboardManagerOnKeyC, 'MIXED');
 		} else {
-			console.error("YOU MUST US lib-wrapper");
+			console.error("YOU MUST USE lib-wrapper");
 
 		// 	const cachedTokenSetTarget = Token.prototype.setTarget;
 		// 	Token.prototype.setTarget = function () {

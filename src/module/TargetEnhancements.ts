@@ -18,11 +18,11 @@ import { MODULE_NAME } from './settings';
 
 Array.prototype.partition = function(rule) {
     return this.reduce((acc, val) => {
-      let test = rule(val);
-      acc[Number(test)].push(val);
-      return acc;
+        let test = rule(val);
+        acc[Number(test)].push(val);
+        return acc;
     }, [[], []]);
-  };
+};
 
 export class TargetEnhancements {
 
@@ -37,6 +37,9 @@ export class TargetEnhancements {
     static friendly_text = new PIXI.Text('Friendly Unit',{fontFamily : 'Signika', fontSize: 24, fill : 0x00ff10, align : 'center'});
     static neutral_text = new PIXI.Text('Neutral Unit',{fontFamily : 'Signika', fontSize: 24, fill : 0xff1010, align : 'center'});
     static hostile_text = new PIXI.Text('Hostile Unit',{fontFamily : 'Signika', fontSize: 24, fill : 0xFF0000, align : 'center'});
+
+    // Collection of running tickers to be used when a token is deleted
+    static tickerFunctions = {};
 
     // static async initHandler(){
     //     EasyTarget.patch();
@@ -251,8 +254,13 @@ export class TargetEnhancements {
 
          // only redraw if not already existing
          if (token.target.children.length <= 0) {
-            let indicator = new TargetIndicator(token);
-            indicator.create(selectedIndicator);
+            // MOD 4535992 2021-03-08 
+            //let indicator = new TargetIndicator(token);
+            //indicator.create(selectedIndicator);
+            TargetEnhancements.tickerFunctions[token.data._id] = new TargetIndicator(token);
+            TargetEnhancements.tickerFunctions[token.data._id].create(selectedIndicator);
+            // END MOD 4535992 2021-03-08
+
          }
     }
 
@@ -637,7 +645,6 @@ export class TargetEnhancements {
         controls[0].tools.push(icon1);
         */
     }
-
 }
 
 /**
