@@ -23,9 +23,11 @@ export let initHooks = () => {
   // INTEGRATION LIB TARGETING
   // ==================================
 
-  Hooks.on("ready",TargetClass.ready);
-  Hooks.on("targetToken", TargetClass.targetTokenHandler);
-  Hooks.on("controlToken",TargetClass.controlTokenHandler);
+  // TODO UNDESRTAND AND TRY TO INTEGRATED 
+  
+  // Hooks.on("ready",TargetClass.ready);
+  // Hooks.on("targetToken", TargetClass.targetTokenHandler);
+  // Hooks.on("controlToken",TargetClass.controlTokenHandler);
 
   // ==================================
   // INTEGRATION TARGET ENHANCEMENTS
