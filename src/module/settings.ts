@@ -1,4 +1,9 @@
 import { debug, log, setDebugLevel, warn, i18n } from '../target-enhancements';
+import { TargetsTable } from './lib-targeting/TargetsTable';
+import { NPCTargeting } from './lib-targeting/NPCTargeting';
+
+window['TargetsTable'] = TargetsTable;
+window['NPCTargeting'] = NPCTargeting;
 
 export const MODULE_NAME = 'target-enhancements';
 

@@ -15,7 +15,8 @@ export class TargetClass {
             ui.notifications.error("You need to load the Lib-Targeting Module");
         }
 
-        NPCTargeting.init(TargetClass.targetsTable);
+        // NPCTargeting.init(TargetClass.targetsTable);
+        <NPCTargeting>window['NPCTargeting'].init(TargetClass.targetsTable);
     } // -- end ready
 
 

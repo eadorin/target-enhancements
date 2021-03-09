@@ -7,10 +7,15 @@ Target Enhancements is a module for FoundryVTT that provides customizations for 
 
 ## [BOUNTY ON TRELLO](https://trello.com/c/KvEZVMtw/213-modulebountyrevive-target-enhancements)
 
+With the new version '1.0.0' i'm trying to make this module the 'facto' tagetting module for all  system.
+The devoloping include:
+
+- Converted to typescript project
+- Direct integration with [easy target](https://bitbucket.org/Fyorl/easy-target/src/master/) thanks to [Fyorl](https://bitbucket.org/%7Beee45cf2-a6e7-43d6-bded-8054de334101%7D/)
+- Direct integration with [lib-targeting](https://github.com/eadorin/lib-targeting) thanks to [eadorin](https://github.com/eadorin) + minor bug fix
+- Generic minor bug fix
 ## Installation
 Simply use the install module screen within the FoundryVTT setup
-
-
 
 ## Usage & features
 - Replaces the colored baubles for users targeting a token with their avatar. (Now with NPC Support!) It will fall back to token if an avatar is not supplied

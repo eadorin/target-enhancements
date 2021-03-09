@@ -4,7 +4,8 @@
 
 [BOUNTY ON TRELLO](https://trello.com/c/KvEZVMtw/213-modulebountyrevive-target-enhancements)
 
-Setup with easy target
+Direct integration with easy target
+Direct integration with lib-targeting + minor bug fix
 Converted to typescript project
 Minor bug fix
 
