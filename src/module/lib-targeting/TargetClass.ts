@@ -12,7 +12,8 @@ export class TargetClass {
         try {
             TargetClass.targetsTable = new TargetsTable(MODULE_NAME);
         } catch(error) {
-            ui.notifications.error("You need to load the Lib-Targeting Module");
+            console.error(error);
+            // ui.notifications.error("You need to load the Lib-Targeting Module");
         }
 
         // NPCTargeting.init(TargetClass.targetsTable);

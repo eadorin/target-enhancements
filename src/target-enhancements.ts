@@ -20,6 +20,12 @@ import { initHooks, readyHooks } from './module/Hooks';
 import { installedModules, setupModules } from './module/setupModules';
 import { TargetEnhancements } from './module/TargetEnhancements';
 
+import { TargetsTable } from './module/lib-targeting/TargetsTable';
+import { NPCTargeting } from './module/lib-targeting/NPCTargeting';
+
+window['TargetsTable'] = TargetsTable;
+window['NPCTargeting'] = NPCTargeting;
+
 export let debugEnabled = 0;
 // 0 = none, warnings = 1, debug = 2, all = 3
 export let debug = (...args) => {if (debugEnabled > 1) console.log(`DEBUG:${MODULE_NAME} | `, ...args)};
@@ -49,11 +55,11 @@ Hooks.once('init', async () => {
 
 	initHooks();
 	// Assign custom classes and constants here
-	
+
 	// Register custom module settings
 	registerSettings();
 	//fetchParams();
-		
+
 	// Preload Handlebars templates
 	await preloadTemplates();
 	// Register custom sheets (if any)
@@ -80,10 +86,10 @@ Hooks.once('ready', () => {
 	if (!game.modules.get("lib-wrapper")?.active && game.user.isGM){
     ui.notifications.warn(`The '${MODULE_NAME}' module recommends to install and activate the 'libWrapper' module.`);
   }
-  if (!game.modules.get("colorsettings")?.active && game.user.isGM){
-    ui.notifications.warn(`The '${MODULE_NAME}', please make sure you have the "lib - ColorSettings" module installed and enabled.`);
-  }
-  
+  // if (!game.modules.get("colorsettings")?.active && game.user.isGM){
+  //   ui.notifications.warn(`The '${MODULE_NAME}', please make sure you have the "lib - ColorSettings" module installed and enabled.`);
+  // }
+
 	readyHooks();
 });
 
