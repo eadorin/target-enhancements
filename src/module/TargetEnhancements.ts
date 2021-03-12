@@ -15,6 +15,7 @@ import * as Helpers from './helpers';
 //@ts-ignore
 // import ColorSetting from "../../colorsettings/colorSetting.js";
 import { MODULE_NAME } from './settings';
+import { TargetClass } from './lib-targeting/TargetClass';
 
 Array.prototype.partition = function(rule) {
     return this.reduce((acc, val) => {
@@ -301,6 +302,7 @@ export class TargetEnhancements {
      * @param {boolean} opt  -- taking control of the token or dropping it
      */
     static async controlTokenEventHandler(token, opt) {
+        TargetClass.controlTokenHandler
 
         // exit out if not GM. Need to change this to check for token ownership
         if (!game.user.isGM) { return false; }
@@ -344,6 +346,7 @@ export class TargetEnhancements {
      * @param {Boolean} targeted -- Is targeted or just is clicked?
      */
     static async targetTokenEventHandler(usr, token, targeted) {
+        TargetClass.targetTokenHandler;
        
         // initialize some values
         var userArray = [];
@@ -563,8 +566,8 @@ export class TargetEnhancements {
     static applyFilters() {
        var filters = new ImageFilters();
        // TODO FIND A WAY TO INTREGATED THESE IN 'foundry-pc-types'
-       //return filters.DropShadow().Outline(3).filters;
-       return filters.Alpha().filters;
+       return filters.DropShadow().Outline(3).filters;
+       //return filters.Alpha().filters;
     }
 
 
@@ -607,7 +610,9 @@ export class TargetEnhancements {
             canvas.scene.unsetFlag(MODULE_NAME,TargetEnhancements.npc_targeting_key);
         }
 
+        // ADDED 4535992
         Helpers.clearTargets();
+        //game.users['updateTokenTargets']();
 
         return true;
     }
@@ -624,12 +629,11 @@ export class TargetEnhancements {
             name: "cancelTargets", 
             title: "Clear Targets/Selection",
             icon:"fa fa-times-circle", 
-            //visible: game.settings.get("cozy-player", "toolbarShowSkills"),
+            //visible: game.settings.get(MODULE_NAME, "XXX"),
             button:true,
             onClick: () => {
                 control.activeTool = "select";
-                Hooks.call("clearTokenTargets",game.user,Helpers.clearTargets());
-                Helpers.clearTargets();
+                Hooks.call("clearTokenTargets",game.user,TargetEnhancements.clearTokenTargetsHandler(game.user, null));
                 return;
             },
             layer: "TokenLayer"

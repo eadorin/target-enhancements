@@ -5,7 +5,7 @@ import { TargetEnhancements } from "./TargetEnhancements";
 
 
 export let readyHooks = async () => {
-  // initialazideTab = true;
+  TargetClass.ready;
 }
 
 export let initHooks = () => {
@@ -25,9 +25,9 @@ export let initHooks = () => {
 
   // TODO UNDESRTAND AND TRY TO INTEGRATED LIB TAREGTTING LIBRARY
 
-  Hooks.on("ready",TargetClass.ready);
-  Hooks.on("targetToken", TargetClass.targetTokenHandler);
-  Hooks.on("controlToken",TargetClass.controlTokenHandler);
+  // Hooks.on("ready",TargetClass.ready);
+  // Hooks.on("targetToken", TargetClass.targetTokenHandler);
+  // Hooks.on("controlToken",TargetClass.controlTokenHandler);
 
   // ==================================
   // INTEGRATION TARGET ENHANCEMENTS

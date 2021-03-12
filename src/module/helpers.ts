@@ -60,5 +60,8 @@ export function clearTargets() {
     {
         target.value.setTarget(false, { user: game.user, releaseOthers: false });
     }
+
+    game.user.targets.forEach( t => t['setTarget'](false, {user: game.user, releaseOthers: true, groupSelection:false }));
+    
     game.user.targets = new Set();
 }

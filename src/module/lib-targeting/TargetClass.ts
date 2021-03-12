@@ -1,3 +1,4 @@
+import { log } from '../../target-enhancements';
 import { MODULE_NAME } from '../settings';
 import { NPCTargeting } from './NPCTargeting';
 import { TargetsTable } from './TargetsTable';
@@ -24,8 +25,11 @@ export class TargetClass {
     static async targetTokenHandler(user,token,targeted) {
         await NPCTargeting.targetTokenHandler(user,token,targeted);
 
-        console.log(MODULE_NAME,"Token is Targeted By:", TargetClass.targetsTable.getTargetSources(token));
-        console.log(MODULE_NAME,"User is targeting:", TargetClass.targetsTable.getSourceTargets(user));
+        let targetSources =  await TargetClass.targetsTable.getTargetSources(token);
+        let sourceTargets = await TargetClass.targetsTable.getSourceTargets(user);
+
+        log(MODULE_NAME,"Token is Targeted By:", targetSources);
+        log(MODULE_NAME,"User is targeting:", sourceTargets);
 
         // TODO ADD OPTIONS FOR PRINT ON CHAT MESSAGES
     }
