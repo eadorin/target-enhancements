@@ -14,10 +14,13 @@ The devoloping include:
 - Direct integration with [easy target](https://bitbucket.org/Fyorl/easy-target/src/master/) thanks to [Fyorl](https://bitbucket.org/%7Beee45cf2-a6e7-43d6-bded-8054de334101%7D/)
 - Direct integration with [lib-targeting](https://github.com/eadorin/lib-targeting) thanks to [eadorin](https://github.com/eadorin) + minor bug fix
 - Generic minor bug fix
+- 
 ## Installation
+
 Simply use the install module screen within the FoundryVTT setup
 
 ## Usage & features
+
 - Replaces the colored baubles for users targeting a token with their avatar. (Now with NPC Support!) It will fall back to token if an avatar is not supplied
 - Adds new "targeted token" indicators, including animations
 - Adds a new button under "Basic Controls" to remove all of a user's current targets/selections
@@ -35,9 +38,11 @@ Simply use the install module screen within the FoundryVTT setup
 
 ## TODO List
 
-- [Low priority] Integration of color settings module for make choose color of target by single use on module settings 
+- [Medium priority] Full integration of i18 lang label
 
 - [Medium priority] Full integration of all hoook with lib-wrapper module 
+  
+- [Low priority] Integration of 'color settings' module for make choose color of target by single use on module settings 
 
 - [Low priority] Turn target features on/off
 
@@ -48,6 +53,7 @@ Simply use the install module screen within the FoundryVTT setup
 - [Low priority] Turn token target icon features on/off  (the default triangles)
 
 ## Known Issues / Limitations
+
 - Users may notice the default target arrows + target baubles appear when first moving a token. Until an API hook is provided by FoundryVTT in the `Token._refreshTarget()` method, this will always be the case
 
 - Moving or clicking too fast may try to update the token before the target request is received by a client.
@@ -55,15 +61,18 @@ Simply use the install module screen within the FoundryVTT setup
 - I've noticed an issue sometimes regarding the selection of multiple NPCs targeting...they don't all show up. If you can reproduce this consistently, please let me know how.
 
 
-Upcoming/requested features:
-
 ## Troubleshooting
 - Users should report issues to the github issues. Reaching out on Discord is a good option as well, but please follow-up with a github issue
 - Try clearing all tokens using the new button before selecting/targeting other tokens. this should resolve most issues.
 
 ## Credit
+
 Thanks to anyone who helps me with this code! I appreciate the user community's feedback on this project!
-[PixiJS-Filters](https://github.com/pixijs/pixi-filters)
+
+- [PixiJS-Filters](https://github.com/pixijs/pixi-filters)
+- 
+
+
 
 ## License
 This Foundry VTT module, writen by Eadorin, is licensed under [GNU GPLv3.0](https://www.gnu.org/licenses/gpl-3.0.en.html), supplemented by [Commons Clause](https://commonsclause.com/).

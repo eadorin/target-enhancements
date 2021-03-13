@@ -5,7 +5,7 @@ import { TargetEnhancements } from "./TargetEnhancements";
 
 
 export let readyHooks = async () => {
-  TargetClass.ready;
+  TargetClass.ready();
 }
 
 export let initHooks = () => {
@@ -22,7 +22,7 @@ export let initHooks = () => {
   // ==================================
   // INTEGRATION LIB TARGETING
   // ==================================
-
+  TargetClass.ready();
   // Hooks.on("ready",TargetClass.ready); // MOVED TO ESYTARGET CLASS
   // Hooks.on("targetToken", TargetClass.targetTokenHandler); // MOVED TO ESYTARGET CLASS
   // Hooks.on("controlToken",TargetClass.controlTokenHandler); // MOVED TO ESYTARGET CLASS

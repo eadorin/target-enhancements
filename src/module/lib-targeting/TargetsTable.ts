@@ -30,8 +30,10 @@ export class TargetsTable {
         this.records = new ObjectSet();
         this.flagScope = scope;
 
-        if ( (typeof game.scenes.active.getFlag(this.flagScope, this.flagKey)) === 'undefined') {
-            game.scenes.active.setFlag(this.flagScope, this.flagKey, this.records);
+        if(game.scenes.active){
+            if ( (typeof game.scenes.active.getFlag(this.flagScope, this.flagKey)) === 'undefined') {
+                game.scenes.active.setFlag(this.flagScope, this.flagKey, this.records);
+            }
         }
 
         if (game.isGM) { this.initGMListener();}

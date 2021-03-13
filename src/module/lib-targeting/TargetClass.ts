@@ -9,56 +9,45 @@ export class TargetClass {
 
     static targetsTable:TargetsTable;
 
-    static flagReady:boolean = false;
-
-    static async ready() {
+    static ready() {
         // NPCTargeting = window['NPCTargeting'];
 
         try {
             TargetClass.targetsTable = new TargetsTable(MODULE_NAME);
         } catch(error) {
-            console.error(error);
+            //console.error(error);
             // ui.notifications.error("You need to load the Lib-Targeting Module");
         }
 
         NPCTargeting.init(TargetClass.targetsTable);
-        TargetClass.flagReady = true;
     } // -- end ready
 
 
-    static async targetTokenHandler(user,token,targeted) {
-        if(!TargetClass.flagReady){
-            TargetClass.ready();
-        }
-
-        await NPCTargeting.targetTokenHandler(user,token,targeted);
+    static async targetClassTargetTokenHandler(user,token,targeted) {
+        // TODO Check out the code targeted as some problem 'true'
+        await NPCTargeting.targetTokenHandler(user,token,true);
 
         let targetSources =  await TargetClass.targetsTable.getTargetSources(token);
         let sourceTargets = await TargetClass.targetsTable.getSourceTargets(user);
 
         log(MODULE_NAME,"Token is Targeted By:", targetSources);
         log(MODULE_NAME,"User is targeting:", sourceTargets);
-        for (let targetSource of targetSources) {
-            MessageCreate("Token is Targeted By:",targetSource);
-        }
-        for (let sourceTarget of sourceTargets) {
-            MessageCreate("User is targeting:",sourceTarget);
+        if(game.settings.get(MODULE_NAME, 'enable_notification')){
+            for (let targetSource of targetSources) {
+                targetClassMessageCreate("Token is Targeted By:",targetSource);
+            }
+            for (let sourceTarget of sourceTargets) {
+                targetClassMessageCreate("User is targeting:",sourceTarget);
+            }
         }
     }
 
-    static async controlTokenHandler(token, tf) {
-        if(!TargetClass.flagReady){
-            TargetClass.ready();
-        }
+    static async targetClassControlTokenHandler(token, tf) {
         await NPCTargeting.controlTokenHandler(token, tf);
     }
 }
 
-// Hooks.on("ready",TargetClass.ready);
-// Hooks.on("targetToken", TargetClass.targetTokenHandler);
-// Hooks.on("controlToken",TargetClass.controlTokenHandler);
-
-export async function MessageCreate(message, tokenTargets) {
+export async function targetClassMessageCreate(message, tokenTargets) {
     let gm = game.user === game.users.find((u) => u.isGM && u.active)
     if (!gm && game.settings.get(MODULE_NAME, 'gm_vision')) return;
 

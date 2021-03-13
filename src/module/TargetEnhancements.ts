@@ -305,7 +305,6 @@ export class TargetEnhancements {
      * @param {boolean} opt  -- taking control of the token or dropping it
      */
     static async controlTokenEventHandler(token, opt) {
-        TargetClass.controlTokenHandler
 
         // exit out if not GM. Need to change this to check for token ownership
         if (!game.user.isGM) { return false; }
@@ -339,6 +338,7 @@ export class TargetEnhancements {
         })
         await token.target.clear();
         
+        TargetClass.targetClassControlTokenHandler(token, opt);
         return;
     }
 
@@ -349,8 +349,6 @@ export class TargetEnhancements {
      * @param {Boolean} targeted -- Is targeted or just is clicked?
      */
     static async targetTokenEventHandler(usr, token, targeted) {
-        TargetClass.targetTokenHandler;
-       
         // initialize some values
         var userArray = [];
         var othersArray = [];
@@ -397,18 +395,18 @@ export class TargetEnhancements {
 
         // targetingItems = othersArray;
         // MOD 4535992 ADD User Icon if no token was selected on prior
-        if(targetingItems.length == 0 && game.user.targets.size>0){
-            game.user.targets.forEach((i, t) => {
-                var myTarget = t.actor.data;
-                if(t.actor.data.type=="npc"){
-                    npcs.push(myTarget);
-                }else{
-                    othersArray.push(myTarget);
-                }
-            });
-            // canvas.scene.setFlag(MODULE_NAME,TargetEnhancements.npc_targeting_key,npcs);
-            targetingItems = await (usr.isGM) ? othersArray.concat(npcs) : othersArray;
-        }
+        // if(targetingItems.length == 0 && game.user.targets.size>0){
+        //     game.user.targets.forEach((i, t) => {
+        //         var myTarget = t.actor.data;
+        //         if(t.actor.data.type=="npc"){
+        //             npcs.push(myTarget);
+        //         }else{
+        //             othersArray.push(myTarget);
+        //         }
+        //     });
+        //     // canvas.scene.setFlag(MODULE_NAME,TargetEnhancements.npc_targeting_key,npcs);
+        //     targetingItems = await (usr.isGM) ? othersArray.concat(npcs) : othersArray;
+        // }
         // END MOD 4535992
 
         // if not using our indicators, then redraw the baubles
@@ -439,6 +437,9 @@ export class TargetEnhancements {
         // get our icons & add them to the display
         let tokensContainer = await TargetEnhancements.getTargetIcons(targetingItems,token);
         token.target.addChild(tokensContainer);
+
+        TargetClass.targetClassTargetTokenHandler(usr, token, targeted);
+        return;
         
     }
 

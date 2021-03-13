@@ -9,8 +9,8 @@ export const MODULE_NAME = 'target-enhancements';
 
 export const registerSettings = function () {
 
-    game.settings.register(MODULE_NAME, 'npc_name', {
-		name: 'Hide name of npc/monster',
+    game.settings.register(MODULE_NAME, 'enable_notification', {
+		name: 'Display notification of targetting on chat',
 		default: true,
 		type: Boolean,
 		scope: 'world',
@@ -19,7 +19,7 @@ export const registerSettings = function () {
 	});
 
     game.settings.register(MODULE_NAME, 'npc_name', {
-		name: 'Hide name of npc/monster',
+		name: 'Display notification of targetting on chat but Hide name of npc/monster',
 		default: false,
 		type: Boolean,
 		scope: 'world',
@@ -28,7 +28,7 @@ export const registerSettings = function () {
 	});
 
 	game.settings.register(MODULE_NAME, 'gm_vision', {
-		name: 'GM Vision',
+		name: 'Display notification of targetting on chat - GM Vision',
 		default: true,
 		type: Boolean,
 		scope: 'world',
@@ -37,7 +37,7 @@ export const registerSettings = function () {
 	});
 
 	game.settings.register(MODULE_NAME, 'show_to_players_the_player_updates', {
-		name: 'Show to players the player updates',
+		name: 'Display notification of targetting on chat but Show to players the player updates',
 		default: false,
 		type: Boolean,
 		scope: 'world',
@@ -61,6 +61,7 @@ export const registerSettings = function () {
         }
     });
 
+  // TODO TO INTEGRATED
   // new ColorSetting(MODULE_NAME, 'friendly-color', {
   //     name: "target-enhancements.options.friendly-color.name",
   //     hint: "target-enhancements.options.friendly-color.hint",

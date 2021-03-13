@@ -50,7 +50,6 @@ export const EasyTarget = {
 			}
 			let targeted = this.targeted.size == 0 ? false : true;
 			TargetEnhancements.targetTokenEventHandler(game.user, this, targeted);
-			TargetClass.targetTokenHandler(game.user, this, true);
 			// END MOD 4535992
 			return wrapped(...args);
 		}
@@ -177,7 +176,6 @@ export const EasyTarget = {
 		const tokenOnControl = function (wrapped, ...args) {
 			const [ event ] = args;
 			TargetEnhancements.controlTokenEventHandler(this,event.releaseOthers);
-			TargetClass.controlTokenHandler(this,event.releaseOthers);
 			return wrapped(...args);
 		}
 		// END MOD 4535992
