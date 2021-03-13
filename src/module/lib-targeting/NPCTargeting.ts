@@ -42,15 +42,16 @@ export class NPCTargeting {
      */
 
     static async targetTokenHandler(user, token, tf) {
-        if (tf) {
-            NPCTargeting.controlledUnits.forEach(t => {
-                NPCTargeting.tt.addTarget(t,token);
-            });
-        } else {
-            NPCTargeting.controlledUnits.forEach(t => {
-                NPCTargeting.tt.removeTarget(t,token);
-            });
-        }
+        // TODO DA SSITEMARE
+        // if (tf) {
+        //     NPCTargeting.controlledUnits.forEach(t => {
+        //         NPCTargeting.tt.addTarget(t,token);
+        //     });
+        // } else {
+        //     NPCTargeting.controlledUnits.forEach(t => {
+        //         NPCTargeting.tt.removeTarget(t,token);
+        //     });
+        // }
     }
 
 }

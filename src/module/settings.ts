@@ -9,6 +9,42 @@ export const MODULE_NAME = 'target-enhancements';
 
 export const registerSettings = function () {
 
+    game.settings.register(MODULE_NAME, 'npc_name', {
+		name: 'Hide name of npc/monster',
+		default: true,
+		type: Boolean,
+		scope: 'world',
+		config: true,
+		hint: 'Display notification on chat'
+	});
+
+    game.settings.register(MODULE_NAME, 'npc_name', {
+		name: 'Hide name of npc/monster',
+		default: false,
+		type: Boolean,
+		scope: 'world',
+		config: true,
+		hint: 'Display notification but hide name of npc/monster'
+	});
+
+	game.settings.register(MODULE_NAME, 'gm_vision', {
+		name: 'GM Vision',
+		default: true,
+		type: Boolean,
+		scope: 'world',
+		config: true,
+		hint: 'Display notification only to GM'
+	});
+
+	game.settings.register(MODULE_NAME, 'show_to_players_the_player_updates', {
+		name: 'Show to players the player updates',
+		default: false,
+		type: Boolean,
+		scope: 'world',
+		config: true,
+		hint: 'Display notification and show to players the player updates'
+	});
+
     game.settings.register(MODULE_NAME,'target-indicator',{
         name: "target-enhancements.options.target-indicator.name",
         hint: "target-enhancements.options.target-indicator.hint",
@@ -67,6 +103,7 @@ export const registerSettings = function () {
         default: true,
         type: Boolean
     });
+
     game.settings.register(MODULE_NAME,'use-fx-rotate', {
         name : "target-enhancements.options.use-fx-rotate.name",
         hint : "target-enhancements.options.use-fx-rotate.hint",
@@ -75,6 +112,7 @@ export const registerSettings = function () {
         default: true,
         type: Boolean
     });
+
     game.settings.register(MODULE_NAME,'use-fx-pulse', {
         name : "target-enhancements.options.use-fx-pulse.name",
         hint : "target-enhancements.options.use-fx-pulse.hint",
@@ -84,15 +122,16 @@ export const registerSettings = function () {
         type: Boolean
     });
 
+    // MOD 4535992 Removed we use easy-target
+    // game.settings.register(MODULE_NAME,'enable-target-modifier-key', {
+    //     name : "target-enhancements.options.enable-target-modifier-key.name",
+    //     hint : "target-enhancements.options.enable-target-modifier-key.hint",
+    //     scope: "world",
+    //     config: "true",
+    //     default: true,
+    //     type: Boolean
+    // });
 
-    game.settings.register(MODULE_NAME,'enable-target-modifier-key', {
-        name : "target-enhancements.options.enable-target-modifier-key.name",
-        hint : "target-enhancements.options.enable-target-modifier-key.hint",
-        scope: "world",
-        config: "true",
-        default: true,
-        type: Boolean
-    });
     game.settings.register(MODULE_NAME,'enable-ctrl-resize-modifier', {
         name : "target-enhancements.options.enable-ctrl-resize-modifier.name",
         hint : "target-enhancements.options.enable-ctrl-resize-modifier.hint",
@@ -101,7 +140,6 @@ export const registerSettings = function () {
         default: true,
         type: Boolean
     });
-
 
     game.settings.register(MODULE_NAME,'enable-target-portraits', {
         name : "target-enhancements.options.enable-target-portraits.name",
@@ -113,15 +151,15 @@ export const registerSettings = function () {
     });
 
     game.settings.register(MODULE_NAME, 'release', {
-      name: 'EASYTGT.ReleaseBehaviour',
-      hint: 'EASYTGT.ReleaseBehaviourHint',
+      name: 'target-enhancements.options.ReleaseBehaviour',
+      hint: 'target-enhancements.options.ReleaseBehaviourHint',
       scope: 'user',
       config: true,
       default: 'sticky',
       type: String,
       choices: {
-        'sticky': 'EASYTGT.Sticky',
-        'standard': 'EASYTGT.Standard'
+        'sticky': 'target-enhancements.options.Sticky',
+        'standard': 'target-enhancements.options.Standard'
       }
     });
 }

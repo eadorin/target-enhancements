@@ -33,21 +33,29 @@ Simply use the install module screen within the FoundryVTT setup
 1. Select the options that you want and save
 -->
 
+## TODO List
+
+- [Low priority] Integration of color settings module for make choose color of target by single use on module settings 
+
+- [Medium priority] Full integration of all hoook with lib-wrapper module 
+
+- [Low priority] Turn target features on/off
+
+- [Low priority] Adjust the display of the target token icons!! (currently uses a black outline + shadow)
+
+- [Low priority] Adjust size of target token icons
+- 
+- [Low priority] Turn token target icon features on/off  (the default triangles)
+
 ## Known Issues / Limitations
 - Users may notice the default target arrows + target baubles appear when first moving a token. Until an API hook is provided by FoundryVTT in the `Token._refreshTarget()` method, this will always be the case
 
 - Moving or clicking too fast may try to update the token before the target request is received by a client.
 
 - I've noticed an issue sometimes regarding the selection of multiple NPCs targeting...they don't all show up. If you can reproduce this consistently, please let me know how.
-  
-- The use of the &lt;T&gt; targeting ability may not be 100% yet.
 
 
 Upcoming/requested features:
-1. Turn target features on/off
-2. Adjust the display of the target token icons!! (currently uses a black outline + shadow)
-3. Adjust size of target token icons
-4. Turn token target icon features on/off  (the default triangles)
 
 ## Troubleshooting
 - Users should report issues to the github issues. Reaching out on Discord is a good option as well, but please follow-up with a github issue

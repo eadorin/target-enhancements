@@ -69,31 +69,32 @@ export class TargetEnhancements {
      */
     //static async registerClickModifier() {
     static async canvasReadyHandler() {
-        if (game.settings.get(MODULE_NAME,'enable-target-modifier-key')) {
-            $(document).keydown(function(event) {
-                // target with the 't' key
-                if (event.which == 84) {
-                    TargetEnhancements.modKeyPressed = true;
-                    document.body.style.cursor = 'crosshair';
-                }
-            });
-            $(document).keyup(function(event) {
-                TargetEnhancements.modKeyPressed = false;
-                document.body.style.cursor = 'default';
-            });
+        // MOD 4535992 Removed we use easy-target
+        // if (game.settings.get(MODULE_NAME,'enable-target-modifier-key')) {
+        //     $(document).keydown(function(event) {
+        //         // target with the 't' key
+        //         if (event.which == 84) {
+        //             TargetEnhancements.modKeyPressed = true;
+        //             document.body.style.cursor = 'crosshair';
+        //         }
+        //     });
+        //     $(document).keyup(function(event) {
+        //         TargetEnhancements.modKeyPressed = false;
+        //         document.body.style.cursor = 'default';
+        //     });
     
-            // consider moving to onHoverToken()
+        //     // consider moving to onHoverToken()
 
-            for (let x = canvas.tokens.placeables.length -1; x >=0; x--) {
-                let token = canvas.tokens.placeables[x];
-                token.on('mousedown',TargetEnhancements.handleTokenClick);
-                try {
-                    token.data.scale = token.getFlag(MODULE_NAME,TargetEnhancements.resizeFlagKey) || 1;
-                    token.refresh();
-                } catch (ex) {}
+        //     for (let x = canvas.tokens.placeables.length -1; x >=0; x--) {
+        //         let token = canvas.tokens.placeables[x];
+        //         token.on('mousedown',TargetEnhancements.handleTokenClick);
+        //         try {
+        //             token.data.scale = token.getFlag(MODULE_NAME,TargetEnhancements.resizeFlagKey) || 1;
+        //             token.refresh();
+        //         } catch (ex) {}
                 
-            }
-        }
+        //     }
+        // }
 
         if (!game.user.isGM) { 
             return; 
@@ -103,22 +104,23 @@ export class TargetEnhancements {
 
     }
 
-    /**
-     * If using the modifier to target a mob, sets them as a target
-     */
-    static async handleTokenClick() {
-        let token = await Helpers.getTokenByTokenID(TargetEnhancements.clickedToken);
-        if (game.settings.get(MODULE_NAME,'enable-target-modifier-key')) {
-            if (TargetEnhancements.modKeyPressed) {
-                token.target.clear();
-                if (!token.targeted.has(game.user)) {
-                    token.setTarget(game.user, {releaseOthers: false});
-                } else {
-                    token.setTarget(false, {user: game.user, releaseOthers: false, groupSelection: true});
-                }
-            }
-        }
-    }
+    // MOD 4535992 Removed we use easy-target
+    // /**
+    //  * If using the modifier to target a mob, sets them as a target
+    //  */
+    // static async handleTokenClick() {
+    //     let token = await Helpers.getTokenByTokenID(TargetEnhancements.clickedToken);
+    //     if (game.settings.get(MODULE_NAME,'enable-target-modifier-key')) {
+    //         if (TargetEnhancements.modKeyPressed) {
+    //             token.target.clear();
+    //             if (!token.targeted.has(game.user)) {
+    //                 token.setTarget(game.user, {releaseOthers: false});
+    //             } else {
+    //                 token.setTarget(false, {user: game.user, releaseOthers: false, groupSelection: true});
+    //             }
+    //         }
+    //     }
+    // }
 
     /**
      * Have to reset existing target art on hover
@@ -394,19 +396,19 @@ export class TargetEnhancements {
         let targetingItems = await (usr.isGM) ? othersArray.concat(npcs) : othersArray;
 
         // targetingItems = othersArray;
-        // MOD 4535992 STRANGE PATCH FOR MANAGE STRANGE BUG WHEN CLICK ON THE BUTTON 'Clear all targets'
-        // if(targetingItems.length == 0 && game.user.targets.size>0){
-        //     game.user.targets.forEach((i, t) => {
-        //         var myTarget = t.actor.data;
-        //         if(t.actor.data.type=="npc"){
-        //             npcs.push(myTarget);
-        //         }else{
-        //             othersArray.push(myTarget);
-        //         }
-        //     });
-        //     // canvas.scene.setFlag(MODULE_NAME,TargetEnhancements.npc_targeting_key,npcs);
-        //     targetingItems = await (usr.isGM) ? othersArray.concat(npcs) : othersArray;
-        // }       
+        // MOD 4535992 ADD User Icon if no token was selected on prior
+        if(targetingItems.length == 0 && game.user.targets.size>0){
+            game.user.targets.forEach((i, t) => {
+                var myTarget = t.actor.data;
+                if(t.actor.data.type=="npc"){
+                    npcs.push(myTarget);
+                }else{
+                    othersArray.push(myTarget);
+                }
+            });
+            // canvas.scene.setFlag(MODULE_NAME,TargetEnhancements.npc_targeting_key,npcs);
+            targetingItems = await (usr.isGM) ? othersArray.concat(npcs) : othersArray;
+        }
         // END MOD 4535992
 
         // if not using our indicators, then redraw the baubles

@@ -5,6 +5,7 @@ import { MODULE_NAME } from './settings';
 import {libWrapper} from './libs/shim.js'
 import { TargetEnhancements } from './TargetEnhancements';
 import { error } from '../target-enhancements';
+import { TargetClass } from './lib-targeting/TargetClass';
 export const EasyTarget = {
 	getTemplateShape: function (template) {
 		let shape = template.data.t;
@@ -49,6 +50,7 @@ export const EasyTarget = {
 			}
 			let targeted = this.targeted.size == 0 ? false : true;
 			TargetEnhancements.targetTokenEventHandler(game.user, this, targeted);
+			TargetClass.targetTokenHandler(game.user, this, true);
 			// END MOD 4535992
 			return wrapped(...args);
 		}
@@ -174,7 +176,9 @@ export const EasyTarget = {
 		// MOD 4535992
 		const tokenOnControl = function (wrapped, ...args) {
 			const [ event ] = args;
-			TargetEnhancements.controlTokenEventHandler(this,event.releaseOthers)
+			TargetEnhancements.controlTokenEventHandler(this,event.releaseOthers);
+			TargetClass.controlTokenHandler(this,event.releaseOthers);
+			return wrapped(...args);
 		}
 		// END MOD 4535992
 		if (game.modules.get('lib-wrapper')?.active) {
@@ -187,7 +191,7 @@ export const EasyTarget = {
 			libWrapper.register(MODULE_NAME, 'TemplateLayer.prototype._onDragLeftDrop', templateLayerOnDragLeftDrop, 'WRAPPER');
 			libWrapper.register(MODULE_NAME, 'KeyboardManager.prototype._onKeyC', keyboardManagerOnKeyC, 'MIXED');
 			// MOD 4535992
-			libWrapper.register(MODULE_NAME, 'Token.prototype.control', tokenOnControl, 'MIXED');
+			libWrapper.register(MODULE_NAME, 'Token.prototype.control', tokenOnControl, 'WRAPPER');
 			// END MOD 4535992
 		} else {
 			error("YOU MUST USE lib-wrapper");
