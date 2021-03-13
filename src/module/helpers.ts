@@ -1,3 +1,5 @@
+import { TargetEnhancements } from "./TargetEnhancements";
+
 /**
  * Some utility functions
  * v0.3
@@ -52,16 +54,41 @@ export function getInput(prompt) {
 }
 
 /*
- Clear Targets https://github.com/psyny/FoundryVTT/blob/master/CozyPlayer/cozy-player/scripts/hotkeys.js
-*/
+ * Clear Targets https://github.com/psyny/FoundryVTT/blob/master/CozyPlayer/cozy-player/scripts/hotkeys.js
+ */
 export function clearTargets() {
     const targets = game.user.targets.values();
     for(let target = targets.next(); !target.done; target = targets.next())
     {
-        target.value.setTarget(false, { user: game.user, releaseOthers: false });
+        target.value.setTarget(
+            false,
+            { 
+                user: game.user, 
+                releaseOthers: true,
+                groupSelection:false 
+            }
+        );
     }
+    // game.user.targets.forEach( 
+    //     t => t['setTarget'](
+    //         false, 
+    //         {
+    //             user: game.user, 
+    //             releaseOthers: true, 
+    //             groupSelection:false 
+    //         }
+    //     )
+    // );
 
-    game.user.targets.forEach( t => t['setTarget'](false, {user: game.user, releaseOthers: true, groupSelection:false }));
+    // This adds handling to untarget and remove any animations
+    for (let token of game.user.targets) {
+        if(token['target']){
+            token['target']['_lineStyle'].texture.destroy();
+            token['target']['_fillStyle'].visible = false;
+            token['target']['fill.visible'] = false;
+            token['target']['graphicsData'].length = 0;
+        }
+    }
     
     game.user.targets = new Set();
 }

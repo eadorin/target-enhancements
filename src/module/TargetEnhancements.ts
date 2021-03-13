@@ -16,6 +16,7 @@ import * as Helpers from './helpers';
 // import ColorSetting from "../../colorsettings/colorSetting.js";
 import { MODULE_NAME } from './settings';
 import { TargetClass } from './lib-targeting/TargetClass';
+import { error } from '../target-enhancements';
 
 Array.prototype.partition = function(rule) {
     return this.reduce((acc, val) => {
@@ -370,6 +371,7 @@ export class TargetEnhancements {
                 
             } catch(err) {
                 // something weird happeened. return;
+                error(err);
             }
         // } 
 
@@ -392,7 +394,20 @@ export class TargetEnhancements {
         let targetingItems = await (usr.isGM) ? othersArray.concat(npcs) : othersArray;
 
         // targetingItems = othersArray;
-
+        // MOD 4535992 STRANGE PATCH FOR MANAGE STRANGE BUG WHEN CLICK ON THE BUTTON 'Clear all targets'
+        // if(targetingItems.length == 0 && game.user.targets.size>0){
+        //     game.user.targets.forEach((i, t) => {
+        //         var myTarget = t.actor.data;
+        //         if(t.actor.data.type=="npc"){
+        //             npcs.push(myTarget);
+        //         }else{
+        //             othersArray.push(myTarget);
+        //         }
+        //     });
+        //     // canvas.scene.setFlag(MODULE_NAME,TargetEnhancements.npc_targeting_key,npcs);
+        //     targetingItems = await (usr.isGM) ? othersArray.concat(npcs) : othersArray;
+        // }       
+        // END MOD 4535992
 
         // if not using our indicators, then redraw the baubles
         if (!game.settings.get(MODULE_NAME,"enable-target-portraits")) {

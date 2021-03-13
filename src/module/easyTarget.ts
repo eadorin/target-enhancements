@@ -3,6 +3,8 @@
 
 import { MODULE_NAME } from './settings';
 import {libWrapper} from './libs/shim.js'
+import { TargetEnhancements } from './TargetEnhancements';
+import { error } from '../target-enhancements';
 export const EasyTarget = {
 	getTemplateShape: function (template) {
 		let shape = template.data.t;
@@ -33,6 +35,21 @@ export const EasyTarget = {
 				args[1].releaseOthers = releaseOthers;
 			}
 
+			// MOD 4535992
+			if(releaseOthers){
+				//This adds handling to untarget and remove any animations
+				if (TargetEnhancements.tickerFunctions[this.data._id]) {
+					try{
+						TargetEnhancements.tickerFunctions[this.data._id].destroy();
+					}catch(e){
+						// IGNORE THIS
+					}
+					delete TargetEnhancements.tickerFunctions[this.data._id];
+				}
+			}
+			let targeted = this.targeted.size == 0 ? false : true;
+			TargetEnhancements.targetTokenEventHandler(game.user, this, targeted);
+			// END MOD 4535992
 			return wrapped(...args);
 		}
 
@@ -154,7 +171,12 @@ export const EasyTarget = {
 				wrapped(...args);
 			}
 		};
-
+		// MOD 4535992
+		const tokenOnControl = function (wrapped, ...args) {
+			const [ event ] = args;
+			TargetEnhancements.controlTokenEventHandler(this,event.releaseOthers)
+		}
+		// END MOD 4535992
 		if (game.modules.get('lib-wrapper')?.active) {
 			libWrapper.register(MODULE_NAME, 'Token.prototype.setTarget', tokenSetTarget, 'WRAPPER');
 			libWrapper.register(MODULE_NAME, 'Token.prototype._onClickLeft', tokenOnClickLeft, 'WRAPPER');
@@ -164,8 +186,11 @@ export const EasyTarget = {
 			libWrapper.register(MODULE_NAME, 'Canvas.prototype._onDragLeftDrop', canvasOnDragLeftDrop, 'WRAPPER');
 			libWrapper.register(MODULE_NAME, 'TemplateLayer.prototype._onDragLeftDrop', templateLayerOnDragLeftDrop, 'WRAPPER');
 			libWrapper.register(MODULE_NAME, 'KeyboardManager.prototype._onKeyC', keyboardManagerOnKeyC, 'MIXED');
+			// MOD 4535992
+			libWrapper.register(MODULE_NAME, 'Token.prototype.control', tokenOnControl, 'MIXED');
+			// END MOD 4535992
 		} else {
-			console.error("YOU MUST USE lib-wrapper");
+			error("YOU MUST USE lib-wrapper");
 
 		// 	const cachedTokenSetTarget = Token.prototype.setTarget;
 		// 	Token.prototype.setTarget = function () {

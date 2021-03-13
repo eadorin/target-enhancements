@@ -23,23 +23,21 @@ export let initHooks = () => {
   // INTEGRATION LIB TARGETING
   // ==================================
 
-  // TODO UNDESRTAND AND TRY TO INTEGRATED LIB TAREGTTING LIBRARY
-
-  // Hooks.on("ready",TargetClass.ready);
-  // Hooks.on("targetToken", TargetClass.targetTokenHandler);
-  // Hooks.on("controlToken",TargetClass.controlTokenHandler);
+  // Hooks.on("ready",TargetClass.ready); // MOVED TO ESYTARGET CLASS
+  // Hooks.on("targetToken", TargetClass.targetTokenHandler); // MOVED TO ESYTARGET CLASS
+  // Hooks.on("controlToken",TargetClass.controlTokenHandler); // MOVED TO ESYTARGET CLASS
 
   // ==================================
   // INTEGRATION TARGET ENHANCEMENTS
   // ==================================
 
-  Hooks.on("targetToken", TargetEnhancements.targetTokenEventHandler);
+  // Hooks.on("targetToken", TargetEnhancements.targetTokenEventHandler); // MOVED TO ESYTARGET CLASS
   Hooks.on("hoverToken", TargetEnhancements.hoverTokenEventHandler);
   Hooks.on("updateToken",TargetEnhancements.updateTokenEventHandler);
   Hooks.on("render",TargetEnhancements.renderTokenEventHandler);
   Hooks.on("preUpdateScene",TargetEnhancements.preUpdateSceneEventHandler);
   Hooks.on("renderSceneControls",TargetEnhancements.preUpdateSceneEventHandler);
-  Hooks.on("controlToken",TargetEnhancements.controlTokenEventHandler);
+  //Hooks.on("controlToken",TargetEnhancements.controlTokenEventHandler); // MOVED TO ESYTARGET CLASS
   Hooks.on("clearTokenTargets",TargetEnhancements.clearTokenTargetsHandler);
   Hooks.on("getSceneControlButtons",TargetEnhancements.getSceneControlButtonsHandler);
   Hooks.on("canvasReady",TargetEnhancements.canvasReadyHandler);
