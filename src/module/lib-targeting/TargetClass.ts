@@ -32,7 +32,7 @@ export class TargetClass {
 
         log(MODULE_NAME,"Token is Targeted By:", targetSources);
         log(MODULE_NAME,"User is targeting:", sourceTargets);
-        if(game.settings.get(MODULE_NAME, 'enable_notification')){
+        if(game.settings.get(MODULE_NAME, 'display_notificaton_enable_notification')){
             for (let targetSource of targetSources) {
                 targetClassMessageCreate("Token is Targeted By:",targetSource);
             }
@@ -49,10 +49,10 @@ export class TargetClass {
 
 export async function targetClassMessageCreate(message, tokenTargets) {
     let gm = game.user === game.users.find((u) => u.isGM && u.active)
-    if (!gm && game.settings.get(MODULE_NAME, 'gm_vision')) return;
+    if (!gm && game.settings.get(MODULE_NAME, 'display_notificaton_gm_vision')) return;
 
-    let isPlayer = game.settings.get(MODULE_NAME, 'npc_name');
-    let hideName = game.settings.get(MODULE_NAME, 'show_to_players_the_player_updates');
+    let isPlayer = game.settings.get(MODULE_NAME, 'display_notificaton_npc_name');
+    let hideName = game.settings.get(MODULE_NAME, 'display_notificaton_show_to_players_the_player_updates');
 
     for (let target of tokenTargets) {
         let content;
@@ -68,7 +68,7 @@ export async function targetClassMessageCreate(message, tokenTargets) {
         }
         
         let recipient;
-        if (game.settings.get(MODULE_NAME, 'gm_vision')) recipient = game.users.find((u) => u.isGM && u.active).id;
+        if (game.settings.get(MODULE_NAME, 'display_notificaton_gm_vision')) recipient = game.users.find((u) => u.isGM && u.active).id;
         let chatData = {
             type: 4,
             user: recipient,

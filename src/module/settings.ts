@@ -9,7 +9,7 @@ export const MODULE_NAME = 'target-enhancements';
 
 export const registerSettings = function () {
 
-    game.settings.register(MODULE_NAME, 'enable_notification', {
+    game.settings.register(MODULE_NAME, 'display_notificaton_enable_notification', {
 		name: 'Display notification of targetting on chat',
 		default: true,
 		type: Boolean,
@@ -18,7 +18,7 @@ export const registerSettings = function () {
 		hint: 'Display notification on chat'
 	});
 
-    game.settings.register(MODULE_NAME, 'npc_name', {
+    game.settings.register(MODULE_NAME, 'display_notificaton_npc_name', {
 		name: 'Display notification of targetting on chat but Hide name of npc/monster',
 		default: false,
 		type: Boolean,
@@ -27,7 +27,7 @@ export const registerSettings = function () {
 		hint: 'Display notification but hide name of npc/monster'
 	});
 
-	game.settings.register(MODULE_NAME, 'gm_vision', {
+	game.settings.register(MODULE_NAME, 'display_notificaton_gm_vision', {
 		name: 'Display notification of targetting on chat - GM Vision',
 		default: true,
 		type: Boolean,
@@ -36,7 +36,7 @@ export const registerSettings = function () {
 		hint: 'Display notification only to GM'
 	});
 
-	game.settings.register(MODULE_NAME, 'show_to_players_the_player_updates', {
+	game.settings.register(MODULE_NAME, 'display_notificaton_show_to_players_the_player_updates', {
 		name: 'Display notification of targetting on chat but Show to players the player updates',
 		default: false,
 		type: Boolean,
@@ -44,6 +44,15 @@ export const registerSettings = function () {
 		config: true,
 		hint: 'Display notification and show to players the player updates'
 	});
+
+    game.settings.register(MODULE_NAME,'enable-better-target', {
+        name : "Enable better target feature",
+        hint : "Enable better target feature",
+        scope: "player",
+        config: "true",
+        default: false,
+        type: Boolean
+    });
 
     game.settings.register(MODULE_NAME,'target-indicator',{
         name: "target-enhancements.options.target-indicator.name",

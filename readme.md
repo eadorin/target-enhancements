@@ -1,9 +1,20 @@
 # Target Enhancements -- FoundryVTT Module
+
 Target Enhancements is a module for FoundryVTT that provides customizations for targeting. As a colorblind player, having icons instead of indistinguishable colored dots makes for a much better experience.
 
-![New Targets](https://github.com/eadorin/target-enhancements/blob/master/img/screenshot_targets.png?raw=true)
-![New Target Inticators](https://github.com/eadorin/target-enhancements/blob/master/img/screenshot_indicator_crosshair.png?raw=true)
-![New Cancel Control](https://github.com/eadorin/target-enhancements/blob/master/img/new_cancel_control.png?raw=true)
+# What new with 1.0.0 version ?
+
+There are more than 100 modules in foundry vtt for what concerns the targetting there are three which are the main ones used:
+
+- [easy target](https://bitbucket.org/Fyorl/easy-target/src/master/) thanks to [Fyorl](https://bitbucket.org/%7Beee45cf2-a6e7-43d6-bded-8054de334101%7D/)
+- [Target Enhancements (Pre 1.0.0)](https://github.com/eadorin/target-enhancements) thanks to [eadorin](https://github.com/eadorin) 
+- [Better Target](https://github.com/sPOiDar/fvtt-module-better-target) thanks to [sPOiDar
+](https://github.com/sPOiDar/fvtt-module-better-target)
+
+
+![New Targets](./img/screenshot_targets.png?raw=true)
+![New Target Inticators](./img/screenshot_indicator_crosshair.png?raw=true)
+![New Cancel Control](./img/new_cancel_control.png?raw=true)
 
 ## [BOUNTY ON TRELLO](https://trello.com/c/KvEZVMtw/213-modulebountyrevive-target-enhancements)
 

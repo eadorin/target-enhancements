@@ -84,11 +84,12 @@ Hooks.once('setup', function () {
 Hooks.once('ready', () => {
 	// Do anything once the module is ready
 	if (!game.modules.get("lib-wrapper")?.active && game.user.isGM){
-    ui.notifications.warn(`The '${MODULE_NAME}' module recommends to install and activate the 'libWrapper' module.`);
-  }
-  // if (!game.modules.get("colorsettings")?.active && game.user.isGM){
-  //   ui.notifications.warn(`The '${MODULE_NAME}', please make sure you have the "lib - ColorSettings" module installed and enabled.`);
-  // }
+   	 	ui.notifications.error(`The '${MODULE_NAME}' module requires to install and activate the 'libWrapper' module.`);
+		return;
+	}
+	// if (!game.modules.get("colorsettings")?.active && game.user.isGM){
+	//   ui.notifications.warn(`The '${MODULE_NAME}', please make sure you have the "lib - ColorSettings" module installed and enabled.`);
+	// }
 
 	readyHooks();
 });
