@@ -19,13 +19,17 @@ There are more than 100 modules in foundry vtt for what concerns the targetting 
 ## [BOUNTY ON TRELLO](https://trello.com/c/KvEZVMtw/213-modulebountyrevive-target-enhancements)
 
 With the new version '1.0.0' i'm trying to make this module the 'facto' tagetting module for all  system.
+
 The devoloping include:
 
 - Converted to typescript project
 - Direct integration with [easy target](https://bitbucket.org/Fyorl/easy-target/src/master/) thanks to [Fyorl](https://bitbucket.org/%7Beee45cf2-a6e7-43d6-bded-8054de334101%7D/)
 - Direct integration with [lib-targeting](https://github.com/eadorin/lib-targeting) thanks to [eadorin](https://github.com/eadorin) + minor bug fix
 - Generic minor bug fix
-- 
+- Direct integration [Better Target](https://github.com/sPOiDar/fvtt-module-better-target) thanks to [sPOiDar
+](https://github.com/sPOiDar/fvtt-module-better-target)
+
+  
 ## Installation
 
 Simply use the install module screen within the FoundryVTT setup
@@ -47,11 +51,11 @@ Simply use the install module screen within the FoundryVTT setup
 1. Select the options that you want and save
 -->
 
-## TODO List
+## TODO List and bug fix
 
-- [Medium priority] Full integration of i18 lang label
+- [Low priority] Full integration of i18
 
-- [Medium priority] Full integration of all hoook with lib-wrapper module 
+- [Low priority] Full integration of all hoook with lib-wrapper module 
   
 - [Low priority] Integration of 'color settings' module for make choose color of target by single use on module settings 
 
@@ -60,7 +64,7 @@ Simply use the install module screen within the FoundryVTT setup
 - [Low priority] Adjust the display of the target token icons!! (currently uses a black outline + shadow)
 
 - [Low priority] Adjust size of target token icons
-- 
+
 - [Low priority] Turn token target icon features on/off  (the default triangles)
 
 ## Known Issues / Limitations
@@ -71,6 +75,7 @@ Simply use the install module screen within the FoundryVTT setup
 
 - I've noticed an issue sometimes regarding the selection of multiple NPCs targeting...they don't all show up. If you can reproduce this consistently, please let me know how.
 
+-  When the 'Better Target^ module feature is enable, if you hover the customize token target disappear
 
 ## Troubleshooting
 - Users should report issues to the github issues. Reaching out on Discord is a good option as well, but please follow-up with a github issue
@@ -81,9 +86,11 @@ Simply use the install module screen within the FoundryVTT setup
 Thanks to anyone who helps me with this code! I appreciate the user community's feedback on this project!
 
 - [PixiJS-Filters](https://github.com/pixijs/pixi-filters)
-- 
-
-
+- [easy target](https://bitbucket.org/Fyorl/easy-target/src/master/) thanks to [Fyorl](https://bitbucket.org/%7Beee45cf2-a6e7-43d6-bded-8054de334101%7D/)
+- [lib-targeting](https://github.com/eadorin/lib-targeting) thanks to [eadorin](https://github.com/eadorin)
+- [Better Target](https://github.com/sPOiDar/fvtt-module-better-target) thanks to [sPOiDar
+](https://github.com/sPOiDar/fvtt-module-better-target)
+- [Target Enhancements (Pre 1.0.0)](https://github.com/eadorin/target-enhancements) thanks to [eadorin](https://github.com/eadorin) 
 
 ## License
 This Foundry VTT module, writen by Eadorin, is licensed under [GNU GPLv3.0](https://www.gnu.org/licenses/gpl-3.0.en.html), supplemented by [Commons Clause](https://commonsclause.com/).

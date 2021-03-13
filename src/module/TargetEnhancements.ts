@@ -43,10 +43,6 @@ export class TargetEnhancements {
     // Collection of running tickers to be used when a token is deleted
     static tickerFunctions = {};
 
-    // static async initHandler(){
-    //     EasyTarget.patch();
-    // }
-
     /**
      * Event listener on keydown to enable resize modifier
      */
@@ -676,9 +672,13 @@ export class TargetEnhancements {
      * @param targeted 
      * @returns 
      */
-    static applyBetterTargetFeature(usr, token, targeted){
-        token.target.clear();
-		if (!token.targeted.size) return;
+    static async applyBetterTargetFeature(usr, token, targeted){        
+        let tokenTargets = await token.targeted; // this takes time to arrive
+        await token.target.clear(); // indicator & baubles
+        await token.target.removeChildren(); // baubles
+        if (!tokenTargets.size) return;
+        // token.target.clear();
+		// if (!token.targeted.size) return;
 
 		// Determine whether the current user has target and any other users
 		const [others, user] = Array.from(token.targeted).partition(u => u === game.user);
@@ -719,7 +719,8 @@ export class TargetEnhancements {
 			let color = colorStringToHex(u['data'].color);
 			token.target.beginFill(color, 1.0).lineStyle(2, 0x0000000).drawCircle(2 + (i * 8), 0, 6);
 		}
-
+        
+        TargetClass.targetClassTargetTokenHandler(usr, token, targeted);
         return;
     }
 }

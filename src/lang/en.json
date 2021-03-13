@@ -2,7 +2,7 @@
     "target-enhancements.options.enable-target-modifier-key.name" : "Enable Target key modifier",
     "target-enhancements.options.enable-target-modifier-key.hint" : "Allows user to hold down the 't' key when clicking to target tokens ** EXPERIMENTAL **",
     "target-enhancements.options.use-player-color.name" : "Use player color for target indicator",
-    "target-enhancements.options.use-player-color.hint" : "",
+    "target-enhancements.options.use-player-color.hint" : "Use player color for target indicator",
     "target-enhancements.options.use-fx-pulse.name" : "Indicator FX: Apply Pulse Effect",
     "target-enhancements.options.use-fx-pulse.hint" : "",
     "target-enhancements.options.use-fx-rotate.name" : "Indicator FX: Apply Rotate Effect",
