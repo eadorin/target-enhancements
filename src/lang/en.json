@@ -14,6 +14,7 @@
     "target-enhancements.options.target-indicator.choices.2" : "CrossHair 2",
     "target-enhancements.options.target-indicator.choices.3" : "BullsEye 1",
     "target-enhancements.options.target-indicator.choices.4" : "BullsEye 2",
+    "target-enhancements.options.target-indicator.choices.5" : "Better Target",
     "target-enhancements.options.enable-ctrl-resize-modifier.name": "Resize token with mousewheel",
     "target-enhancements.options.enable-ctrl-resize-modifier.hint" : "While holding <SHIFT>, user can resize the token using the mousewheel. The token MUST NOT BE SELECTED!",
     "target-enhancements.options.enable-target-portraits.name" : "Enable target portraits",

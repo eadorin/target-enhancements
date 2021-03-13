@@ -185,6 +185,50 @@ export class TargetIndicator {
         return new SpriteID(texture, this.token.id);
     }
 
+    drawBetterTarget() {
+		const [others, user] = Array.from(this.token.targeted).partition(u => u === game.user);
+		const userTarget = user.length;
+
+		// For the current user, draw the target arrows
+		// if (userTarget) {
+			let size = this.token.w;
+			// Constrain dimensions to the shortest axis
+			if (size > this.token.h) {
+				size = this.token.h;
+			}
+			const padding = 12;
+			const stroke = 6;
+			const vmid = this.token.h / 2;
+			const hmid = this.token.w / 2;
+			const crossLen = (size / 2) - padding;
+			this.token.target.beginFill(0xc72121, 1.0).lineStyle(1, 0x000000)
+				.drawCircle(hmid, vmid, (size / 2) - padding)
+				.beginHole()
+				.drawCircle(hmid, vmid, (size / 2) - padding - stroke)
+				.endHole()
+				.drawRoundedRect(hmid - (stroke / 2), vmid - stroke - crossLen, stroke, crossLen)
+				.drawRoundedRect(hmid - (stroke / 2), vmid + padding - stroke, stroke, crossLen)
+				.drawRoundedRect(hmid - stroke - crossLen, vmid - (stroke / 2), crossLen, stroke)
+				.drawRoundedRect(hmid + padding - stroke, vmid - (stroke / 2), crossLen, stroke);
+			/*
+			// Original indicator
+			.drawPolygon([-p, hh, -p - aw, hh - ah, -p - aw, hh + ah])
+			.drawPolygon([w + p, hh, w + p + aw, hh - ah, w + p + aw, hh + ah])
+			.drawPolygon([hw, -p, hw - ah, -p - aw, hw + ah, -p - aw])
+			.drawPolygon([hw, h + p, hw - ah, h + p + aw, hw + ah, h + p + aw]);
+			*/
+		// }
+
+		// For other users, draw offset pips
+		for (let [i, u] of others.entries()) {
+			let color = colorStringToHex(u['data'].color);
+			this.token.target.beginFill(color, 1.0).lineStyle(2, 0x0000000).drawCircle(2 + (i * 8), 0, 6);
+		}
+
+        let texture = canvas.app.renderer.generateTexture(this.i);
+        return new SpriteID(texture, this.token.id);
+    }
+
     async create(sprite="") {
         if (!this.sprite && sprite == "") {
             this.sprite = await this.drawDefault();
@@ -202,7 +246,9 @@ export class TargetIndicator {
                 case "4" :
                     this.sprite = await this.drawBullsEye2();
                     break;
-                    
+                case "5" :
+                    this.sprite = await this.drawBetterTarget();
+                    break;                   
                 default:
                     this.sprite = await this.drawDefault();
                     break;

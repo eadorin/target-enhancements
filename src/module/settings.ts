@@ -10,39 +10,39 @@ export const MODULE_NAME = 'target-enhancements';
 export const registerSettings = function () {
 
     game.settings.register(MODULE_NAME, 'display_notificaton_enable_notification', {
-		name: 'Display notification of targetting on chat',
-		default: true,
+		name: 'Display notification: Write on chat enabled (Need some developing)',
+		default: false,
 		type: Boolean,
 		scope: 'world',
 		config: true,
-		hint: 'Display notification on chat'
+		hint: 'Display notification: Write on chat enabled (Need some developing)'
 	});
 
     game.settings.register(MODULE_NAME, 'display_notificaton_npc_name', {
-		name: 'Display notification of targetting on chat but Hide name of npc/monster',
+		name: 'Display notification: Write on chat but Hide name of npc/monster with "Unknown Creature" label',
 		default: false,
 		type: Boolean,
 		scope: 'world',
 		config: true,
-		hint: 'Display notification but hide name of npc/monster'
+		hint: 'Display notification: Write on chat but Hide name of npc/monster with "Unknown Creature" label'
 	});
 
 	game.settings.register(MODULE_NAME, 'display_notificaton_gm_vision', {
-		name: 'Display notification of targetting on chat - GM Vision',
-		default: true,
-		type: Boolean,
-		scope: 'world',
-		config: true,
-		hint: 'Display notification only to GM'
-	});
-
-	game.settings.register(MODULE_NAME, 'display_notificaton_show_to_players_the_player_updates', {
-		name: 'Display notification of targetting on chat but Show to players the player updates',
+		name: 'Display notification: Write on chat but show only to GM',
 		default: false,
 		type: Boolean,
 		scope: 'world',
 		config: true,
-		hint: 'Display notification and show to players the player updates'
+		hint: 'Display notification: Write on chat but show only to GM'
+	});
+
+	game.settings.register(MODULE_NAME, 'display_notificaton_show_to_players_the_player_updates', {
+		name: 'Display notification: Write on chat to players but only when a player is targetting',
+		default: false,
+		type: Boolean,
+		scope: 'world',
+		config: true,
+		hint: 'Display notification: Write on chat to players but only when a player is targetting'
 	});
 
     game.settings.register(MODULE_NAME,'enable-better-target', {
@@ -67,6 +67,7 @@ export const registerSettings = function () {
             "2" : "target-enhancements.options.target-indicator.choices.2",
             "3" : "target-enhancements.options.target-indicator.choices.3",
             "4" : "target-enhancements.options.target-indicator.choices.4",
+            "5" : "target-enhancements.options.target-indicator.choices.5",
         }
     });
 

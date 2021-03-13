@@ -51,12 +51,9 @@ export class EasyTarget {
 				}
 			}
 			let targeted = this.targeted.size == 0 ? false : true;
-			if(game.settings.get(MODULE_NAME,'enable-better-target')){
-				// TargetEnhancements.clearTokenTargetsHandler(game.user,null);
-				TargetEnhancements.applyBetterTargetFeature(game.user, this, targeted);
-			}else{
-				TargetEnhancements.targetTokenEventHandler(game.user, this, targeted);
-			}		
+			
+			TargetEnhancements.targetTokenEventHandler(game.user, this, targeted);
+					
 			// END MOD 4535992
 			return wrapped(...args);
 		}

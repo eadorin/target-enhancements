@@ -249,6 +249,11 @@ export class TargetEnhancements {
      */
     static async drawTargetIndicators(token) {
         let selectedIndicator = game.settings.get(MODULE_NAME,"target-indicator");
+
+        if(game.settings.get(MODULE_NAME,"enable-better-target")){
+            selectedIndicator = "5";
+        }
+
         // playing with different filters...ignore this
         // token.target.filters = new ImageFilters().TiltShift().filters;
         // token.icon.filters = new ImageFilters().Glow().filters;
@@ -665,64 +670,64 @@ export class TargetEnhancements {
         */
     }
 
-    /**
-     * Method for the integration of the better target module
-     * @param usr 
-     * @param token 
-     * @param targeted 
-     * @returns 
-     */
-    static async applyBetterTargetFeature(usr, token, targeted){        
-        let tokenTargets = await token.targeted; // this takes time to arrive
-        await token.target.clear(); // indicator & baubles
-        await token.target.removeChildren(); // baubles
-        if (!tokenTargets.size) return;
-        // token.target.clear();
-		// if (!token.targeted.size) return;
+    // /**
+    //  * Method for the integration of the better target module
+    //  * @param usr 
+    //  * @param token 
+    //  * @param targeted 
+    //  * @returns 
+    //  */
+    // static async applyBetterTargetFeature(usr, token, targeted){        
+    //     let tokenTargets = await token.targeted; // this takes time to arrive
+    //     await token.target.clear(); // indicator & baubles
+    //     await token.target.removeChildren(); // baubles
+    //     if (!tokenTargets.size) return;
+    //     // token.target.clear();
+	// 	// if (!token.targeted.size) return;
 
-		// Determine whether the current user has target and any other users
-		const [others, user] = Array.from(token.targeted).partition(u => u === game.user);
-		const userTarget = user.length;
+	// 	// Determine whether the current user has target and any other users
+	// 	const [others, user] = Array.from(token.targeted).partition(u => u === game.user);
+	// 	const userTarget = user.length;
 
-		// For the current user, draw the target arrows
-		if (userTarget) {
-			let size = token.w;
-			// Constrain dimensions to the shortest axis
-			if (size > token.h) {
-				size = token.h;
-			}
-			const padding = 12;
-			const stroke = 6;
-			const vmid = token.h / 2;
-			const hmid = token.w / 2;
-			const crossLen = (size / 2) - padding;
-			token.target.beginFill(0xc72121, 1.0).lineStyle(1, 0x000000)
-				.drawCircle(hmid, vmid, (size / 2) - padding)
-				.beginHole()
-				.drawCircle(hmid, vmid, (size / 2) - padding - stroke)
-				.endHole()
-				.drawRoundedRect(hmid - (stroke / 2), vmid - stroke - crossLen, stroke, crossLen)
-				.drawRoundedRect(hmid - (stroke / 2), vmid + padding - stroke, stroke, crossLen)
-				.drawRoundedRect(hmid - stroke - crossLen, vmid - (stroke / 2), crossLen, stroke)
-				.drawRoundedRect(hmid + padding - stroke, vmid - (stroke / 2), crossLen, stroke);
-			/*
-			// Original indicator
-			.drawPolygon([-p, hh, -p - aw, hh - ah, -p - aw, hh + ah])
-			.drawPolygon([w + p, hh, w + p + aw, hh - ah, w + p + aw, hh + ah])
-			.drawPolygon([hw, -p, hw - ah, -p - aw, hw + ah, -p - aw])
-			.drawPolygon([hw, h + p, hw - ah, h + p + aw, hw + ah, h + p + aw]);
-			*/
-		}
+	// 	// For the current user, draw the target arrows
+	// 	if (userTarget) {
+	// 		let size = token.w;
+	// 		// Constrain dimensions to the shortest axis
+	// 		if (size > token.h) {
+	// 			size = token.h;
+	// 		}
+	// 		const padding = 12;
+	// 		const stroke = 6;
+	// 		const vmid = token.h / 2;
+	// 		const hmid = token.w / 2;
+	// 		const crossLen = (size / 2) - padding;
+	// 		token.target.beginFill(0xc72121, 1.0).lineStyle(1, 0x000000)
+	// 			.drawCircle(hmid, vmid, (size / 2) - padding)
+	// 			.beginHole()
+	// 			.drawCircle(hmid, vmid, (size / 2) - padding - stroke)
+	// 			.endHole()
+	// 			.drawRoundedRect(hmid - (stroke / 2), vmid - stroke - crossLen, stroke, crossLen)
+	// 			.drawRoundedRect(hmid - (stroke / 2), vmid + padding - stroke, stroke, crossLen)
+	// 			.drawRoundedRect(hmid - stroke - crossLen, vmid - (stroke / 2), crossLen, stroke)
+	// 			.drawRoundedRect(hmid + padding - stroke, vmid - (stroke / 2), crossLen, stroke);
+	// 		/*
+	// 		// Original indicator
+	// 		.drawPolygon([-p, hh, -p - aw, hh - ah, -p - aw, hh + ah])
+	// 		.drawPolygon([w + p, hh, w + p + aw, hh - ah, w + p + aw, hh + ah])
+	// 		.drawPolygon([hw, -p, hw - ah, -p - aw, hw + ah, -p - aw])
+	// 		.drawPolygon([hw, h + p, hw - ah, h + p + aw, hw + ah, h + p + aw]);
+	// 		*/
+	// 	}
 
-		// For other users, draw offset pips
-		for (let [i, u] of others.entries()) {
-			let color = colorStringToHex(u['data'].color);
-			token.target.beginFill(color, 1.0).lineStyle(2, 0x0000000).drawCircle(2 + (i * 8), 0, 6);
-		}
+	// 	// For other users, draw offset pips
+	// 	for (let [i, u] of others.entries()) {
+	// 		let color = colorStringToHex(u['data'].color);
+	// 		token.target.beginFill(color, 1.0).lineStyle(2, 0x0000000).drawCircle(2 + (i * 8), 0, 6);
+	// 	}
         
-        TargetClass.targetClassTargetTokenHandler(usr, token, targeted);
-        return;
-    }
+    //     TargetClass.targetClassTargetTokenHandler(usr, token, targeted);
+    //     return;
+    // }
 }
 
 /**
