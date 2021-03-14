@@ -51,10 +51,10 @@
   ],
   "url": "https://github.com/eadorin/target-enhancements/tree/master",
   "manifest": "https://raw.githubusercontent.com/eadorin/target-enhancements/master/src/module.json",
-  "download": "https://github.com/eadorin/target-enhancements/raw/master/target-enhancements.zip",
+  "download": "https://raw.githubusercontent.com/eadorin/target-enhancements/master/package/target-enhancements-v1.0.0.zip",
   "minimumCoreVersion": "0.7.6",
   "compatibleCoreVersion": "0.7.9",
-  "changelog": "https:github.com/p4535992/target-enhancements/blob/v1.1/changelog.md",
+  "changelog": "https://raw.githubusercontent.com/eadorin/target-enhancements/master/changelog.md",
   "dependencies": [
     {
       "name": "colorsettings"
