@@ -70,6 +70,37 @@ Simply use the install module screen within the FoundryVTT setup
 		
 - Enable better target feature
        
+- Use player color for target indicator
+
+- Indicator FX: Apply Pulse Effect
+
+- Indicator FX: Apply Rotate Effect
+
+- Target indicator
+
+-  Default Foundry Indicator
+
+   -  CrossHair 1
+   -  CrossHair 2
+   -  BullsEye 1
+   -  BullsEye 2
+   -  Better Target
+
+- [Experimental] Resize token with mousewheel
+
+- Enable target portraits
+  
+- Friendly color
+    
+- Neutral color
+
+- Hostile color
+
+- Enable Colorblind-targeting features? (warning:ugly)
+  
+- Enables a set of features to help those who are colorblind
+
+- Release Behaviour
 
 <!----
 1. From the Game Settings tab
