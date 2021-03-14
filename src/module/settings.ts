@@ -10,44 +10,44 @@ export const MODULE_NAME = 'target-enhancements';
 export const registerSettings = function () {
 
     game.settings.register(MODULE_NAME, 'display_notificaton_enable_notification', {
-		name: 'Display notification: Write on chat enabled (Need some developing)',
+		name: "target-enhancements.options.display-notificaton-enable-notification.name",
 		default: false,
 		type: Boolean,
 		scope: 'world',
 		config: true,
-		hint: 'Display notification: Write on chat enabled (Need some developing)'
+		hint: "target-enhancements.options.display-notificaton-enable-notification.hint"
 	});
 
     game.settings.register(MODULE_NAME, 'display_notificaton_npc_name', {
-		name: 'Display notification: Write on chat but Hide name of npc/monster with "Unknown Creature" label',
+		name: "target-enhancements.options.display-notificaton-npc-name.name",
 		default: false,
 		type: Boolean,
 		scope: 'world',
 		config: true,
-		hint: 'Display notification: Write on chat but Hide name of npc/monster with "Unknown Creature" label'
+		hint: "target-enhancements.options.display-notificaton-npc-name.hint"
 	});
 
 	game.settings.register(MODULE_NAME, 'display_notificaton_gm_vision', {
-		name: 'Display notification: Write on chat but show only to GM',
+		name: "target-enhancements.options.display-notificaton-gm-vision.name",
 		default: false,
 		type: Boolean,
 		scope: 'world',
 		config: true,
-		hint: 'Display notification: Write on chat but show only to GM'
+		hint: "target-enhancements.options.display-notificaton-gm-vision.hint"
 	});
 
 	game.settings.register(MODULE_NAME, 'display_notificaton_show_to_players_the_player_updates', {
-		name: 'Display notification: Write on chat to players but only when a player is targetting',
+		name: "target-enhancements.options.display-notificaton-show-to-players-the-player-updates.name",
 		default: false,
 		type: Boolean,
 		scope: 'world',
 		config: true,
-		hint: 'Display notification: Write on chat to players but only when a player is targetting'
+		hint: "target-enhancements.options.display-notificaton-show-to-players-the-player-updates.hint"
 	});
 
     game.settings.register(MODULE_NAME,'enable-better-target', {
-        name : "Enable better target feature",
-        hint : "Enable better target feature",
+        name : "target-enhancements.options.enable-better-target.name",
+        hint : "target-enhancements.options.enable-better-target.hint",
         scope: "player",
         config: "true",
         default: false,

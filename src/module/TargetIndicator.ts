@@ -188,7 +188,7 @@ export class TargetIndicator {
     drawBetterTarget() {
 		const [others, user] = Array.from(this.token.targeted).partition(u => u === game.user);
 		const userTarget = user.length;
-
+        this.fillColor = 0xc72121;
 		// For the current user, draw the target arrows
 		// if (userTarget) {
 			let size = this.token.w;
@@ -201,15 +201,16 @@ export class TargetIndicator {
 			const vmid = this.token.h / 2;
 			const hmid = this.token.w / 2;
 			const crossLen = (size / 2) - padding;
-			this.token.target.beginFill(0xc72121, 1.0).lineStyle(1, 0x000000)
+			this.i.beginFill(0xc72121, 1.0).lineStyle(1, 0x000000)
 				.drawCircle(hmid, vmid, (size / 2) - padding)
 				.beginHole()
 				.drawCircle(hmid, vmid, (size / 2) - padding - stroke)
 				.endHole()
-				.drawRoundedRect(hmid - (stroke / 2), vmid - stroke - crossLen, stroke, crossLen)
-				.drawRoundedRect(hmid - (stroke / 2), vmid + padding - stroke, stroke, crossLen)
-				.drawRoundedRect(hmid - stroke - crossLen, vmid - (stroke / 2), crossLen, stroke)
-				.drawRoundedRect(hmid + padding - stroke, vmid - (stroke / 2), crossLen, stroke);
+				.drawRoundedRect(hmid - (stroke / 2), vmid - stroke - crossLen, stroke, crossLen, null)
+				.drawRoundedRect(hmid - (stroke / 2), vmid + padding - stroke, stroke, crossLen, null)
+				.drawRoundedRect(hmid - stroke - crossLen, vmid - (stroke / 2), crossLen, stroke, null)
+				.drawRoundedRect(hmid + padding - stroke, vmid - (stroke / 2), crossLen, stroke, null)
+                .endFill();
 			/*
 			// Original indicator
 			.drawPolygon([-p, hh, -p - aw, hh - ah, -p - aw, hh + ah])

@@ -70,6 +70,9 @@ export let initHooks = () => {
   libWrapper.register(MODULE_NAME, 'KeyboardManager.prototype._onKeyC', EasyTarget.keyboardManagerOnKeyC, 'MIXED');
   libWrapper.register(MODULE_NAME, 'Token.prototype.control', EasyTarget.tokenOnControl, 'WRAPPER');
 
+  // ?????
+  // libWrapper.register(MODULE_NAME, 'Token.prototype._refreshTarget', TargetEnhancements.drawTargetIndicatorsWrapper, 'WRAPPER');
+
   /*
   * This adds handling to untarget and remove any animations
   * The tokenDelete event is called after a token is destroyed which is too late to handle un-targeting

@@ -46,9 +46,9 @@ Simply use the install module screen within the FoundryVTT setup
   
 ![New Target Inticators](./img/screenshot_indicator_crosshair.png?raw=true)
 
-- Adds the ability to hold the &lt;Alt&gt; key down and click enemies to target them (ty to easy target)
+- Allows for easy targeting whilst holding alt. Also allows for alt+clicking inside an AoE to target all tokens within that AoE. Holding alt while placing a template will also target all tokens within that template when placed. (ty to easy target)
 
-- [Experimental] If a token is not selected and you're the GM, you can use the &lt;SHIFT&gt; key + mousewheel to resize tokens
+- [Experimental][need more developing] If a token is not selected and you're the GM, you can use the &lt;SHIFT&gt; key + mousewheel to resize tokens
 
 - Add the choice on module settings for integration with Better Target
 
@@ -81,9 +81,9 @@ Simply use the install module screen within the FoundryVTT setup
 
 ## TODO List / Known Issues / Limitations
 
-- [Feature][Low priority] Full integration of i18
+- [Feature][High priority] Full integration of all hook with lib-wrapper module 
 
-- [Feature][Low priority] Full integration of all hook with lib-wrapper module 
+- [Feature][Low priority] Full integration of i18n
   
 - [Feature][Low priority] Integration of 'color settings' module for make choose color of target by single use on module settings 
 
