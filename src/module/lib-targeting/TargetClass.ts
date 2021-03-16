@@ -33,12 +33,12 @@ export class TargetClass {
         log(MODULE_NAME,"Token is Targeted By:", targetSources);
         log(MODULE_NAME,"User is targeting:", sourceTargets);
         if(game.settings.get(MODULE_NAME, 'display_notificaton_enable_notification')){
-            for (let targetSource of targetSources) {
-                targetClassMessageCreate("Token is Targeted By:",targetSource);
-            }
-            for (let sourceTarget of sourceTargets) {
-                targetClassMessageCreate("User is targeting:",sourceTarget);
-            }
+            // for (let targetSource of targetSources) {
+                targetClassMessageCreate("Token is Targeted By:",targetSources);
+            // }
+            // for (let sourceTarget of sourceTargets) {
+                targetClassMessageCreate("User is targeting:",sourceTargets);
+            // }
         }
     }
 
@@ -53,34 +53,42 @@ export async function targetClassMessageCreate(message, tokenTargets) {
 
     let isPlayer = game.settings.get(MODULE_NAME, 'display_notificaton_npc_name');
     let hideName = game.settings.get(MODULE_NAME, 'display_notificaton_show_to_players_the_player_updates');
+    let content;
 
-    for (let target of tokenTargets) {
-        let content;
-        let tokenTarget:any = getTokenByTokenID(target.targetID);
-        let tokenSource:any = getTokenByTokenID(target.sourceID);
-        let nameTarget = tokenTarget.actor.data.name;
-        let nameSource = tokenSource.actor.data.name;
-        if (hideName && !isPlayer) {
-            content = '<span class="hm_messagetaken">"' + nameSource + '" is target ' + ' "Unknown entity" '  + '</span>'
+    let nameSources = [];
+    let nameTargets = [];
+
+    for (let tokenTarget of tokenTargets) {
+        for (let target  of tokenTarget) {
+            let tokenTarget:any = getTokenByTokenID(target.targetID);
+            let tokenSource:any = getTokenByTokenID(target.sourceID);
+            let nameTarget = tokenTarget.actor.data.name;
+            let nameSource = tokenSource.actor.data.name;
+            nameSources.push(nameSource);
+            nameTargets.push(nameTarget);
         }
-        else {
-            content = '<span class="hm_messagetaken">"' + nameSource + '" is target "' + nameTarget + '"</span>'
-        }
-        
-        let recipient;
-        if (game.settings.get(MODULE_NAME, 'display_notificaton_gm_vision')) recipient = game.users.find((u) => u.isGM && u.active).id;
-        let chatData = {
-            type: 4,
-            user: recipient,
-            speaker: { alias: MODULE_NAME },
-            content: content,
-            whisper: [recipient]
-
-        };
-
-        ChatMessage.create(chatData, {});
-        // if((chatData)!== '' && game.settings.get('health-monitor', 'Enable_Disable')) {
-        // 	ChatMessage.create(chatData, {});	
-        // }
     }
+
+    if (hideName && !isPlayer) {
+        content = '<span class="hm_messagetaken">"' + nameSources.toString() + '" is target ' + ' "Unknown entity" '  + '</span>'
+    }
+    else {
+        content = '<span class="hm_messagetaken">"' + nameSources.toString() + '" is target "' + nameTargets.toString() + '"</span>'
+    }
+
+    let recipient;
+    if (game.settings.get(MODULE_NAME, 'display_notificaton_gm_vision')) recipient = game.users.find((u) => u.isGM && u.active).id;
+    let chatData = {
+        type: 4,
+        user: recipient,
+        speaker: { alias: MODULE_NAME },
+        content: content,
+        whisper: [recipient]
+
+    };
+
+    ChatMessage.create(chatData, {});
+    // if((chatData)!== '' && game.settings.get('health-monitor', 'Enable_Disable')) {
+    // 	ChatMessage.create(chatData, {});	
+    // }
 }

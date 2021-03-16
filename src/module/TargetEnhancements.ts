@@ -679,28 +679,66 @@ export class TargetEnhancements {
         controls[0].tools.push(icon1);
         */
     }
-}
 
-/**
- * Bugs
- *  - Sometimes after selecting multiple on GM side, neither side updates appropriately (NPCs) -- resolved?
- *  - clear target button doesn't always update clients // event handler isn't firing
- *      game.users.updateTokenTargets(); // resolved by setting groupSelection to False -- forces token updates
- */
-(function customBorderColors() {
-    Token.prototype['_getBorderColor'] = function() {
-        if (this._controlled) return 0xFF9829;                    // Controlled
+    /**
+     * Bugs
+     *  - Sometimes after selecting multiple on GM side, neither side updates appropriately (NPCs) -- resolved?
+     *  - clear target button doesn't always update clients // event handler isn't firing
+     *      game.users.updateTokenTargets(); // resolved by setting groupSelection to False -- forces token updates
+     */
+    static customBorderColors = function (wrapped, ...args) {
+        //const [token] = args;
+        let mycolor;
+        if (this._controlled) {
+            mycolor = 0xFF9829;// Controlled
+        }
         else if (this._hover) {
             let d = parseInt(this.data.disposition);
-            if (!game.user.isGM && this.owner) return 0xFF9829;       // Owner
-            else if (this.actor && this.actor.isPC) return 0x33BC4E;  // Party Member
-            else if (d === 1) return colorStringToHex(game.settings.get(MODULE_NAME,"friendly-color"));                        // Friendly NPC
-            else if (d === 0) return colorStringToHex(game.settings.get(MODULE_NAME,"neutral-color"));                        // Neutral NPC
-            else return colorStringToHex(game.settings.get(MODULE_NAME,"hostile-color"));                                     // Hostile NPC
+            if (!game.user.isGM && this.owner){
+                mycolor = 0xFF9829;// Owner
+            } 
+            else if (this.actor && this.actor.hasPlayerOwner){
+                mycolor = 0x33BC4E;  // Party Member
+            }
+            else if (d === 1){
+                mycolor = colorStringToHex(game.settings.get(MODULE_NAME,"friendly-color")); // Friendly NPC
+            }
+            else if (d === 0){
+                mycolor = colorStringToHex(game.settings.get(MODULE_NAME,"neutral-color"));// Neutral NPC
+            }
+            else{
+                mycolor = colorStringToHex(game.settings.get(MODULE_NAME,"hostile-color")); // Hostile NPC
+            }
         }
-        else return null;
+        else{
+            mycolor =  null;
+        }
+        this.border._fillStyle.color = mycolor;
+        this.border._fillStyle.visible = true;
+        return wrapped(...args);
     }
-});
+}
+
+// /**
+//  * Bugs
+//  *  - Sometimes after selecting multiple on GM side, neither side updates appropriately (NPCs) -- resolved?
+//  *  - clear target button doesn't always update clients // event handler isn't firing
+//  *      game.users.updateTokenTargets(); // resolved by setting groupSelection to False -- forces token updates
+//  */
+// (function customBorderColors() {
+//     Token.prototype['_getBorderColor'] = function() {
+//         if (this._controlled) return 0xFF9829;                    // Controlled
+//         else if (this._hover) {
+//             let d = parseInt(this.data.disposition);
+//             if (!game.user.isGM && this.owner) return 0xFF9829;       // Owner
+//             else if (this.actor && this.actor.hasPlayerOwner) return 0x33BC4E;  // Party Member
+//             else if (d === 1) return colorStringToHex(game.settings.get(MODULE_NAME,"friendly-color"));                        // Friendly NPC
+//             else if (d === 0) return colorStringToHex(game.settings.get(MODULE_NAME,"neutral-color"));                        // Neutral NPC
+//             else return colorStringToHex(game.settings.get(MODULE_NAME,"hostile-color"));                                     // Hostile NPC
+//         }
+//         else return null;
+//     }
+// });
 
 
 

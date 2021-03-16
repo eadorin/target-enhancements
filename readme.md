@@ -4,14 +4,14 @@ Target Enhancements is a module for FoundryVTT that provides customizations for 
 
 # Why this module?
 
-There are more than 100 modules in foundry vtt but for what concerns the targetting there are three which are the main ones used:
+There are more than 100 modules in foundry vtt but for what concerns the targetting these are the main ones used:
 
 - [easy target](https://bitbucket.org/Fyorl/easy-target/src/master/) thanks to [Fyorl](https://bitbucket.org/%7Beee45cf2-a6e7-43d6-bded-8054de334101%7D/)
 - [Target Enhancements (Pre 1.0.0)](https://github.com/eadorin/target-enhancements) thanks to [eadorin](https://github.com/eadorin) 
 - [Better Target](https://github.com/sPOiDar/fvtt-module-better-target) thanks to [sPOiDar
 ](https://github.com/sPOiDar/fvtt-module-better-target)
 
-So I thought I'd try to take the best of the three modules and integrate them with each other and after a couple of months I studied the API and put together something that works (more or less, there is still some work to do).
+So the scope of this module is to reduce the number of modules on your game and integrate them with each other and put together something that works (more or less, there is still some work to do).
 Thanks to all the other developers who inspired this work.
 
 I'm trying to make this module a upgrade of my favorite tagetting module for all  system 'Target Enhancements'.
@@ -146,7 +146,8 @@ Thanks to anyone who helps me with this code! I appreciate the user community's 
 - [lib-targeting](https://github.com/eadorin/lib-targeting) thanks to [eadorin](https://github.com/eadorin)
 - [Better Target](https://github.com/sPOiDar/fvtt-module-better-target) thanks to [sPOiDar
 ](https://github.com/sPOiDar/fvtt-module-better-target)
-- [Target Enhancements](https://github.com/eadorin/target-enhancements) thanks to [eadorin](https://github.com/eadorin) 
+- [Target Enhancements](https://github.com/eadorin/target-enhancements) thanks to [eadorin](https://github.com/eadorin)
+- [Foundry VTT - Bullseye](https://gitlab.com/Ionshard/foundry-vtt-bullseye) ty to [Ionshard](https://gitlab.com/Ionshard)
 
 ## License
 This Foundry VTT module, writen by Eadorin, is licensed under [GNU GPLv3.0](https://www.gnu.org/licenses/gpl-3.0.en.html), supplemented by [Commons Clause](https://commonsclause.com/).

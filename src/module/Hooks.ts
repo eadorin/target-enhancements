@@ -94,4 +94,6 @@ export let initHooks = () => {
       //return onDelete.apply(this, options, userId);
       return onDelete.apply(options, userId);
   }
+
+  libWrapper.register(MODULE_NAME, 'Token.prototype._getBorderColor', TargetEnhancements.customBorderColors, 'WRAPPER');
 }

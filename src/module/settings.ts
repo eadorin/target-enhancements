@@ -1,6 +1,8 @@
 import { debug, log, setDebugLevel, warn, i18n } from '../target-enhancements';
 import { TargetsTable } from './lib-targeting/TargetsTable';
 import { NPCTargeting } from './lib-targeting/NPCTargeting';
+//@ts-ignore
+import ColorSetting from '../../colorsettings/colorSetting.js';
 
 window['TargetsTable'] = TargetsTable;
 window['NPCTargeting'] = NPCTargeting;
@@ -71,31 +73,30 @@ export const registerSettings = function () {
         }
     });
 
-  // TODO TO INTEGRATED
-  // new ColorSetting(MODULE_NAME, 'friendly-color', {
-  //     name: "target-enhancements.options.friendly-color.name",
-  //     hint: "target-enhancements.options.friendly-color.hint",
-  //     label: "Pick color",
-  //     restricted: false,
-  //     defaultColor: hexToRGBAString(0x43DFDF, 1),
-  //     scope: "client"
-  // });
-  // new ColorSetting(MODULE_NAME, 'neutral-color', {
-  //     name: "target-enhancements.options.neutral-color.name",
-  //     hint: "target-enhancements.options.neutral-color.hint",
-  //     label: "Pick color",
-  //     restricted: false,
-  //     defaultColor: hexToRGBAString(0xF1D836, 1),
-  //     scope: "client"
-  // });
-  // new ColorSetting(MODULE_NAME, 'hostile-color', {
-  //     name: "target-enhancements.options.hostile-color.name",
-  //     hint: "target-enhancements.options.hostile-color.hint",
-  //     label: "Pick color",
-  //     restricted: false,
-  //     defaultColor: hexToRGBAString(0xE72124, 1),
-  //     scope: "client"
-  // });
+    new ColorSetting(MODULE_NAME, 'friendly-color', {
+        name: "target-enhancements.options.friendly-color.name",
+        hint: "target-enhancements.options.friendly-color.hint",
+        label: "Pick color",
+        restricted: false,
+        defaultColor: hexToRGBAString(0x43DFDF, 1),
+        scope: "client"
+    });
+    new ColorSetting(MODULE_NAME, 'neutral-color', {
+        name: "target-enhancements.options.neutral-color.name",
+        hint: "target-enhancements.options.neutral-color.hint",
+        label: "Pick color",
+        restricted: false,
+        defaultColor: hexToRGBAString(0xF1D836, 1),
+        scope: "client"
+    });
+    new ColorSetting(MODULE_NAME, 'hostile-color', {
+        name: "target-enhancements.options.hostile-color.name",
+        hint: "target-enhancements.options.hostile-color.hint",
+        label: "Pick color",
+        restricted: false,
+        defaultColor: hexToRGBAString(0xE72124, 1),
+        scope: "client"
+    });
 
     game.settings.register(MODULE_NAME,'enable-colorblind-features', {
         name : "target-enhancements.options.enable-colorblind-features.name",
