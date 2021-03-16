@@ -64,31 +64,37 @@ export async function targetClassMessageCreate(message, tokenTargets) {
             let tokenSource:any = getTokenByTokenID(target.sourceID);
             let nameTarget = tokenTarget.actor.data.name;
             let nameSource = tokenSource.actor.data.name;
-            nameSources.push(nameSource);
-            nameTargets.push(nameTarget);
+            if(nameSource){
+                nameSources.push(nameSource);
+            }
+            if(nameTarget){
+                nameTargets.push(nameTarget);
+            }
         }
     }
 
-    if (hideName && !isPlayer) {
-        content = '<span class="hm_messagetaken">"' + nameSources.toString() + '" is target ' + ' "Unknown entity" '  + '</span>'
+    if(nameSources.length>0){
+        if (hideName && !isPlayer) {
+            content = '<span class="hm_messagetaken">"' + nameSources.toString() + '" is target ' + ' "Unknown entity" '  + '</span>'
+        }
+        else {
+            content = '<span class="hm_messagetaken">"' + nameSources.toString() + '" is target "' + nameTargets.toString() + '"</span>'
+        }
+
+        let recipient;
+        if (game.settings.get(MODULE_NAME, 'display_notificaton_gm_vision')) recipient = game.users.find((u) => u.isGM && u.active).id;
+        let chatData = {
+            type: 4,
+            user: recipient,
+            speaker: { alias: MODULE_NAME },
+            content: content,
+            whisper: [recipient]
+
+        };
+
+        ChatMessage.create(chatData, {});
+        // if((chatData)!== '' && game.settings.get('health-monitor', 'Enable_Disable')) {
+        // 	ChatMessage.create(chatData, {});	
+        // }
     }
-    else {
-        content = '<span class="hm_messagetaken">"' + nameSources.toString() + '" is target "' + nameTargets.toString() + '"</span>'
-    }
-
-    let recipient;
-    if (game.settings.get(MODULE_NAME, 'display_notificaton_gm_vision')) recipient = game.users.find((u) => u.isGM && u.active).id;
-    let chatData = {
-        type: 4,
-        user: recipient,
-        speaker: { alias: MODULE_NAME },
-        content: content,
-        whisper: [recipient]
-
-    };
-
-    ChatMessage.create(chatData, {});
-    // if((chatData)!== '' && game.settings.get('health-monitor', 'Enable_Disable')) {
-    // 	ChatMessage.create(chatData, {});	
-    // }
 }

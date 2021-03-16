@@ -96,4 +96,8 @@ export let initHooks = () => {
   }
 
   libWrapper.register(MODULE_NAME, 'Token.prototype._getBorderColor', TargetEnhancements.customBorderColors, 'WRAPPER');
+  // libWrapper.register(MODULE_NAME, 'PIXI.Graphics.prototype.drawEllipse', TargetEnhancements.drawDashLine, 'WRAPPER');
+  PIXI.Graphics.prototype['drawDashLine'] = TargetEnhancements.drawDashLine;
 }
+
+
