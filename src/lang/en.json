@@ -40,6 +40,8 @@
 	"target-enhancements.options.display-notificaton-show-to-players-the-player-updates.name": "Display notification: Write on chat to players but only when a player is targetting",
 	"target-enhancements.options.display-notificaton-show-to-players-the-player-updates.hint": "Display notification: Write on chat to players but only when a player is targetting",
     "target-enhancements.options.enable-better-target.name": "Enable better target feature",
-    "target-enhancements.options.enable-better-target.hint": "Enable better target feature"
+    "target-enhancements.options.enable-better-target.hint": "Enable better target feature",
+    "target-enhancements.options.enable-color.name": "Enable color feature",
+    "target-enhancements.options.enable-color.hint": "Enable color feature"
 
 }

@@ -89,12 +89,12 @@ Simply use the install module screen within the FoundryVTT setup
 - [Experimental] Resize token with mousewheel
 
 - Enable target portraits
-  
-- Friendly color
-    
-- Neutral color
 
-- Hostile color
+- Enable color feature
+  
+  - Friendly color  
+  - Neutral color
+  - Hostile color
 
 - Enable Colorblind-targeting features? (warning:ugly)
   

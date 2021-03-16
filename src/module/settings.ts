@@ -73,6 +73,15 @@ export const registerSettings = function () {
         }
     });
 
+    game.settings.register(MODULE_NAME,'enable-color', {
+        name : "target-enhancements.options.enable-color.name",
+        hint : "target-enhancements.options.enable-color.hint",
+        scope: "player",
+        config: "true",
+        default: false,
+        type: Boolean
+    });
+
     new ColorSetting(MODULE_NAME, 'friendly-color', {
         name: "target-enhancements.options.friendly-color.name",
         hint: "target-enhancements.options.friendly-color.hint",

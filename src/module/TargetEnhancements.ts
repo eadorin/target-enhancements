@@ -138,7 +138,7 @@ export class TargetEnhancements {
         TargetEnhancements.resizeToken  = token.id;
 
         
-        // customBorderColors();
+        // TargetEnhancements.customBorderColorsInternal();
         
         
         let text:any = "";
@@ -687,34 +687,35 @@ export class TargetEnhancements {
      *      game.users.updateTokenTargets(); // resolved by setting groupSelection to False -- forces token updates
      */
     static customBorderColors = function (wrapped, ...args) {
-        //const [token] = args;
-        let mycolor;
-        if (this._controlled) {
-            mycolor = 0xFF9829;// Controlled
-        }
-        else if (this._hover) {
-            let d = parseInt(this.data.disposition);
-            if (!game.user.isGM && this.owner){
-                mycolor = 0xFF9829;// Owner
-            } 
-            else if (this.actor && this.actor.hasPlayerOwner){
-                mycolor = 0x33BC4E;  // Party Member
+        if(game.settings.get(MODULE_NAME,"enable-color")){
+            let mycolor;
+            if (this._controlled) {
+                mycolor = 0xFF9829;// Controlled
             }
-            else if (d === 1){
-                mycolor = colorStringToHex(game.settings.get(MODULE_NAME,"friendly-color")); // Friendly NPC
-            }
-            else if (d === 0){
-                mycolor = colorStringToHex(game.settings.get(MODULE_NAME,"neutral-color"));// Neutral NPC
+            else if (this._hover) {
+                let d = parseInt(this.data.disposition);
+                if (!game.user.isGM && this.owner){
+                    mycolor = 0xFF9829;// Owner
+                } 
+                else if (this.actor && this.actor.hasPlayerOwner){
+                    mycolor = 0x33BC4E;  // Party Member
+                }
+                else if (d === 1){
+                    mycolor = colorStringToHex(game.settings.get(MODULE_NAME,"friendly-color")); // Friendly NPC
+                }
+                else if (d === 0){
+                    mycolor = colorStringToHex(game.settings.get(MODULE_NAME,"neutral-color"));// Neutral NPC
+                }
+                else{
+                    mycolor = colorStringToHex(game.settings.get(MODULE_NAME,"hostile-color")); // Hostile NPC
+                }
             }
             else{
-                mycolor = colorStringToHex(game.settings.get(MODULE_NAME,"hostile-color")); // Hostile NPC
+                mycolor =  null;
             }
+            this.border._fillStyle.color = mycolor;
+            this.border._fillStyle.visible = true;
         }
-        else{
-            mycolor =  null;
-        }
-        this.border._fillStyle.color = mycolor;
-        this.border._fillStyle.visible = true;
         return wrapped(...args);
     }
 
