@@ -18,7 +18,7 @@ export class TargetIndicator {
 
     constructor(token,indicator_type="default") {
         this.token = token;
-        //this.sprite = false;
+        this.sprite = false;
         this.owner = token.owner;
         this.indicator_type = indicator_type;
 
@@ -27,9 +27,9 @@ export class TargetIndicator {
         token.indicator = this;
 
         if (game.settings.get(MODULE_NAME,'use-player-color')) {
-            this.fillColor = colorStringToHex(game.user.options['color']);
+          this.fillColor = colorStringToHex(game.user['color']);
         } else {
-            this.fillColor = 0xFF9829;
+          this.fillColor = 0xFF9829;
         }
     }
 
@@ -45,7 +45,7 @@ export class TargetIndicator {
             default :
                 this.drawDefault();
                 break;
-            
+
         }
     }
 
@@ -84,8 +84,8 @@ export class TargetIndicator {
         let rw = 10; // rect width
         let rh = 30; // rect length
         let r = hh; // radius
-        
-        let topX   = hw - rw/2; let topY   = 0 - rh/2; 
+
+        let topX   = hw - rw/2; let topY   = 0 - rh/2;
         let rightX = w  - rh/2; let rightY = hh - rw/2;
         let botX   = hw - rw/2; let botY   = h  - rh/2;
         let leftX  = 0  - rh/2; let leftY = hh  - rw/2;
@@ -118,8 +118,8 @@ export class TargetIndicator {
         let rw = 10; // rect width
         let rh = 50; // rect length
         let r = hh; // radius
-        
-        let topX   = hw - rw/2; let topY   = 0 - rh/2; 
+
+        let topX   = hw - rw/2; let topY   = 0 - rh/2;
         let rightX = w  - rh/2; let rightY = hh - rw/2;
         let botX   = hw - rw/2; let botY   = h  - rh/2;
         let leftX  = 0  - rh/2; let leftY = hh  - rw/2;
@@ -186,48 +186,53 @@ export class TargetIndicator {
     }
 
     drawBetterTarget() {
-		const [others, user] = Array.from(this.token.targeted).partition(u => u === game.user);
-		const userTarget = user.length;
-        this.fillColor = 0xc72121;
-		// For the current user, draw the target arrows
-		// if (userTarget) {
-			let size = this.token.w;
-			// Constrain dimensions to the shortest axis
-			if (size > this.token.h) {
-				size = this.token.h;
-			}
-			const padding = 12;
-			const stroke = 6;
-			const vmid = this.token.h / 2;
-			const hmid = this.token.w / 2;
-			const crossLen = (size / 2) - padding;
-			this.i.beginFill(0xc72121, 1.0).lineStyle(1, 0x000000)
-				.drawCircle(hmid, vmid, (size / 2) - padding)
-				.beginHole()
-				.drawCircle(hmid, vmid, (size / 2) - padding - stroke)
-				.endHole()
-				.drawRoundedRect(hmid - (stroke / 2), vmid - stroke - crossLen, stroke, crossLen, null)
-				.drawRoundedRect(hmid - (stroke / 2), vmid + padding - stroke, stroke, crossLen, null)
-				.drawRoundedRect(hmid - stroke - crossLen, vmid - (stroke / 2), crossLen, stroke, null)
-				.drawRoundedRect(hmid + padding - stroke, vmid - (stroke / 2), crossLen, stroke, null)
-                .endFill();
-			/*
-			// Original indicator
-			.drawPolygon([-p, hh, -p - aw, hh - ah, -p - aw, hh + ah])
-			.drawPolygon([w + p, hh, w + p + aw, hh - ah, w + p + aw, hh + ah])
-			.drawPolygon([hw, -p, hw - ah, -p - aw, hw + ah, -p - aw])
-			.drawPolygon([hw, h + p, hw - ah, h + p + aw, hw + ah, h + p + aw]);
-			*/
-		// }
+      const [others, user] = Array.from(this.token.targeted).partition(u => u === game.user);
+      const userTarget = user.length;
 
-		// For other users, draw offset pips
-		for (let [i, u] of others.entries()) {
-			let color = colorStringToHex(u['data'].color);
-			this.token.target.beginFill(color, 1.0).lineStyle(2, 0x0000000).drawCircle(2 + (i * 8), 0, 6);
-		}
+      let fillColor = this.fillColor;
+      if (game.settings.get(MODULE_NAME,'enable-better-target')) {
+        fillColor = 0xc72121; // Fooce the standard red
+      }
 
-        let texture = canvas.app.renderer.generateTexture(this.i);
-        return new SpriteID(texture, this.token.id);
+      // For the current user, draw the target arrows
+      // if (userTarget) {
+        let size = this.token.w;
+        // Constrain dimensions to the shortest axis
+        if (size > this.token.h) {
+          size = this.token.h;
+        }
+        const padding = 12;
+        const stroke = 6;
+        const vmid = this.token.h / 2;
+        const hmid = this.token.w / 2;
+        const crossLen = (size / 2) - padding;
+        this.i.beginFill(fillColor, 1.0).lineStyle(1, 0x000000)
+          .drawCircle(hmid, vmid, (size / 2) - padding)
+          .beginHole()
+          .drawCircle(hmid, vmid, (size / 2) - padding - stroke)
+          .endHole()
+          .drawRoundedRect(hmid - (stroke / 2), vmid - stroke - crossLen, stroke, crossLen, null)
+          .drawRoundedRect(hmid - (stroke / 2), vmid + padding - stroke, stroke, crossLen, null)
+          .drawRoundedRect(hmid - stroke - crossLen, vmid - (stroke / 2), crossLen, stroke, null)
+          .drawRoundedRect(hmid + padding - stroke, vmid - (stroke / 2), crossLen, stroke, null)
+                  .endFill();
+        /*
+        // Original indicator
+        .drawPolygon([-p, hh, -p - aw, hh - ah, -p - aw, hh + ah])
+        .drawPolygon([w + p, hh, w + p + aw, hh - ah, w + p + aw, hh + ah])
+        .drawPolygon([hw, -p, hw - ah, -p - aw, hw + ah, -p - aw])
+        .drawPolygon([hw, h + p, hw - ah, h + p + aw, hw + ah, h + p + aw]);
+        */
+      // }
+
+      // For other users, draw offset pips
+      for (let [i, u] of others.entries()) {
+        let color = colorStringToHex(u['data'].color);
+        this.token.target.beginFill(color, 1.0).lineStyle(2, 0x0000000).drawCircle(2 + (i * 8), 0, 6);
+      }
+
+      let texture = canvas.app.renderer.generateTexture(this.i);
+      return new SpriteID(texture, this.token.id);
     }
 
     async create(sprite="") {
@@ -249,12 +254,12 @@ export class TargetIndicator {
                     break;
                 case "5" :
                     this.sprite = await this.drawBetterTarget();
-                    break;                   
+                    break;
                 default:
                     this.sprite = await this.drawDefault();
                     break;
             }
-                
+
         }
 
         this.sprite.zIndex = -1;
@@ -275,7 +280,7 @@ export class TargetIndicator {
         if (game.settings.get(MODULE_NAME,'use-fx-rotate')) {
             this.rotate();
         }
-        
+
     }
     pulse() {
         //pulse code
@@ -287,7 +292,7 @@ export class TargetIndicator {
         var pulse_grow = true;
         canvas.app.ticker.add( function(delta) {
             _self.scale.set(size);
-            
+
             if (pulse_grow) {
                 size = size + speed * delta;
                 pulse_ticks++;

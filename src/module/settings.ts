@@ -12,44 +12,44 @@ export const MODULE_NAME = 'target-enhancements';
 export const registerSettings = function () {
 
     game.settings.register(MODULE_NAME, 'display_notificaton_enable_notification', {
-		name: "target-enhancements.options.display-notificaton-enable-notification.name",
+		name: i18n(MODULE_NAME+".display-notificaton-enable-notification-name"),
 		default: false,
 		type: Boolean,
 		scope: 'world',
 		config: true,
-		hint: "target-enhancements.options.display-notificaton-enable-notification.hint"
+		hint: i18n(MODULE_NAME+".display-notificaton-enable-notification-hint")
 	});
 
     game.settings.register(MODULE_NAME, 'display_notificaton_npc_name', {
-		name: "target-enhancements.options.display-notificaton-npc-name.name",
+		name: i18n(MODULE_NAME+".display-notificaton-npc-name-name"),
 		default: false,
 		type: Boolean,
 		scope: 'world',
 		config: true,
-		hint: "target-enhancements.options.display-notificaton-npc-name.hint"
+		hint: i18n(MODULE_NAME+".display-notificaton-npc-name-hint")
 	});
 
 	game.settings.register(MODULE_NAME, 'display_notificaton_gm_vision', {
-		name: "target-enhancements.options.display-notificaton-gm-vision.name",
+		name: i18n(MODULE_NAME+".display-notificaton-gm-vision-name"),
 		default: false,
 		type: Boolean,
 		scope: 'world',
 		config: true,
-		hint: "target-enhancements.options.display-notificaton-gm-vision.hint"
+		hint: i18n(MODULE_NAME+".display-notificaton-gm-vision-hint")
 	});
 
 	game.settings.register(MODULE_NAME, 'display_notificaton_show_to_players_the_player_updates', {
-		name: "target-enhancements.options.display-notificaton-show-to-players-the-player-updates.name",
+		name: i18n(MODULE_NAME+".display-notificaton-show-to-players-the-player-updates-name"),
 		default: false,
 		type: Boolean,
 		scope: 'world',
 		config: true,
-		hint: "target-enhancements.options.display-notificaton-show-to-players-the-player-updates.hint"
+		hint: i18n(MODULE_NAME+".display-notificaton-show-to-players-the-player-updates-hint")
 	});
 
     game.settings.register(MODULE_NAME,'enable-better-target', {
-        name : "target-enhancements.options.enable-better-target.name",
-        hint : "target-enhancements.options.enable-better-target.hint",
+        name : i18n(MODULE_NAME+".enable-better-target-name"),
+        hint : i18n(MODULE_NAME+".enable-better-target-hint"),
         scope: "player",
         config: "true",
         default: false,
@@ -57,25 +57,25 @@ export const registerSettings = function () {
     });
 
     game.settings.register(MODULE_NAME,'target-indicator',{
-        name: "target-enhancements.options.target-indicator.name",
-        hint: "target-enhancements.options.target-indicator.hint",
+        name: i18n(MODULE_NAME+".target-indicator-name"),
+        hint: i18n(MODULE_NAME+".target-indicator-hint"),
         scope: "player",
         config: true,
         default: "0",
         type: String,
         choices: {
-            "0" : "target-enhancements.options.target-indicator.choices.0",
-            "1" : "target-enhancements.options.target-indicator.choices.1",
-            "2" : "target-enhancements.options.target-indicator.choices.2",
-            "3" : "target-enhancements.options.target-indicator.choices.3",
-            "4" : "target-enhancements.options.target-indicator.choices.4",
-            "5" : "target-enhancements.options.target-indicator.choices.5",
+            "0" : i18n(MODULE_NAME+".target-indicator-choices-0"),
+            "1" : i18n(MODULE_NAME+".target-indicator-choices-1"),
+            "2" : i18n(MODULE_NAME+".target-indicator-choices-2"),
+            "3" : i18n(MODULE_NAME+".target-indicator-choices-3"),
+            "4" : i18n(MODULE_NAME+".target-indicator-choices-4"),
+            "5" : i18n(MODULE_NAME+".target-indicator-choices-5"),
         }
     });
 
     game.settings.register(MODULE_NAME,'enable-color', {
-        name : "target-enhancements.options.enable-color.name",
-        hint : "target-enhancements.options.enable-color.hint",
+        name : i18n(MODULE_NAME+".enable-color-name"),
+        hint : i18n(MODULE_NAME+".enable-color-hint"),
         scope: "player",
         config: "true",
         default: false,
@@ -83,24 +83,24 @@ export const registerSettings = function () {
     });
 
     new ColorSetting(MODULE_NAME, 'friendly-color', {
-        name: "target-enhancements.options.friendly-color.name",
-        hint: "target-enhancements.options.friendly-color.hint",
+        name: i18n(MODULE_NAME+".friendly-color-name"),
+        hint: i18n(MODULE_NAME+".friendly-color-hint"),
         label: "Pick color",
         restricted: false,
         defaultColor: hexToRGBAString(0x43DFDF, 1),
         scope: "client"
     });
     new ColorSetting(MODULE_NAME, 'neutral-color', {
-        name: "target-enhancements.options.neutral-color.name",
-        hint: "target-enhancements.options.neutral-color.hint",
+        name: i18n(MODULE_NAME+".neutral-color-name"),
+        hint: i18n(MODULE_NAME+".neutral-color-hint"),
         label: "Pick color",
         restricted: false,
         defaultColor: hexToRGBAString(0xF1D836, 1),
         scope: "client"
     });
     new ColorSetting(MODULE_NAME, 'hostile-color', {
-        name: "target-enhancements.options.hostile-color.name",
-        hint: "target-enhancements.options.hostile-color.hint",
+        name: i18n(MODULE_NAME+".hostile-color-name"),
+        hint: i18n(MODULE_NAME+".hostile-color-hint"),
         label: "Pick color",
         restricted: false,
         defaultColor: hexToRGBAString(0xE72124, 1),
@@ -108,8 +108,8 @@ export const registerSettings = function () {
     });
 
     game.settings.register(MODULE_NAME,'enable-colorblind-features', {
-        name : "target-enhancements.options.enable-colorblind-features.name",
-        hint : "target-enhancements.options.enable-colorblind-features.hint",
+        name : i18n(MODULE_NAME+".enable-colorblind-features-name"),
+        hint : i18n(MODULE_NAME+".enable-colorblind-features-hint"),
         scope: "player",
         config: "true",
         default: false,
@@ -117,8 +117,8 @@ export const registerSettings = function () {
     });
 
     game.settings.register(MODULE_NAME,'use-player-color', {
-        name : "target-enhancements.options.use-player-color.name",
-        hint : "target-enhancements.options.use-player-color.hint",
+        name : i18n(MODULE_NAME+".use-player-color-name"),
+        hint : i18n(MODULE_NAME+".use-player-color-hint"),
         scope: "player",
         config: "true",
         default: true,
@@ -126,8 +126,8 @@ export const registerSettings = function () {
     });
 
     game.settings.register(MODULE_NAME,'use-fx-rotate', {
-        name : "target-enhancements.options.use-fx-rotate.name",
-        hint : "target-enhancements.options.use-fx-rotate.hint",
+        name : i18n(MODULE_NAME+".use-fx-rotate-name"),
+        hint : i18n(MODULE_NAME+".use-fx-rotate-hint"),
         scope: "player",
         config: "true",
         default: true,
@@ -135,8 +135,8 @@ export const registerSettings = function () {
     });
 
     game.settings.register(MODULE_NAME,'use-fx-pulse', {
-        name : "target-enhancements.options.use-fx-pulse.name",
-        hint : "target-enhancements.options.use-fx-pulse.hint",
+        name : i18n(MODULE_NAME+".use-fx-pulse-name"),
+        hint : i18n(MODULE_NAME+".use-fx-pulse-hint"),
         scope: "player",
         config: "true",
         default: true,
@@ -145,8 +145,8 @@ export const registerSettings = function () {
 
     // MOD 4535992 Removed we use easy-target
     // game.settings.register(MODULE_NAME,'enable-target-modifier-key', {
-    //     name : "target-enhancements.options.enable-target-modifier-key.name",
-    //     hint : "target-enhancements.options.enable-target-modifier-key.hint",
+    //     name : i18n(MODULE_NAME+".enable-target-modifier-key-name",
+    //     hint : i18n(MODULE_NAME+".enable-target-modifier-key-hint",
     //     scope: "world",
     //     config: "true",
     //     default: true,
@@ -154,8 +154,8 @@ export const registerSettings = function () {
     // });
 
     game.settings.register(MODULE_NAME,'enable-ctrl-resize-modifier', {
-        name : "target-enhancements.options.enable-ctrl-resize-modifier.name",
-        hint : "target-enhancements.options.enable-ctrl-resize-modifier.hint",
+        name : i18n(MODULE_NAME+".enable-ctrl-resize-modifier-name"),
+        hint : i18n(MODULE_NAME+".enable-ctrl-resize-modifier-hint"),
         scope: "world",
         config: "true",
         default: true,
@@ -163,8 +163,8 @@ export const registerSettings = function () {
     });
 
     game.settings.register(MODULE_NAME,'enable-target-portraits', {
-        name : "target-enhancements.options.enable-target-portraits.name",
-        hint : "target-enhancements.options.enable-target-portraits.hint",
+        name : i18n(MODULE_NAME+".enable-target-portraits-name"),
+        hint : i18n(MODULE_NAME+".enable-target-portraits-hint"),
         scope: "world",
         config: "true",
         default: true,
@@ -172,15 +172,15 @@ export const registerSettings = function () {
     });
 
     game.settings.register(MODULE_NAME, 'release', {
-      name: 'target-enhancements.options.ReleaseBehaviour',
-      hint: 'target-enhancements.options.ReleaseBehaviourHint',
+      name: i18n(MODULE_NAME+".ReleaseBehaviour"),
+      hint: i18n(MODULE_NAME+".ReleaseBehaviourHint"),
       scope: 'user',
       config: true,
       default: 'sticky',
       type: String,
       choices: {
-        'sticky': 'target-enhancements.options.Sticky',
-        'standard': 'target-enhancements.options.Standard'
+        'sticky': i18n(MODULE_NAME+".Sticky"),
+        'standard': i18n(MODULE_NAME+".Standard")
       }
     });
 }

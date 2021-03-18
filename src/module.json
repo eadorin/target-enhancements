@@ -21,7 +21,7 @@
     {
       "type": "icon",
       "location": ""
-    }, 
+    },
     {
       "type": "cover",
       "location": ""
@@ -32,10 +32,10 @@
     }
   ],
   "languages": [
-    { 
-      "lang": "en", 
-      "name": "English", 
-      "path": "lang/en.json" 
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
     }
   ],
   "scripts": [
