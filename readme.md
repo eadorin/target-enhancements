@@ -16,15 +16,7 @@ Thanks to all the other developers who inspired this work.
 
 I'm trying to make this module a upgrade of my favorite tagetting module for all  system 'Target Enhancements'.
 
-The developing include:
-
-- Converted to typescript project the module [Target Enhancements](https://github.com/eadorin/target-enhancements) thanks to [eadorin](https://github.com/eadorin) + minor bug fix
-- Direct integration with [easy target](https://bitbucket.org/Fyorl/easy-target/src/master/) thanks to [Fyorl](https://bitbucket.org/%7Beee45cf2-a6e7-43d6-bded-8054de334101%7D/)
-- Direct integration with [lib-targeting](https://github.com/eadorin/lib-targeting) thanks to [eadorin](https://github.com/eadorin) + minor bug fix
-- Generic minor bug fix
-- Direct integration [Better Target](https://github.com/sPOiDar/fvtt-module-better-target) thanks to [sPOiDar
-](https://github.com/sPOiDar/fvtt-module-better-target)
-
+The check out the  developing see the [changelog.md](./changelog.md)
   
 ## Installation
 
@@ -112,14 +104,6 @@ Simply use the install module screen within the FoundryVTT setup
 
 ## TODO List / Known Issues / Limitations
 
-- [Feature][High priority] Full integration of all hook with lib-wrapper module 
-
-- [Feature][Low priority] Full integration of i18n
-  
-- [Feature][Low priority] Integration of 'color settings' module for make choose color of target by single use on module settings 
-
-- [Feature][Low priority] Turn target features on/off
-
 - [Feature][Low priority] Adjust the display of the target token icons!! (currently uses a black outline + shadow)
 
 - [Feature][Low priority] Adjust size of target token icons
@@ -148,6 +132,8 @@ Thanks to anyone who helps me with this code! I appreciate the user community's 
 ](https://github.com/sPOiDar/fvtt-module-better-target)
 - [Target Enhancements](https://github.com/eadorin/target-enhancements) thanks to [eadorin](https://github.com/eadorin)
 - [Foundry VTT - Bullseye](https://gitlab.com/Ionshard/foundry-vtt-bullseye) ty to [Ionshard](https://gitlab.com/Ionshard)
+
+and of course a huge ty to all the developers of 'League of Extraordinary foundryvtt developers' for give me a hand every time i ask.
 
 ## License
 This Foundry VTT module, writen by Eadorin, is licensed under [GNU GPLv3.0](https://www.gnu.org/licenses/gpl-3.0.en.html), supplemented by [Commons Clause](https://commonsclause.com/).
