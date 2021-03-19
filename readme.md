@@ -8,13 +8,14 @@ There are more than 100 modules in foundry vtt but for what concerns the targett
 
 - [easy target](https://bitbucket.org/Fyorl/easy-target/src/master/) thanks to [Fyorl](https://bitbucket.org/%7Beee45cf2-a6e7-43d6-bded-8054de334101%7D/)
 - [Target Enhancements (Pre 1.0.0)](https://github.com/eadorin/target-enhancements) thanks to [eadorin](https://github.com/eadorin) 
-- [Better Target](https://github.com/sPOiDar/fvtt-module-better-target) thanks to [sPOiDar
-](https://github.com/sPOiDar/fvtt-module-better-target)
+- [Better Target](https://github.com/sPOiDar/fvtt-module-better-target) thanks to [sPOiDar](https://github.com/sPOiDar/fvtt-module-better-target)
+- [T is for target](https://github.com/basicer/foundryvtt-t-is-for-target) thanks to [basicer](https://github.com/basicer)
 
 So the scope of this module is to reduce the number of modules on your game and integrate them with each other and put together something that works (more or less, there is still some work to do).
+
 Thanks to all the other developers who inspired this work.
 
-I'm trying to make this module a upgrade of my favorite tagetting module for all  system 'Target Enhancements'.
+I'm trying to make this module a upgrade of my favorite tagetting module for all system 'Target Enhancements'.
 
 The check out the  developing see the [changelog.md](./changelog.md)
   
@@ -48,7 +49,7 @@ Simply use the install module screen within the FoundryVTT setup
 
 ![Better Target 2](./img/better_target_2.png?raw=true)
 
-- [Experimental][need more developing] Write on the chat who is targeting whom, or who is being targeted by whom thanks to the lib-targetting library module
+- [Experimental][It's work but the chat a little ugly ] Write on the chat who is targeting whom, or who is being targeted by whom thanks to the lib-targetting library module
 
 ## Settings
 
@@ -132,6 +133,7 @@ Thanks to anyone who helps me with this code! I appreciate the user community's 
 - [Target Enhancements](https://github.com/eadorin/target-enhancements) thanks to [eadorin](https://github.com/eadorin)
 - [Foundry VTT - Bullseye](https://gitlab.com/Ionshard/foundry-vtt-bullseye) ty to [Ionshard](https://gitlab.com/Ionshard)
 - [settings-extender](https://gitlab.com/cswendrowski/settings-extender) ty to [foundry-azzurrite](https://gitlab.com/foundry-azzurite)
+- [T is for target](https://github.com/basicer/foundryvtt-t-is-for-target) ty to [basicer](https://github.com/basicer)
 
 and of course a huge ty to all the developers of 'League of Extraordinary foundryvtt developers' for give me a hand every time i ask.
 
