@@ -62,20 +62,20 @@ export function clearTargets() {
     {
         target.value.setTarget(
             false,
-            { 
-                user: game.user, 
+            {
+                user: game.user,
                 releaseOthers: true,
-                groupSelection:false 
+                groupSelection:false
             }
         );
     }
-    // game.user.targets.forEach( 
+    // game.user.targets.forEach(
     //     t => t['setTarget'](
-    //         false, 
+    //         false,
     //         {
-    //             user: game.user, 
-    //             releaseOthers: true, 
-    //             groupSelection:false 
+    //             user: game.user,
+    //             releaseOthers: true,
+    //             groupSelection:false
     //         }
     //     )
     // );
@@ -89,6 +89,6 @@ export function clearTargets() {
             token['target']['graphicsData'].length = 0;
         }
     }
-    
+
     game.user.targets = new Set();
 }

@@ -1,7 +1,7 @@
 /**
  * main entry point
  * Used to kickoff our target enhancements
- * 
+ *
  *  canvas.scene.update({"flags.-=target-enhancements":null}); // fixes random issues.
  */
 
@@ -78,7 +78,7 @@ export class TargetEnhancements {
         //         TargetEnhancements.modKeyPressed = false;
         //         document.body.style.cursor = 'default';
         //     });
-    
+
         //     // consider moving to onHoverToken()
 
         //     for (let x = canvas.tokens.placeables.length -1; x >=0; x--) {
@@ -88,12 +88,12 @@ export class TargetEnhancements {
         //             token.data.scale = token.getFlag(MODULE_NAME,TargetEnhancements.resizeFlagKey) || 1;
         //             token.refresh();
         //         } catch (ex) {}
-                
+
         //     }
         // }
-
-        if (!game.user.isGM) { 
-            return; 
+        // END MOD 4535992 Removed we use easy-target
+        if (!game.user.isGM) {
+            return;
         }
         TargetEnhancements.registerResizeModifier();
         $('body').on('mousewheel',TargetEnhancements.resizeHandler);
@@ -121,9 +121,9 @@ export class TargetEnhancements {
     /**
      * Have to reset existing target art on hover
      * @param {Token} token -- Token instance passed in
-     * @param {*} tf 
+     * @param {*} tf
      */
-    static async hoverTokenEventHandler(token,hovered) { 
+    static async hoverTokenEventHandler(token,hovered) {
         token.target.clear();
 
         if (TargetEnhancements.getTargets(await token.targeted).selfA.length) {
@@ -137,14 +137,14 @@ export class TargetEnhancements {
         TargetEnhancements.clickedToken = token.id;
         TargetEnhancements.resizeToken  = token.id;
 
-        
+
         // TargetEnhancements.customBorderColorsInternal();
-        
-        
+
+
         let text:any = "";
         var line:any = new PIXI.Graphics();
         switch (token.data.disposition) {
-           
+
             case 1 :
                 text = TargetEnhancements.friendly_text;
                 line.lineStyle(3,0x00FF00);
@@ -157,7 +157,7 @@ export class TargetEnhancements {
                 text = TargetEnhancements.hostile_text;
                 line.lineStyle(3,0xFF0000);
                 break;
-            
+
         }
 
         line.moveTo(0,0);
@@ -214,7 +214,7 @@ export class TargetEnhancements {
                 }
                 token.setFlag(MODULE_NAME,TargetEnhancements.resizeFlagKey,token.data.scale);
             }
-            
+
         }
     }
 
@@ -223,10 +223,10 @@ export class TargetEnhancements {
      * @param {Scene} scene -- The current Scene
      * @param {Token} token_obj -- token instance
      * @param {*} update -- the data being updated
-     * @param {*} dif 
+     * @param {*} dif
      * @param {*} userId -- user who made the change
      */
-    static async updateTokenEventHandler(scene,token_obj,update,dif,userId) { 
+    static async updateTokenEventHandler(scene,token_obj,update,dif,userId) {
         let token = canvas.tokens.get(token_obj._id);
         // console.log("Token updated:",token.icon);
         try {
@@ -234,9 +234,9 @@ export class TargetEnhancements {
         } catch (error) {}
         // patch for issue #11. Only fixes it for DND I think :(
         try {
-            if (token_obj.actorData.data.attributes.hp.value == 0) {return;} 
+            if (token_obj.actorData.data.attributes.hp.value == 0) {return;}
         } catch (error) {}
-        
+
 
         if (token?.targeted && TargetEnhancements.getTargets(await token.targeted).selfA.length) {
             TargetEnhancements.drawTargetIndicators(token);
@@ -260,7 +260,7 @@ export class TargetEnhancements {
 
          // only redraw if not already existing
          if (token.target.children.length <= 0) {
-            // MOD 4535992 2021-03-08 
+            // MOD 4535992 2021-03-08
             //let indicator = new TargetIndicator(token);
             //indicator.create(selectedIndicator);
             TargetEnhancements.tickerFunctions[token.data._id] = new TargetIndicator(token);
@@ -282,7 +282,7 @@ export class TargetEnhancements {
 
     /**
      * Splits the <set> of targets of a token into two arrays
-     * @param {set} tokenTargets 
+     * @param {set} tokenTargets
      * @return {object} -- contains 2 arrays; one with other users and one with current player
      */
     static getTargets(tokenTargets) {
@@ -348,7 +348,7 @@ export class TargetEnhancements {
             canvas.scene.setFlag(MODULE_NAME, (TargetEnhancements.npc_targeting_key) , toStore);
         })
         await token.target.clear();
-        
+
         TargetClass.targetClassControlTokenHandler(token, opt);
         return;
     }
@@ -365,9 +365,9 @@ export class TargetEnhancements {
         var othersArray = [];
         var npcs = [];
         let tokenTargets = await token.targeted; // this takes time to arrive
-  
 
-        
+
+
         // clear any existing items/icons
         // if (game.settings.get(mod,"enable-target-portraits")) {
             try {
@@ -379,12 +379,12 @@ export class TargetEnhancements {
                 // token.target._fillStyle.visible = false;
                 // token.target.fill.visible = false;
                 // token.target.graphicsData.length = 0;
-                
+
             } catch(err) {
                 // something weird happeened. return;
                 error(err);
             }
-        // } 
+        // }
 
         // if for some reason we still don't have a size
         if (!tokenTargets.size) return;
@@ -431,7 +431,7 @@ export class TargetEnhancements {
         //-----------------------------
         //           Target
         //-----------------------------
-        if (userArray.length) { 
+        if (userArray.length) {
             TargetEnhancements.drawTargetIndicators(token);
         }
 
@@ -441,7 +441,7 @@ export class TargetEnhancements {
         if (!targetingItems.length) { return;} // only user is ourself or no one
 
         // TODO: update which tokens are now targeting the token, store this in a custom property or in a canvas flag
- 
+
         if (!game.settings.get(MODULE_NAME,"enable-target-portraits")){
             return;
         }
@@ -451,7 +451,7 @@ export class TargetEnhancements {
 
         TargetClass.targetClassTargetTokenHandler(usr, token, targeted);
         return;
-        
+
     }
 
 
@@ -497,7 +497,7 @@ export class TargetEnhancements {
             } else {
                 icon = PIXI.Sprite.from(user.avatar);
             }
-            
+
 
         } catch (err) {
             try {
@@ -505,7 +505,7 @@ export class TargetEnhancements {
             } catch (er) {
                 icon = PIXI.Sprite.from("icons/svg/mystery-man.svg");
             }
-            
+
         }
 
         // set the icon dimensions & anchor
@@ -513,17 +513,17 @@ export class TargetEnhancements {
         icon.anchor.y = 0;
         icon.width  = this.icon_size;
         icon.height = this.icon_size;
-   
+
         //-----------------------------
         //      Icon Positioning
         //-----------------------------
 
         /*
-         * TODO: 
+         * TODO:
          * [-] finish different arrangements
          * [-] refactor out to Icon Class?
          */
-        let icon_arrangement = 1; 
+        let icon_arrangement = 1;
         if (icon_arrangement==1) {
             // Top, Bottom, Top, Bottom
             //-----------------------------
@@ -561,17 +561,17 @@ export class TargetEnhancements {
         let drawbox = true;
         let drawCircle = false;
         if (drawbox) {
-            
+
             bg.beginFill(colorStringToHex((user.color) ? user.color : '#000000'), .4);
             bg.drawRect(icon.position.x - 1, icon.position.y - 1, this.icon_size + 1, this.icon_size + 1);
             bg.endFill();
         }
-        
+
         if (drawCircle) {
             bg.beginFill(colorStringToHex((user.color) ? user.color : '#000000'), .4);
             bg.drawCircle(icon.position.x + this.icon_size /2, icon.position.y + this.icon_size / 2, this.icon_size+.5);
             bg.lineStyle(3.2,0x000000);
-            
+
             oc.lineStyle(1.2,0x000000);
             oc.drawCircle(icon.position.x + this.icon_size / 2, icon.position.y + this.icon_size / 2, this.icon_size + .5);
 
@@ -586,7 +586,7 @@ export class TargetEnhancements {
         p.addChild(icon);
         return p;
         return icon;
-        
+
     }
 
     /**
@@ -613,10 +613,10 @@ export class TargetEnhancements {
             let token:Token = data;
             if (token.getFlag(MODULE_NAME,TargetEnhancements.resizeFlagKey)) {
                 token.data.scale = token.getFlag(MODULE_NAME,TargetEnhancements.resizeFlagKey);
-            } 
+            }
         }
     }
-    
+
     /**
      * Button Handler to clear token targets & selections
      * @param {User} user              -- the user clearing the targets
@@ -625,7 +625,7 @@ export class TargetEnhancements {
     static clearTokenTargetsHandler(user,tokenlayer) {
 
         user.targets.forEach( t => t.setTarget(false, {user: user, releaseOthers: true, groupSelection:false }));
-        // TODO SEEM DEPRECATED ASK FOR HELP
+
         /*
         tokenlayer.selectObjects({
             x:0,
@@ -635,7 +635,7 @@ export class TargetEnhancements {
             controlOptions:{releaseOthers:true,updateSight:true}
         });
         */
-        if (user.isGM) { 
+        if (user.isGM) {
             canvas.scene.unsetFlag(MODULE_NAME,TargetEnhancements.npc_targeting_key);
         }
 
@@ -653,11 +653,11 @@ export class TargetEnhancements {
     static getSceneControlButtonsHandler(controls) {
 
         let control = controls.find(c => c.name === "token") || controls[0];
-  
+
         control.tools.push({
-            name: "cancelTargets", 
+            name: "cancelTargets",
             title: "Clear Targets/Selection",
-            icon:"fa fa-times-circle", 
+            icon:"fa fa-times-circle",
             //visible: game.settings.get(MODULE_NAME, "XXX"),
             button:true,
             onClick: () => {
@@ -669,9 +669,9 @@ export class TargetEnhancements {
         });
         /*
         var icon1 = {
-            name: "cancelTargets", 
+            name: "cancelTargets",
             title: "Clear Targets/Selection",
-            icon:"fa fa-times-circle", 
+            icon:"fa fa-times-circle",
             button:true,
             onClick: function() { Hooks.call("clearTokenTargets",game.user,TokenLayer.instance);},
             layer: "TokenLayer"
@@ -696,7 +696,7 @@ export class TargetEnhancements {
                 let d = parseInt(this.data.disposition);
                 if (!game.user.isGM && this.owner){
                     mycolor = 0xFF9829;// Owner
-                } 
+                }
                 else if (this.actor && this.actor.hasPlayerOwner){
                     mycolor = 0x33BC4E;  // Party Member
                 }
@@ -722,17 +722,17 @@ export class TargetEnhancements {
     static drawDashLine  = function (...args) {
         const [toX, toY, dash = 16, gap = 8] = args;
         const lastPosition = this.currentPath.points;
-  
+
         const currentPosition = {
           x: lastPosition[lastPosition.length - 2] || 0,
           y: lastPosition[lastPosition.length - 1] || 0
         };
-      
+
         const absValues = {
           toX: Math.abs(toX),
           toY: Math.abs(toY)
         };
-      
+
         for (
           ;
           Math.abs(currentPosition.x) < absValues.toX ||
@@ -746,9 +746,9 @@ export class TargetEnhancements {
             Math.abs(currentPosition.y + dash) < absValues.toY
               ? currentPosition.y + dash
               : toY;
-      
+
           this.lineTo(currentPosition.x, currentPosition.y);
-      
+
           currentPosition.x =
             Math.abs(currentPosition.x + gap) < absValues.toX
               ? currentPosition.x + gap
@@ -757,10 +757,58 @@ export class TargetEnhancements {
             Math.abs(currentPosition.y + gap) < absValues.toY
               ? currentPosition.y + gap
               : toY;
-      
+
           this.moveTo(currentPosition.x, currentPosition.y);
-        }    
+        }
         //return wrapped(...args);
+    }
+
+   /**
+    * This adds handling to untarget and remove any animations
+    * The tokenDelete event is called after a token is destroyed which is too late to handle un-targeting
+    */
+    static tokenDeleteHandler = function (wrapped, ...args) {
+      if (TargetEnhancements.tickerFunctions[this.data._id]) {
+        TargetEnhancements.tickerFunctions[this.data._id].destroy();
+        delete TargetEnhancements.tickerFunctions[this.data._id];
+      }
+      this.targeted.forEach((user) =>
+          user.targets.forEach((t) =>
+              t.setTarget(false, {user: user, releaseOthers: true, groupSelection:false })
+          )
+      );
+      //return onDelete.apply(this, options, userId);
+      // return onDelete.apply(options, userId);
+      return wrapped(...args);
+    }
+
+    /**
+     * If using the modifier to target a mob, sets them as a target
+     * TODO CHECK OUT THIS FUNCTION WITH lib-wrapper
+     */
+    static handleTokenClick = async function (wrapped, ...args) {
+        const [event] = args;
+        let token = await Helpers.getTokenByTokenID(TargetEnhancements.clickedToken);
+        if (game.settings.get(MODULE_NAME,'enable-target-modifier-key')) {
+            if (TargetEnhancements.modKeyPressed) {
+                token.target.clear();
+                if (!token.targeted.has(game.user)) {
+                    token.setTarget(game.user, {releaseOthers: false});
+                } else {
+                    token.setTarget(false, {user: game.user, releaseOthers: false, groupSelection: true});
+                }
+            }
+        }else{
+          // DEFAULT IS EASY TARGET BEHAVIOUR
+          if (event.altKey && event.key === 'C') {
+            game.user.targets.forEach(token =>
+              token['setTarget'](false, {releaseOthers: false, groupSelection: true})
+            );
+            game.user['broadcastActivity']({targets: game.user.targets['ids']});
+          }
+
+        }
+        return wrapped(...args);
     }
 }
 
@@ -789,17 +837,17 @@ export class TargetEnhancements {
 
 // PIXI.Graphics.prototype['drawDashLine'] = function(toX, toY, dash = 16, gap = 8) {
 //     const lastPosition = this.currentPath.points;
-  
+
 //     const currentPosition = {
 //       x: lastPosition[lastPosition.length - 2] || 0,
 //       y: lastPosition[lastPosition.length - 1] || 0
 //     };
-  
+
 //     const absValues = {
 //       toX: Math.abs(toX),
 //       toY: Math.abs(toY)
 //     };
-  
+
 //     for (
 //       ;
 //       Math.abs(currentPosition.x) < absValues.toX ||
@@ -813,9 +861,9 @@ export class TargetEnhancements {
 //         Math.abs(currentPosition.y + dash) < absValues.toY
 //           ? currentPosition.y + dash
 //           : toY;
-  
+
 //       this.lineTo(currentPosition.x, currentPosition.y);
-  
+
 //       currentPosition.x =
 //         Math.abs(currentPosition.x + gap) < absValues.toX
 //           ? currentPosition.x + gap
@@ -824,8 +872,7 @@ export class TargetEnhancements {
 //         Math.abs(currentPosition.y + gap) < absValues.toY
 //           ? currentPosition.y + gap
 //           : toY;
-  
+
 //       this.moveTo(currentPosition.x, currentPosition.y);
 //     }
 //   };
-  

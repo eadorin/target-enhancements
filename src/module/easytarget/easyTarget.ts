@@ -1,11 +1,12 @@
 // For Zamrod.
 // Special thanks to Reaver.
 
-import { MODULE_NAME } from '../settings';
+import { KeyBinding, MODULE_NAME } from '../settings';
 import {libWrapper} from '../libs/shim.js'
 import { TargetEnhancements } from '../TargetEnhancements';
 import { error } from '../../target-enhancements';
 import { TargetClass } from '../lib-targeting/TargetClass';
+import { parsedValueKeyBindingTarget } from '../Hooks';
 export class EasyTarget {
 	static getTemplateShape = function (template) {
 		let shape = template.data.t;
@@ -31,7 +32,7 @@ export class EasyTarget {
 
 	// patch = function () {
 	// 	const releaseOthersMap = new WeakMap();
-			
+
 		static tokenSetTarget = function (wrapped, ...args) {
 			const releaseOthers = EasyTarget.releaseOthersMap.get(this);
 			if (releaseOthers !== undefined) {
@@ -51,9 +52,9 @@ export class EasyTarget {
 				}
 			}
 			let targeted = this.targeted.size == 0 ? false : true;
-			
+
 			TargetEnhancements.targetTokenEventHandler(game.user, this, targeted);
-					
+
 			// END MOD 4535992
 			return wrapped(...args);
 		}
@@ -255,7 +256,7 @@ export class EasyTarget {
 				//token.setTarget(false, {releaseOthers: false, groupSelection: true})
 				token['setTarget'](false, {releaseOthers: false, groupSelection: true})
 			);
-				
+
 		}
 
 		canvas.tokens.objects.children.filter(token => {
@@ -270,24 +271,17 @@ export class EasyTarget {
 	}
 };
 
-// Hooks.once('init', () => EasyTarget.patch());
-// Hooks.once('ready', function () {
-// 	game.settings.register('easy-target', 'release', {
-// 		name: 'EASYTGT.ReleaseBehaviour',
-// 		hint: 'EASYTGT.ReleaseBehaviourHint',
-// 		scope: 'user',
-// 		config: true,
-// 		default: 'sticky',
-// 		type: String,
-// 		choices: {
-// 			'sticky': 'EASYTGT.Sticky',
-// 			'standard': 'EASYTGT.Standard'
-// 		}
-// 	});
+// document.addEventListener('keydown', event => {
+// 	if (event.altKey && event.key === 'C') {
+// 		game.user.targets.forEach(token =>
+// 			token['setTarget'](false, {releaseOthers: false, groupSelection: true})
+// 		);
+// 		game.user['broadcastActivity']({targets: game.user.targets['ids']});
+// 	}
 // });
 
 document.addEventListener('keydown', event => {
-	if (event.altKey && event.key === 'C') {
+	if (KeyBinding.eventIsForBinding(event, parsedValueKeyBindingTarget) && event.key === 'C') {
 		game.user.targets.forEach(token =>
 			token['setTarget'](false, {releaseOthers: false, groupSelection: true})
 		);

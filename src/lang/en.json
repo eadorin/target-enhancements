@@ -42,6 +42,8 @@
     "target-enhancements.enable-better-target-name" : "Enable better target feature",
     "target-enhancements.enable-better-target-hint" : "Enable better target feature",
     "target-enhancements.enable-color-name" : "Enable color feature",
-    "target-enhancements.enable-color-hint" : "Enable color feature"
+    "target-enhancements.enable-color-hint" : "Enable color feature",
+    "target-enhancements.set-customize-hotkey-target-name" : "Customize the hotkey for targetting",
+    "target-enhancements.set-customize-hotkey-target-hint" : "Customize the hotkey for targetting"
 
 }

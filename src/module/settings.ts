@@ -3,15 +3,18 @@ import { TargetsTable } from './lib-targeting/TargetsTable';
 import { NPCTargeting } from './lib-targeting/NPCTargeting';
 //@ts-ignore
 import ColorSetting from '../../colorsettings/colorSetting.js';
+// import './libs/settings-extender.js';
 
 window['TargetsTable'] = TargetsTable;
 window['NPCTargeting'] = NPCTargeting;
 
 export const MODULE_NAME = 'target-enhancements';
 
+export const KeyBinding = window['Azzu'].SettingsTypes.KeyBinding;
+
 export const registerSettings = function () {
 
-    game.settings.register(MODULE_NAME, 'display_notificaton_enable_notification', {
+  game.settings.register(MODULE_NAME, 'display_notificaton_enable_notification', {
 		name: i18n(MODULE_NAME+".display-notificaton-enable-notification-name"),
 		default: false,
 		type: Boolean,
@@ -20,7 +23,7 @@ export const registerSettings = function () {
 		hint: i18n(MODULE_NAME+".display-notificaton-enable-notification-hint")
 	});
 
-    game.settings.register(MODULE_NAME, 'display_notificaton_npc_name', {
+  game.settings.register(MODULE_NAME, 'display_notificaton_npc_name', {
 		name: i18n(MODULE_NAME+".display-notificaton-npc-name-name"),
 		default: false,
 		type: Boolean,
@@ -47,142 +50,152 @@ export const registerSettings = function () {
 		hint: i18n(MODULE_NAME+".display-notificaton-show-to-players-the-player-updates-hint")
 	});
 
-    game.settings.register(MODULE_NAME,'enable-better-target', {
-        name : i18n(MODULE_NAME+".enable-better-target-name"),
-        hint : i18n(MODULE_NAME+".enable-better-target-hint"),
-        scope: "player",
-        config: "true",
-        default: false,
-        type: Boolean
-    });
+  game.settings.register(MODULE_NAME,'enable-better-target', {
+      name : i18n(MODULE_NAME+".enable-better-target-name"),
+      hint : i18n(MODULE_NAME+".enable-better-target-hint"),
+      scope: "player",
+      config: "true",
+      default: false,
+      type: Boolean
+  });
 
-    game.settings.register(MODULE_NAME,'target-indicator',{
-        name: i18n(MODULE_NAME+".target-indicator-name"),
-        hint: i18n(MODULE_NAME+".target-indicator-hint"),
-        scope: "player",
-        config: true,
-        default: "0",
-        type: String,
-        choices: {
-            "0" : i18n(MODULE_NAME+".target-indicator-choices-0"),
-            "1" : i18n(MODULE_NAME+".target-indicator-choices-1"),
-            "2" : i18n(MODULE_NAME+".target-indicator-choices-2"),
-            "3" : i18n(MODULE_NAME+".target-indicator-choices-3"),
-            "4" : i18n(MODULE_NAME+".target-indicator-choices-4"),
-            "5" : i18n(MODULE_NAME+".target-indicator-choices-5"),
-        }
-    });
-
-    game.settings.register(MODULE_NAME,'enable-color', {
-        name : i18n(MODULE_NAME+".enable-color-name"),
-        hint : i18n(MODULE_NAME+".enable-color-hint"),
-        scope: "player",
-        config: "true",
-        default: false,
-        type: Boolean
-    });
-
-    new ColorSetting(MODULE_NAME, 'friendly-color', {
-        name: i18n(MODULE_NAME+".friendly-color-name"),
-        hint: i18n(MODULE_NAME+".friendly-color-hint"),
-        label: "Pick color",
-        restricted: false,
-        defaultColor: hexToRGBAString(0x43DFDF, 1),
-        scope: "client"
-    });
-    new ColorSetting(MODULE_NAME, 'neutral-color', {
-        name: i18n(MODULE_NAME+".neutral-color-name"),
-        hint: i18n(MODULE_NAME+".neutral-color-hint"),
-        label: "Pick color",
-        restricted: false,
-        defaultColor: hexToRGBAString(0xF1D836, 1),
-        scope: "client"
-    });
-    new ColorSetting(MODULE_NAME, 'hostile-color', {
-        name: i18n(MODULE_NAME+".hostile-color-name"),
-        hint: i18n(MODULE_NAME+".hostile-color-hint"),
-        label: "Pick color",
-        restricted: false,
-        defaultColor: hexToRGBAString(0xE72124, 1),
-        scope: "client"
-    });
-
-    game.settings.register(MODULE_NAME,'enable-colorblind-features', {
-        name : i18n(MODULE_NAME+".enable-colorblind-features-name"),
-        hint : i18n(MODULE_NAME+".enable-colorblind-features-hint"),
-        scope: "player",
-        config: "true",
-        default: false,
-        type: Boolean
-    });
-
-    game.settings.register(MODULE_NAME,'use-player-color', {
-        name : i18n(MODULE_NAME+".use-player-color-name"),
-        hint : i18n(MODULE_NAME+".use-player-color-hint"),
-        scope: "player",
-        config: "true",
-        default: true,
-        type: Boolean
-    });
-
-    game.settings.register(MODULE_NAME,'use-fx-rotate', {
-        name : i18n(MODULE_NAME+".use-fx-rotate-name"),
-        hint : i18n(MODULE_NAME+".use-fx-rotate-hint"),
-        scope: "player",
-        config: "true",
-        default: true,
-        type: Boolean
-    });
-
-    game.settings.register(MODULE_NAME,'use-fx-pulse', {
-        name : i18n(MODULE_NAME+".use-fx-pulse-name"),
-        hint : i18n(MODULE_NAME+".use-fx-pulse-hint"),
-        scope: "player",
-        config: "true",
-        default: true,
-        type: Boolean
-    });
-
-    // MOD 4535992 Removed we use easy-target
-    // game.settings.register(MODULE_NAME,'enable-target-modifier-key', {
-    //     name : i18n(MODULE_NAME+".enable-target-modifier-key-name",
-    //     hint : i18n(MODULE_NAME+".enable-target-modifier-key-hint",
-    //     scope: "world",
-    //     config: "true",
-    //     default: true,
-    //     type: Boolean
-    // });
-
-    game.settings.register(MODULE_NAME,'enable-ctrl-resize-modifier', {
-        name : i18n(MODULE_NAME+".enable-ctrl-resize-modifier-name"),
-        hint : i18n(MODULE_NAME+".enable-ctrl-resize-modifier-hint"),
-        scope: "world",
-        config: "true",
-        default: true,
-        type: Boolean
-    });
-
-    game.settings.register(MODULE_NAME,'enable-target-portraits', {
-        name : i18n(MODULE_NAME+".enable-target-portraits-name"),
-        hint : i18n(MODULE_NAME+".enable-target-portraits-hint"),
-        scope: "world",
-        config: "true",
-        default: true,
-        type: Boolean
-    });
-
-    game.settings.register(MODULE_NAME, 'release', {
-      name: i18n(MODULE_NAME+".ReleaseBehaviour"),
-      hint: i18n(MODULE_NAME+".ReleaseBehaviourHint"),
-      scope: 'user',
+  game.settings.register(MODULE_NAME,'target-indicator',{
+      name: i18n(MODULE_NAME+".target-indicator-name"),
+      hint: i18n(MODULE_NAME+".target-indicator-hint"),
+      scope: "player",
       config: true,
-      default: 'sticky',
+      default: "0",
       type: String,
       choices: {
-        'sticky': i18n(MODULE_NAME+".Sticky"),
-        'standard': i18n(MODULE_NAME+".Standard")
+          "0" : i18n(MODULE_NAME+".target-indicator-choices-0"),
+          "1" : i18n(MODULE_NAME+".target-indicator-choices-1"),
+          "2" : i18n(MODULE_NAME+".target-indicator-choices-2"),
+          "3" : i18n(MODULE_NAME+".target-indicator-choices-3"),
+          "4" : i18n(MODULE_NAME+".target-indicator-choices-4"),
+          "5" : i18n(MODULE_NAME+".target-indicator-choices-5"),
       }
-    });
+  });
+
+  game.settings.register(MODULE_NAME,'enable-color', {
+      name : i18n(MODULE_NAME+".enable-color-name"),
+      hint : i18n(MODULE_NAME+".enable-color-hint"),
+      scope: "player",
+      config: "true",
+      default: false,
+      type: Boolean
+  });
+
+  new ColorSetting(MODULE_NAME, 'friendly-color', {
+      name: i18n(MODULE_NAME+".friendly-color-name"),
+      hint: i18n(MODULE_NAME+".friendly-color-hint"),
+      label: "Pick color",
+      restricted: false,
+      defaultColor: hexToRGBAString(0x43DFDF, 1),
+      scope: "client"
+  });
+  new ColorSetting(MODULE_NAME, 'neutral-color', {
+      name: i18n(MODULE_NAME+".neutral-color-name"),
+      hint: i18n(MODULE_NAME+".neutral-color-hint"),
+      label: "Pick color",
+      restricted: false,
+      defaultColor: hexToRGBAString(0xF1D836, 1),
+      scope: "client"
+  });
+  new ColorSetting(MODULE_NAME, 'hostile-color', {
+      name: i18n(MODULE_NAME+".hostile-color-name"),
+      hint: i18n(MODULE_NAME+".hostile-color-hint"),
+      label: "Pick color",
+      restricted: false,
+      defaultColor: hexToRGBAString(0xE72124, 1),
+      scope: "client"
+  });
+
+  game.settings.register(MODULE_NAME,'enable-colorblind-features', {
+      name : i18n(MODULE_NAME+".enable-colorblind-features-name"),
+      hint : i18n(MODULE_NAME+".enable-colorblind-features-hint"),
+      scope: "player",
+      config: "true",
+      default: false,
+      type: Boolean
+  });
+
+  game.settings.register(MODULE_NAME,'use-player-color', {
+      name : i18n(MODULE_NAME+".use-player-color-name"),
+      hint : i18n(MODULE_NAME+".use-player-color-hint"),
+      scope: "player",
+      config: "true",
+      default: true,
+      type: Boolean
+  });
+
+  game.settings.register(MODULE_NAME,'use-fx-rotate', {
+      name : i18n(MODULE_NAME+".use-fx-rotate-name"),
+      hint : i18n(MODULE_NAME+".use-fx-rotate-hint"),
+      scope: "player",
+      config: "true",
+      default: true,
+      type: Boolean
+  });
+
+  game.settings.register(MODULE_NAME,'use-fx-pulse', {
+      name : i18n(MODULE_NAME+".use-fx-pulse-name"),
+      hint : i18n(MODULE_NAME+".use-fx-pulse-hint"),
+      scope: "player",
+      config: "true",
+      default: true,
+      type: Boolean
+  });
+
+  // MOD 4535992 Removed we use easy-target
+  // game.settings.register(MODULE_NAME,'enable-target-modifier-key', {
+  //     name : i18n(MODULE_NAME+".enable-target-modifier-key-name",
+  //     hint : i18n(MODULE_NAME+".enable-target-modifier-key-hint",
+  //     scope: "world",
+  //     config: "true",
+  //     default: true,
+  //     type: Boolean
+  // });
+
+  game.settings.register(MODULE_NAME,'enable-ctrl-resize-modifier', {
+      name : i18n(MODULE_NAME+".enable-ctrl-resize-modifier-name"),
+      hint : i18n(MODULE_NAME+".enable-ctrl-resize-modifier-hint"),
+      scope: "world",
+      config: "true",
+      default: true,
+      type: Boolean
+  });
+
+  game.settings.register(MODULE_NAME,'enable-target-portraits', {
+      name : i18n(MODULE_NAME+".enable-target-portraits-name"),
+      hint : i18n(MODULE_NAME+".enable-target-portraits-hint"),
+      scope: "world",
+      config: "true",
+      default: true,
+      type: Boolean
+  });
+
+  game.settings.register(MODULE_NAME, 'release', {
+    name: i18n(MODULE_NAME+".ReleaseBehaviour"),
+    hint: i18n(MODULE_NAME+".ReleaseBehaviourHint"),
+    scope: 'user',
+    config: true,
+    default: 'sticky',
+    type: String,
+    choices: {
+      'sticky': i18n(MODULE_NAME+".Sticky"),
+      'standard': i18n(MODULE_NAME+".Standard")
+    }
+  });
+
+  game.settings.register(MODULE_NAME, 'set-customize-hotkey-target', {
+    name: i18n(MODULE_NAME+".set-customize-hotkey-target-name"),
+    hint: i18n(MODULE_NAME+".set-customize-hotkey-target-hint"),
+    type: window['Azzu'].SettingsTypes.KeyBinding,
+    default: 'Alt',
+    scope: 'client',
+    config: true
+  });
+
 }
 
 // function setup(templateSettings) {

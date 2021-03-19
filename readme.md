@@ -128,10 +128,10 @@ Thanks to anyone who helps me with this code! I appreciate the user community's 
 - [PixiJS-Filters](https://github.com/pixijs/pixi-filters)
 - [easy target](https://bitbucket.org/Fyorl/easy-target/src/master/) thanks to [Fyorl](https://bitbucket.org/%7Beee45cf2-a6e7-43d6-bded-8054de334101%7D/)
 - [lib-targeting](https://github.com/eadorin/lib-targeting) thanks to [eadorin](https://github.com/eadorin)
-- [Better Target](https://github.com/sPOiDar/fvtt-module-better-target) thanks to [sPOiDar
-](https://github.com/sPOiDar/fvtt-module-better-target)
+- [Better Target](https://github.com/sPOiDar/fvtt-module-better-target) thanks to [sPOiDar](https://github.com/sPOiDar/fvtt-module-better-target)
 - [Target Enhancements](https://github.com/eadorin/target-enhancements) thanks to [eadorin](https://github.com/eadorin)
 - [Foundry VTT - Bullseye](https://gitlab.com/Ionshard/foundry-vtt-bullseye) ty to [Ionshard](https://gitlab.com/Ionshard)
+- [settings-extender](https://gitlab.com/cswendrowski/settings-extender) ty to [foundry-azzurrite](https://gitlab.com/foundry-azzurite)
 
 and of course a huge ty to all the developers of 'League of Extraordinary foundryvtt developers' for give me a hand every time i ask.
 

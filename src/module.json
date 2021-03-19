@@ -41,7 +41,8 @@
   "scripts": [
     "./module/libs/pixi-filters.js",
     "./module/libs/filters/pixi-filters.js",
-    "./module/libs/libWrapper/shim.js"
+    "./module/libs/libWrapper/shim.js",
+    "./module/libs/settings-extender.js"
   ],
   "esmodules": [
     "target-enhancements.js"
