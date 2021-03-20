@@ -11,6 +11,7 @@ window['NPCTargeting'] = NPCTargeting;
 export const MODULE_NAME = 'target-enhancements';
 
 export const KeyBinding = window['Azzu'].SettingsTypes.KeyBinding;
+export let parsedValueKeyBindingTarget = KeyBinding.parse("Alt");
 
 export const registerSettings = function () {
 
@@ -187,14 +188,25 @@ export const registerSettings = function () {
     }
   });
 
-  game.settings.register(MODULE_NAME, 'set-customize-hotkey-target', {
-    name: i18n(MODULE_NAME+".set-customize-hotkey-target-name"),
-    hint: i18n(MODULE_NAME+".set-customize-hotkey-target-hint"),
-    type: window['Azzu'].SettingsTypes.KeyBinding,
-    default: 'Alt',
-    scope: 'client',
-    config: true
-  });
+//   game.settings.register(MODULE_NAME, 'set-customize-hotkey-target', {
+//     name: i18n(MODULE_NAME+".set-customize-hotkey-target-name"),
+//     hint: i18n(MODULE_NAME+".set-customize-hotkey-target-hint"),
+//     type: window['Azzu'].SettingsTypes.KeyBinding,
+//     default: 'Alt',
+//     scope: 'client',
+//     config: true,
+//     onChange: (key:any) => {
+//         // CHECKOUT
+//         let stringValue = key;// game.settings.get(MODULE_NAME, 'set-customize-hotkey-target');
+//         if (stringValue.endsWith("+")) {
+//             stringValue = stringValue + "  ";
+//         }
+//         parsedValueKeyBindingTarget = KeyBinding.parse(stringValue);
+//         //const withShift = KeyBinding.parse('Shift + ' + stringValue);
+//         //const bind = KeyBinding.eventIsForBinding(event, parsedValue);
+//         //const bindWithShift = KeyBinding.eventIsForBinding(event, withShift);
+//     }
+//   });
 
 }
 

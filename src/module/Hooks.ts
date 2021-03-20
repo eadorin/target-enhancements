@@ -5,20 +5,8 @@ import { MODULE_NAME, KeyBinding } from "./settings";
 import { TargetEnhancements } from "./TargetEnhancements";
 import {libWrapper} from './libs/shim.js'
 
-export let parsedValueKeyBindingTarget = KeyBinding.parse("Alt");
-
 export let readyHooks = async () => {
   TargetClass.ready();
-
-  // CHECKOUT
-  let stringValue = game.settings.get(MODULE_NAME, 'set-customize-hotkey-target');
-  if (stringValue.endsWith("+")) {
-      stringValue = stringValue + "  ";
-  }
-  parsedValueKeyBindingTarget = KeyBinding.parse(stringValue);
-  //const withShift = KeyBinding.parse('Shift + ' + stringValue);
-  //const bind = KeyBinding.eventIsForBinding(event, parsedValue);
-  //const bindWithShift = KeyBinding.eventIsForBinding(event, withShift);
 }
 
 export let initHooks = () => {

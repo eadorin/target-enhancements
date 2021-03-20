@@ -35,7 +35,7 @@ Simply use the install module screen within the FoundryVTT setup
 
 ![New Cancel Control](./img/new_cancel_control.png?raw=true)
 
-- Allows the GM to select tokens (<SELECTED>) and then target other tokens as <SELECTED> (ty to easy target)
+- Allows the GM to select tokens (<SELECTED>) and then target other tokens as <SELECTED> with the 'Alt' key button (ty to easy target)
   
 ![New Target Inticators](./img/screenshot_indicator_crosshair.png?raw=true)
 
