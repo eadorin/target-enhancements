@@ -47,7 +47,7 @@ export let initHooks = () => {
   Hooks.on("getSceneControlButtons",TargetEnhancements.getSceneControlButtonsHandler);
   Hooks.on("canvasReady",TargetEnhancements.canvasReadyHandler);
 
-  // SOMETHING IS WRONG WITH THESE
+  // WHERE IS POSSIBLE USE HOOKS INSTEAD libWrapper suggestion bu @calego
 
   // libWrapper.register(MODULE_NAME, 'Token.prototype._onHoverIn', TargetEnhancements.hoverTokenEventHandler, 'WRAPPER');
   // libWrapper.register(MODULE_NAME, 'Token.prototype.update', TargetEnhancements.updateTokenEventHandler, 'WRAPPER');
@@ -58,7 +58,18 @@ export let initHooks = () => {
   // libWrapper.register(MODULE_NAME, 'SceneControls.prototype._getControlButtons', TargetEnhancements.getSceneControlButtonsHandler, 'WRAPPER');
   // libWrapper.register(MODULE_NAME, 'Canvas.prototype.constructor', TargetEnhancements.canvasReadyHandler, 'WRAPPER');
 
-  // TODO AVOID WHERE IS POSSIBLE lib-wrapper in favor of Hooks (need someone more skilled than me by p4535992)
+  // Hooks.on("getSceneNavigationContext", (html, contextOptions) => {
+  //   TargetEnhancements.clearTokenTargetsHandler(game.user, null);
+  // });
+
+  // Hooks.on("getSceneDirectoryEntryContext", (html, contextOptions) => {
+  //   TargetEnhancements.clearTokenTargetsHandler(game.user, null);
+  // });
+
+  // Hooks.on('getJournalDirectoryEntryContext', (html,contextOptions)=>{
+  //   TargetEnhancements.clearTokenTargetsHandler(game.user, null);
+  // });
+
 
   libWrapper.register(MODULE_NAME, 'Token.prototype.setTarget', EasyTarget.tokenSetTarget, 'WRAPPER');
   libWrapper.register(MODULE_NAME, 'Token.prototype._onClickLeft', EasyTarget.tokenOnClickLeft, 'WRAPPER');

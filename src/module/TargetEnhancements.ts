@@ -276,7 +276,7 @@ export class TargetEnhancements {
     //  */
     //  static drawTargetIndicatorsWrapper(wrapped, ...args) {
     //     let token = args[0];
-    //     TargetEnhancements.drawTargetIndicators(this);
+    //     TargetEnhancements.drawTargetIndicators(token);
     //     return wrapped(...args);
     // }
 

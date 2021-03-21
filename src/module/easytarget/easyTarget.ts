@@ -184,8 +184,11 @@ export class EasyTarget {
 		}
 		// MOD 4535992
 		static tokenOnControl = function (wrapped, ...args) {
-			const [ event ] = args;
-			TargetEnhancements.controlTokenEventHandler(this,event.releaseOthers);
+			for(let elem of args){
+				const releaseOthers = elem.releaseOthers;
+				const updateSight = elem.updateSight;
+				TargetEnhancements.controlTokenEventHandler(this,releaseOthers);
+			}
 			return wrapped(...args);
 		}
 		// END MOD 4535992
