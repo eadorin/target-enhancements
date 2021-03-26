@@ -15,13 +15,23 @@ So the scope of this module is to reduce the number of modules on your game and 
 
 Thanks to all the other developers who inspired this work.
 
-I'm trying to make this module a upgrade of my favorite tagetting module for all system 'Target Enhancements'.
-
-The check out the  developing see the [changelog.md](./changelog.md)
-  
+I'm trying to make this module a upgrade of my favorite tagetting module for all system 'Target Enhancements'.  
 ## Installation
 
-Simply use the install module screen within the FoundryVTT setup
+It's always easiest to install modules from the in game add-on browser.
+
+To install this module manually:
+1.  Inside the Foundry "Configuration and Setup" screen, click "Add-on Modules"
+2.  Click "Install Module"
+3.  In the "Manifest URL" field, paste the following url:
+`https://raw.githubusercontent.com/p4535992/target-enhancements/master/src/module.json`
+4.  Click 'Install' and wait for installation to complete
+5.  Don't forget to enable the module in game using the "Manage Module" button
+
+### libWrapper
+
+This module uses the [libWrapper](https://github.com/ruipin/fvtt-lib-wrapper) library for wrapping core methods. It is a hard dependency and it is recommended for the best experience and compatibility with other modules.
+
 
 ## Usage & features
 
@@ -117,10 +127,14 @@ Simply use the install module screen within the FoundryVTT setup
 
 - [Bug][Low priority] I've noticed an issue sometimes regarding the selection of multiple NPCs targeting...they don't all show up. If you can reproduce this consistently, please let me know how.
 
-## Troubleshooting
+## [Changelog](./changelog.md)
+
+## Issues
 
 - Users should report issues to the github issues. Reaching out on Discord is a good option as well, but please follow-up with a github issue
 - Try clearing all tokens using the new button before selecting/targeting other tokens. this should resolve most issues.
+
+Any issues, bugs, or feature requests are always welcome to be reported directly to the [Issue Tracker](https://github.com/p4535992/target-enhancements/issues ), or using the [Bug Reporter Module](https://foundryvtt.com/packages/bug-reporter/).
 
 ## Credit
 
