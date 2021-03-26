@@ -1,7 +1,7 @@
 // For Zamrod.
 // Special thanks to Reaver.
 
-import { KeyBinding, MODULE_NAME, parsedValueKeyBindingTarget } from '../settings';
+import { matchBoundKeyEvent, MODULE_NAME } from '../settings';
 import {libWrapper} from '../libs/shim.js'
 import { TargetEnhancements } from '../TargetEnhancements';
 import { error } from '../../target-enhancements';
@@ -63,8 +63,9 @@ export class EasyTarget {
 			const oe = event.data.originalEvent;
 			const tool = ui['controls'].control.activeTool;
 
-			if (oe.altKey) {
+			//if (oe.altKey) {
 			//if (KeyBinding.eventIsForBinding(oe, parsedValueKeyBindingTarget)) {
+      if(matchBoundKeyEvent(oe)){
 				ui['controls'].control.activeTool = 'target';
 			}
 
@@ -89,8 +90,9 @@ export class EasyTarget {
 			const oe = event.data.originalEvent;
 			const tool = ui['controls'].control.activeTool;
 
-			if (oe.altKey) {
+			//if (oe.altKey) {
 			//if (KeyBinding.eventIsForBinding(oe, parsedValueKeyBindingTarget)) {
+      if(matchBoundKeyEvent(oe)){
 				ui['controls'].control.activeTool = 'target';
 			}
 
@@ -117,15 +119,17 @@ export class EasyTarget {
 			const tool = ui['controls'].control.activeTool;
 			const selectState = event.data._selectState;
 
-			if (oe.altKey) {
+			//if (oe.altKey) {
 			//if (KeyBinding.eventIsForBinding(oe, parsedValueKeyBindingTarget)) {
+      if(matchBoundKeyEvent(oe)){
 				ui['controls'].control.activeTool = 'target';
 			}
 
 			wrapped(...args);
 
-			if (oe.altKey && selectState !== 2) {
+			//if (oe.altKey && selectState !== 2) {
 			//if (KeyBinding.eventIsForBinding(oe, parsedValueKeyBindingTarget) !== 2) {
+      if (matchBoundKeyEvent(oe) && selectState !== 2) {
 				const {x: ox, y: oy} = event.data.origin;
 				const templates = canvas.templates.objects.children.filter(template => {
 					const {x: cx, y: cy} = template.center;
@@ -144,8 +148,9 @@ export class EasyTarget {
 			const tool = ui['controls'].control.activeTool;
 			const layer = canvas.activeLayer;
 
-			if (oe.altKey) {
+			//if (oe.altKey) {
 			//if (KeyBinding.eventIsForBinding(oe, parsedValueKeyBindingTarget)) {
+      if(matchBoundKeyEvent(oe)){
 				ui['controls'].control.activeTool = 'target';
 			}
 
@@ -167,8 +172,9 @@ export class EasyTarget {
 
 			wrapped(...args);
 
-			if (oe.altKey) {
+			//if (oe.altKey) {
 			//if (KeyBinding.eventIsForBinding(oe, parsedValueKeyBindingTarget)) {
+      if(matchBoundKeyEvent(oe)){
 				const template = new MeasuredTemplate(object.data);
 				template['shape'] = EasyTarget.getTemplateShape(template);
 				EasyTarget.targetTokensInArea([template], EasyTarget.releaseBehaviour(oe));
@@ -252,8 +258,9 @@ export class EasyTarget {
 	static releaseBehaviour = function (oe) {
 		const mode = game.settings.get(MODULE_NAME, 'release');
 		if (mode === 'sticky') {
-			return !oe.shiftKey && !oe.altKey;
+			//return !oe.shiftKey && !oe.altKey;
 			//return !oe.shiftKey && !KeyBinding.eventIsForBinding(oe, parsedValueKeyBindingTarget);
+      return !oe.shiftKey && matchBoundKeyEvent(oe);
 		}
 
 		return !oe.shiftKey;
@@ -280,20 +287,22 @@ export class EasyTarget {
 	}
 };
 
-document.addEventListener('keydown', event => {
-	if (event.altKey && event.key === 'C') {
-		game.user.targets.forEach(token =>
-			token['setTarget'](false, {releaseOthers: false, groupSelection: true})
-		);
-		game.user['broadcastActivity']({targets: game.user.targets['ids']});
-	}
-});
-
 // document.addEventListener('keydown', event => {
-// 	if (KeyBinding.eventIsForBinding(event, parsedValueKeyBindingTarget)) {
+// 	if (event.altKey && event.key === 'C') {
 // 		game.user.targets.forEach(token =>
 // 			token['setTarget'](false, {releaseOthers: false, groupSelection: true})
 // 		);
 // 		game.user['broadcastActivity']({targets: game.user.targets['ids']});
 // 	}
 // });
+
+document.addEventListener('keydown', event => {
+  if (matchBoundKeyEvent(event)) {
+    event.stopPropagation();
+    event.preventDefault();
+    game.user.targets.forEach(token =>
+			token['setTarget'](false, {releaseOthers: false, groupSelection: true})
+		);
+		game.user['broadcastActivity']({targets: game.user.targets['ids']});
+  }
+});

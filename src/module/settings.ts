@@ -10,8 +10,8 @@ window['NPCTargeting'] = NPCTargeting;
 
 export const MODULE_NAME = 'target-enhancements';
 
-export const KeyBinding = window['Azzu'].SettingsTypes.KeyBinding;
-export let parsedValueKeyBindingTarget = KeyBinding.parse("Alt");
+// export const KeyBinding = window['Azzu'].SettingsTypes.KeyBinding;
+// export let parsedValueKeyBindingTarget = KeyBinding.parse("Alt");
 
 export const registerSettings = function () {
 
@@ -188,25 +188,25 @@ export const registerSettings = function () {
     }
   });
 
-//   game.settings.register(MODULE_NAME, 'set-customize-hotkey-target', {
-//     name: i18n(MODULE_NAME+".set-customize-hotkey-target-name"),
-//     hint: i18n(MODULE_NAME+".set-customize-hotkey-target-hint"),
-//     type: window['Azzu'].SettingsTypes.KeyBinding,
-//     default: 'Alt',
-//     scope: 'client',
-//     config: true,
-//     onChange: (key:any) => {
-//         // CHECKOUT
-//         let stringValue = key;// game.settings.get(MODULE_NAME, 'set-customize-hotkey-target');
-//         if (stringValue.endsWith("+")) {
-//             stringValue = stringValue + "  ";
-//         }
-//         parsedValueKeyBindingTarget = KeyBinding.parse(stringValue);
-//         //const withShift = KeyBinding.parse('Shift + ' + stringValue);
-//         //const bind = KeyBinding.eventIsForBinding(event, parsedValue);
-//         //const bindWithShift = KeyBinding.eventIsForBinding(event, withShift);
-//     }
-//   });
+  game.settings.register(MODULE_NAME, 'set-customize-hotkey-target', {
+    name: i18n(MODULE_NAME+".set-customize-hotkey-target-name"),
+    hint: i18n(MODULE_NAME+".set-customize-hotkey-target-hint"),
+    type: window['Azzu'].SettingsTypes.KeyBinding,
+    default: 'Alt',
+    scope: 'client',
+    config: true,
+    // onChange: (key:any) => {
+    //     // CHECKOUT
+    //     let stringValue = key;// game.settings.get(MODULE_NAME, 'set-customize-hotkey-target');
+    //     if (stringValue.endsWith("+")) {
+    //         stringValue = stringValue + "  ";
+    //     }
+    //     parsedValueKeyBindingTarget = KeyBinding.parse(stringValue);
+    //     //const withShift = KeyBinding.parse('Shift + ' + stringValue);
+    //     //const bind = KeyBinding.eventIsForBinding(event, parsedValue);
+    //     //const bindWithShift = KeyBinding.eventIsForBinding(event, withShift);
+    // }
+  });
 
 }
 
@@ -225,3 +225,25 @@ export const registerSettings = function () {
 // 		game.settings.register(templateSettings.name(), setting.name, options);
 // 	});
 // }
+
+export const matchBoundKeyEvent = function(event): boolean {
+  if (this.app.embeddedMode || !event) return false;
+
+  let keySetting = game.settings.get(MODULE_NAME,'set-customize-hotkey-target');
+  // keybinds ending with space are trimmed by 0.7.x settings window
+  if (keySetting.endsWith("+")) {
+    keySetting = keySetting + "  ";
+  }
+
+  const key = window['Azzu'].SettingsTypes.KeyBinding.parse(keySetting);
+  if (key.key === " " && canvas.controls?.ruler?.waypoints?.length > 0) {
+    return false;
+  }
+
+  return (
+    window['Azzu'].SettingsTypes.KeyBinding.eventIsForBinding(event, key) &&
+    !$(document.activeElement)
+      .closest(".app.window-app")
+      .is("#client-settings")
+  );
+}

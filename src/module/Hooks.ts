@@ -1,7 +1,7 @@
 import { warn, error, debug, i18n } from "../target-enhancements";
 import { EasyTarget } from "./easytarget/easyTarget";
 import { TargetClass } from "./lib-targeting/TargetClass";
-import { MODULE_NAME, KeyBinding } from "./settings";
+import { MODULE_NAME } from "./settings";
 import { TargetEnhancements } from "./TargetEnhancements";
 import {libWrapper} from './libs/shim.js'
 
