@@ -32,6 +32,13 @@ To install this module manually:
 
 This module uses the [libWrapper](https://github.com/ruipin/fvtt-lib-wrapper) library for wrapping core methods. It is a hard dependency and it is recommended for the best experience and compatibility with other modules.
 
+### Color Settings
+
+This module uses the [color settings](https://github.com/ardittristan/VTTColorSettings) library like a dependency. It is a hard dependency and it is recommended for the best experience and compatibility with other modules.
+
+### FXMaster
+
+This module uses the [FXMaster](https://gitlab.com/mesfoliesludiques/foundryvtt-fxmaster) library like a dependency. It is a hard dependency and it is recommended for the best experience and compatibility with other modules.
 
 ## Usage & features
 
