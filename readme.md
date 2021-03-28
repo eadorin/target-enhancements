@@ -122,6 +122,8 @@ This module uses the [FXMaster](https://gitlab.com/mesfoliesludiques/foundryvtt-
 
 ## TODO List / Known Issues / Limitations
 
+- [Feature] Show to others player the animated token marker
+
 - [Bug][Switching Scenes or Deleting tokens while target locks up game](https://github.com/eadorin/target-enhancements/issues/31)
 
 - [Bug][Medium priority] When you refesh/reload the page lose all targets

@@ -130,7 +130,7 @@ export class TargetEnhancements {
 
             // only redraw if not already existing
             if (token.target.children.length <= 0) {
-            TargetEnhancements.drawTargetIndicators(token);
+                TargetEnhancements.drawTargetIndicators(token);
             }
         }
 
@@ -611,12 +611,16 @@ export class TargetEnhancements {
     }
 
 
-    static preUpdateSceneEventHandler(sene,flags,diff,id) {
+    static preUpdateSceneEventHandler(scene,flags,diff,id) {
+        // MOD p4535992 REMOVED
+        /*
         game.user.targets.forEach( t => {
             //t.target.clear();
-            t.targeted.clear();
+            t.targeted.clear(); 
             TargetEnhancements.drawTargetIndicators(t);
         });
+        */
+        // END MOD p4535992 REMOVED
     }
 
     static renderTokenEventHandler(a, div, data) {
