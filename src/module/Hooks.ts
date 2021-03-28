@@ -47,17 +47,10 @@ export let initHooks = () => {
   Hooks.on("getSceneControlButtons",TargetEnhancements.getSceneControlButtonsHandler);
   Hooks.on("canvasReady",TargetEnhancements.canvasReadyHandler);
 
-  // WHERE IS POSSIBLE USE HOOKS INSTEAD libWrapper suggestion bu @calego
-
-  // libWrapper.register(MODULE_NAME, 'Token.prototype._onHoverIn', TargetEnhancements.hoverTokenEventHandler, 'WRAPPER');
-  // libWrapper.register(MODULE_NAME, 'Token.prototype.update', TargetEnhancements.updateTokenEventHandler, 'WRAPPER');
-  // libWrapper.register(MODULE_NAME, 'Token.prototype.render', TargetEnhancements.renderTokenEventHandler, 'WRAPPER');
-  // libWrapper.register(MODULE_NAME, 'Scene.prototype._onUpdate', TargetEnhancements.preUpdateSceneEventHandler, 'WRAPPER');
-  // libWrapper.register(MODULE_NAME, 'SceneControls.prototype.render', TargetEnhancements.preUpdateSceneEventHandler, 'WRAPPER');
-  // libWrapper.register(MODULE_NAME, 'Token.prototype._refreshTarget', TargetEnhancements.clearTokenTargetsHandler, 'WRAPPER');
-  // libWrapper.register(MODULE_NAME, 'SceneControls.prototype._getControlButtons', TargetEnhancements.getSceneControlButtonsHandler, 'WRAPPER');
-  // libWrapper.register(MODULE_NAME, 'Canvas.prototype.constructor', TargetEnhancements.canvasReadyHandler, 'WRAPPER');
-
+  // TODO NOT SURE IF WE NEED THIS
+  //Hooks.on('preCreateScene', TargetEnhancements.preCreateSceneHandler);
+  //Hooks.on('renderSceneConfig', TargetEnhancements.preCreateSceneHandler);
+ 
   // Hooks.on("getSceneNavigationContext", (html, contextOptions) => {
   //   TargetEnhancements.clearTokenTargetsHandler(game.user, null);
   // });

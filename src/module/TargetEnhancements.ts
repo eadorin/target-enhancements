@@ -365,8 +365,19 @@ export class TargetEnhancements {
         var othersArray = [];
         var npcs = [];
         let tokenTargets = await token.targeted; // this takes time to arrive
-
-
+        // SOMETHING WRONG
+        if(!token.target){
+            Helpers.clearTargets();
+            if (TargetEnhancements.tickerFunctions[token.data._id]) {
+                try{
+                    TargetEnhancements.tickerFunctions[token.data._id].destroy();
+                }catch(e){
+                    // IGNORE THIS
+                }
+                delete TargetEnhancements.tickerFunctions[token.data._id];
+            }
+            return;
+        }
 
         // clear any existing items/icons
         // if (game.settings.get(mod,"enable-target-portraits")) {
@@ -624,7 +635,15 @@ export class TargetEnhancements {
      */
     static clearTokenTargetsHandler(user,tokenlayer) {
 
-        user.targets.forEach( t => t.setTarget(false, {user: user, releaseOthers: true, groupSelection:false }));
+        user.targets.forEach( t => 
+            t.setTarget(false, 
+                {
+                    user: user, 
+                    releaseOthers: true, 
+                    groupSelection:false 
+                }
+            )
+        );
 
         /*
         tokenlayer.selectObjects({
@@ -641,6 +660,16 @@ export class TargetEnhancements {
 
         // ADDED 4535992
         Helpers.clearTargets();
+        user.targets.forEach(token => {
+            if (TargetEnhancements.tickerFunctions[token.data._id]) {
+                try{
+                    TargetEnhancements.tickerFunctions[token.data._id].destroy();
+                }catch(e){
+                    // IGNORE THIS
+                }
+                delete TargetEnhancements.tickerFunctions[token.data._id];
+            }
+        });
         //game.users['updateTokenTargets']();
 
         return true;
@@ -809,6 +838,10 @@ export class TargetEnhancements {
 
         }
         return wrapped(...args);
+    }
+
+    static async preCreateSceneHandler(){
+        TargetEnhancements.clearTokenTargetsHandler(game.user,null);
     }
 }
 

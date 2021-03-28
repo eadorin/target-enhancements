@@ -284,35 +284,45 @@ export class TargetIndicator {
     }
     pulse() {
         //pulse code
-        var _self = this.c;
+        var _self = this.c; //.parent.parent is the token
         var size = 1;
         var speed = 0.001;
         var pulse_ticks = 0;
         var max_ticks = 20;
         var pulse_grow = true;
         canvas.app.ticker.add( function(delta) {
-            _self.scale.set(size);
+            // Uncaught TypeError: Cannot read property 'scale' of null, when player chang scene
+            if(_self){ 
+                _self.scale.set(size);
 
-            if (pulse_grow) {
-                size = size + speed * delta;
-                pulse_ticks++;
+                if (pulse_grow) {
+                    size = size + speed * delta;
+                    pulse_ticks++;
 
-                if (pulse_ticks == max_ticks) { pulse_grow = false;}
-            } else {
-                size = size - speed *delta;
-                pulse_ticks--;
-                if (pulse_ticks == 0) { pulse_grow = true;}
+                    if (pulse_ticks == max_ticks) { pulse_grow = false;}
+                } else {
+                    size = size - speed *delta;
+                    pulse_ticks--;
+                    if (pulse_ticks == 0) { pulse_grow = true;}
+                }
             }
         });
     }
     rotate() {
-        var _self = this.c;
-        var spin = 1.2;
-        var speed = 0.006;
-        canvas.app.ticker.add(function(delta) {
-            _self.rotation = spin;
-            spin = spin + speed * delta;
-        });
+        try{
+            var _self = this.c;
+            var spin = 1.2;
+            var speed = 0.006;
+            canvas.app.ticker.add(function(delta) {
+                // Uncaught TypeError: Cannot read property 'scale' of null, when player chang scene
+                if(_self){ 
+                    _self.rotation = spin;
+                    spin = spin + speed * delta;
+                }
+            });
+        }catch(e){
+            // DO NOTHING
+        }
     }
 
 

@@ -122,17 +122,13 @@ This module uses the [FXMaster](https://gitlab.com/mesfoliesludiques/foundryvtt-
 
 ## TODO List / Known Issues / Limitations
 
+- [Bug][Switching Scenes or Deleting tokens while target locks up game](https://github.com/eadorin/target-enhancements/issues/31)
+
+- [Bug][Medium priority] When you refesh/reload the page lose all targets
+
 - [Feature][Low priority] Adjust the display of the target token icons!! (currently uses a black outline + shadow)
 
 - [Feature][Low priority] Adjust size of target token icons
-
-- [Low priority] Turn token target icon features on/off  (the default triangles)
-
-- [Bug][Low priority] Users may notice the default target arrows + target baubles appear when first moving a token. Until an API hook is provided by FoundryVTT in the `Token._refreshTarget()` method, this will always be the case
-
-- [Bug][Low priority] Moving or clicking too fast may try to update the token before the target request is received by a client.
-
-- [Bug][Low priority] I've noticed an issue sometimes regarding the selection of multiple NPCs targeting...they don't all show up. If you can reproduce this consistently, please let me know how.
 
 ## [Changelog](./changelog.md)
 
