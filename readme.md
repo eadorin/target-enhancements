@@ -1,5 +1,11 @@
 # Target Enhancements -- FoundryVTT Module
 
+## THIS MODULE IS STILL IN BETA IF YOU WANT TO CONTIBUTE ADD SOME BOUNTY FOR DEVELOPING
+
+I tried to solve the problems as far as I could, but now I can't solve the remaining problems myself, for anyone who wants to contribute financially to attract the attention of some developer I put below the link of the reward on trello
+
+[Bounty on trelllo of League of Extraordinary foundryvtt developers](https://trello.com/c/KvEZVMtw/213-modulebountyrevive-target-enhancements)
+
 Target Enhancements is a module for FoundryVTT that provides customizations for targeting. As a colorblind player, having icons instead of indistinguishable colored dots makes for a much better experience.
 
 # Why this module?
