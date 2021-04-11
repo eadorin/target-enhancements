@@ -11,7 +11,8 @@
     "download": "https://github.com/eadorin/target-enhancements/archive/master.zip",
     "url": "https://github.com/eadorin/target-enhancements",
     "languages": [
-      { "lang": "en", "name": "English", "path": "lang/en.json" }
+      { "lang": "en", "name": "English", "path": "lang/en.json" },
+      { "lang": "es", "name": "Español", "path": "lang/es.json" }
     ],
     "changelog": "https:github.com/eadorin/about-face/blob/v1.1/changelog.md"
   }
