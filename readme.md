@@ -22,6 +22,7 @@ So the scope of this module is to reduce the number of modules on your game and 
 Thanks to all the other developers who inspired this work.
 
 I'm trying to make this module a upgrade of my favorite tagetting module for all system 'Target Enhancements'.  
+
 ## Installation
 
 It's always easiest to install modules from the in game add-on browser.
@@ -163,6 +164,7 @@ Thanks to anyone who helps me with this code! I appreciate the user community's 
 and of course a huge ty to all the developers of 'League of Extraordinary foundryvtt developers' for give me a hand every time i ask.
 
 ## License
+
 This Foundry VTT module, writen by Eadorin, is licensed under [GNU GPLv3.0](https://www.gnu.org/licenses/gpl-3.0.en.html), supplemented by [Commons Clause](https://commonsclause.com/).
 
 This work is licensed under Foundry Virtual Tabletop [EULA - Limited License Agreement for module development v 0.1.6](http://foundryvtt.com/pages/license.html).
