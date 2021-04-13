@@ -273,17 +273,46 @@ export class TargetEnhancements {
             // END MOD 4535992 2021-03-08
 
          }
+
+        //MOD 4535992 2021-04-13
+        // Determine whether the current user has target and any other users
+		const [others, user] = Array.from(token.targeted).partition(u => u === game.user);
+		const userTarget = user.length;
+        // For other users, draw offset pips
+		for (let [i, u] of others.entries()) {
+			let color = colorStringToHex(u['data'].color);
+			TargetEnhancements.tickerFunctions[token.data._id].i.beginFill(color, 1.0).lineStyle(2, 0x0000000).drawCircle(2 + (i * 8), 0, 6);
+		}
+        //END MOD 4535992 2021-04-13
     }
 
-    // /**
-    //  * Helper function to draw consistent target indicators
-    //  * @param {Token} token -- the Token
-    //  */
-    //  static drawTargetIndicatorsWrapper(wrapped, ...args) {
-    //     let token = args[0];
-    //     TargetEnhancements.drawTargetIndicators(token);
-    //     return wrapped(...args);
-    // }
+    /**
+     * Helper function to draw consistent target indicators
+     * @param {Token} token -- the Token
+     */
+     static TokenPrototypeRefreshTargetHandler(wrapped, ...args) {
+        //let token = args[0];
+        let token:any = this;
+        token.target.clear();
+		if (!token.targeted.size){
+             return;
+        }
+        // Determine whether the current user has target and any other users
+		const [others, users] = Array.from(token.targeted).partition(u => u === game.user);
+		const userTarget = users.length;
+
+		// For the current user, draw the target arrows
+		if (userTarget) {
+            TargetEnhancements.drawTargetIndicators(token);
+        }
+        // For other users, draw offset pips
+		for (let [i, u] of others.entries()) {
+			//let color = colorStringToHex(u['data'].color);
+			//this.target.beginFill(color, 1.0).lineStyle(2, 0x0000000).drawCircle(2 + (i * 8), 0, 6);
+            TargetEnhancements.drawTargetIndicators(token);
+		}
+        return wrapped(...args);
+    }
 
     /**
      * Splits the <set> of targets of a token into two arrays

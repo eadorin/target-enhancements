@@ -8,23 +8,23 @@ import { getCanvas, MODULE_NAME } from '../module/settings'
 
 export class TargetIndicator {
 
-    token:any;
-    sprite:any;
+    token:Token;
+    sprite:PIXI.Sprite;
     owner:any;
     indicator_type:any;
     c:PIXI.Container;
     i:PIXI.Graphics;
     fillColor:number;
 
-    constructor(token,indicator_type="default") {
+    constructor(token:Token,indicator_type="default") {
         this.token = token;
-        this.sprite = false;
+        this.sprite = new PIXI.Sprite();
         this.owner = token.owner;
         this.indicator_type = indicator_type;
 
         this.c = new PIXI.Container();
         this.i = new PIXI.Graphics();
-        token.indicator = this;
+        token['indicator'] = this;
 
         if (game.settings.get(MODULE_NAME,'use-player-color')) {
           this.fillColor = colorStringToHex(game.user['color']);
@@ -225,11 +225,11 @@ export class TargetIndicator {
         */
       // }
 
-      // For other users, draw offset pips
-      for (let [i, u] of others.entries()) {
-        let color = colorStringToHex(u['data'].color);
-        this.token.target.beginFill(color, 1.0).lineStyle(2, 0x0000000).drawCircle(2 + (i * 8), 0, 6);
-      }
+    //   // For other users, draw offset pips
+    //   for (let [i, u] of others.entries()) {
+    //     let color = colorStringToHex(u['data'].color);
+    //     this.token.target.beginFill(color, 1.0).lineStyle(2, 0x0000000).drawCircle(2 + (i * 8), 0, 6);
+    //   }
 
       let texture = getCanvas().app.renderer.generateTexture(this.i,PIXI.SCALE_MODES.LINEAR,PIXI.settings.RESOLUTION);
       return new SpriteID(texture, this.token.id);
@@ -272,8 +272,8 @@ export class TargetIndicator {
         this.c.position.x = this.token.w/2;
         this.c.position.y = this.token.h/2;
         this.c.addChild(this.sprite);
-        this.token.target.addChild(this.c);
-
+        //this.token.target.addChild(this.c); REMOVED 4535992
+        this.token.addChild(this.c); // ADDED 4535992
         if (game.settings.get(MODULE_NAME,'use-fx-pulse')) {
             this.pulse();
         }

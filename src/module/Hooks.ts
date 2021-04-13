@@ -74,8 +74,8 @@ export let initHooks = () => {
   libWrapper.register(MODULE_NAME, 'KeyboardManager.prototype._onKeyC', EasyTarget.keyboardManagerOnKeyC, 'MIXED');
   libWrapper.register(MODULE_NAME, 'Token.prototype.control', EasyTarget.tokenOnControl, 'WRAPPER');
 
-  // ?????
-  // libWrapper.register(MODULE_NAME, 'Token.prototype._refreshTarget', TargetEnhancements.drawTargetIndicatorsWrapper, 'WRAPPER');
+  // This is a horrible hack where we replace the entire method body, but I'm not certain there's a better way.
+  libWrapper.register(MODULE_NAME, 'Token.prototype._refreshTarget', TargetEnhancements.TokenPrototypeRefreshTargetHandler, 'OVERRIDE');
 
   // /*
   // * This adds handling to untarget and remove any animations

@@ -97,5 +97,5 @@ export function clearTargets() {
     }
 
     //game.user.targets = new Set();
-    game.user.targets = new UserTargets(game.user);
+    game.user.targets.clear();
 }
