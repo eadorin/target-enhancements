@@ -1,3 +1,5 @@
+import { getCanvas } from "../settings";
+
 export const SOURCE_TYPES = {
     SOURCE_TYPE_TOKEN  : 0,
     SOURCE_TYPE_PLAYER : 1,
@@ -204,7 +206,7 @@ export class TargetsTable {
      * @param {int} item the id of the token we're looking for
      */
     getTokenByTokenId(item) {
-        return canvas.tokens.placeables.find(x => { return x.id === item });
+        return getCanvas().tokens.placeables.find(x => { return x.id === item });
     }
 }
 

@@ -10,6 +10,22 @@ window['NPCTargeting'] = NPCTargeting;
 
 export const MODULE_NAME = 'target-enhancements';
 
+/**
+ * Because typescript doesn’t know when in the lifecycle of foundry your code runs, we have to assume that the
+ * canvas is potentially not yet initialized, so it’s typed as declare let canvas: Canvas | {ready: false}.
+ * That’s why you get errors when you try to access properties on canvas other than ready.
+ * In order to get around that, you need to type guard canvas.
+ * Also be aware that this will become even more important in 0.8.x because a „no canvas“ mode is being introduced there.
+ * So you will need to deal with the fact that there might not be an initialized canvas at any point in time.
+ * @returns
+ */
+ export function getCanvas(): Canvas {
+    if (!(canvas instanceof Canvas) || !canvas.ready) {
+        throw new Error("Canvas Is Not Initialized");
+    }
+    return canvas;
+}
+
 // export const KeyBinding = window['Azzu'].SettingsTypes.KeyBinding;
 // export let parsedValueKeyBindingTarget = KeyBinding.parse("Alt");
 
@@ -55,7 +71,7 @@ export const registerSettings = function () {
       name : i18n(MODULE_NAME+".enable-better-target-name"),
       hint : i18n(MODULE_NAME+".enable-better-target-hint"),
       scope: "player",
-      config: "true",
+      config: true,
       default: false,
       type: Boolean
   });
@@ -81,7 +97,7 @@ export const registerSettings = function () {
       name : i18n(MODULE_NAME+".enable-color-name"),
       hint : i18n(MODULE_NAME+".enable-color-hint"),
       scope: "player",
-      config: "true",
+      config: true,
       default: false,
       type: Boolean
   });
@@ -115,7 +131,7 @@ export const registerSettings = function () {
       name : i18n(MODULE_NAME+".enable-colorblind-features-name"),
       hint : i18n(MODULE_NAME+".enable-colorblind-features-hint"),
       scope: "player",
-      config: "true",
+      config: true,
       default: false,
       type: Boolean
   });
@@ -124,7 +140,7 @@ export const registerSettings = function () {
       name : i18n(MODULE_NAME+".use-player-color-name"),
       hint : i18n(MODULE_NAME+".use-player-color-hint"),
       scope: "player",
-      config: "true",
+      config: true,
       default: true,
       type: Boolean
   });
@@ -133,7 +149,7 @@ export const registerSettings = function () {
       name : i18n(MODULE_NAME+".use-fx-rotate-name"),
       hint : i18n(MODULE_NAME+".use-fx-rotate-hint"),
       scope: "player",
-      config: "true",
+      config: true,
       default: true,
       type: Boolean
   });
@@ -142,7 +158,7 @@ export const registerSettings = function () {
       name : i18n(MODULE_NAME+".use-fx-pulse-name"),
       hint : i18n(MODULE_NAME+".use-fx-pulse-hint"),
       scope: "player",
-      config: "true",
+      config: true,
       default: true,
       type: Boolean
   });
@@ -161,7 +177,7 @@ export const registerSettings = function () {
       name : i18n(MODULE_NAME+".enable-ctrl-resize-modifier-name"),
       hint : i18n(MODULE_NAME+".enable-ctrl-resize-modifier-hint"),
       scope: "world",
-      config: "true",
+      config: true,
       default: true,
       type: Boolean
   });
@@ -170,7 +186,7 @@ export const registerSettings = function () {
       name : i18n(MODULE_NAME+".enable-target-portraits-name"),
       hint : i18n(MODULE_NAME+".enable-target-portraits-hint"),
       scope: "world",
-      config: "true",
+      config: true,
       default: true,
       type: Boolean
   });

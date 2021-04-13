@@ -139,6 +139,8 @@ This module uses the [FXMaster](https://gitlab.com/mesfoliesludiques/foundryvtt-
 
 - [Feature][Low priority] Adjust size of target token icons
 
+- [OTHER ISSUE ARE SET ON TRELLO](https://trello.com/c/KvEZVMtw/213-modulebountyrevive-target-enhancements) 
+
 ## [Changelog](./changelog.md)
 
 ## Issues
@@ -147,6 +149,13 @@ This module uses the [FXMaster](https://gitlab.com/mesfoliesludiques/foundryvtt-
 - Try clearing all tokens using the new button before selecting/targeting other tokens. this should resolve most issues.
 
 Any issues, bugs, or feature requests are always welcome to be reported directly to the [Issue Tracker](https://github.com/p4535992/target-enhancements/issues ), or using the [Bug Reporter Module](https://foundryvtt.com/packages/bug-reporter/).
+
+
+## Acknowledgements
+
+Bootstrapped with League of Extraordinary FoundryVTT Developers  [foundry-vtt-types](https://github.com/League-of-Foundry-Developers/foundry-vtt-types).
+
+Mad props to the 'League of Extraordinary FoundryVTT Developers' community which helped me figure out a lot.
 
 ## Credit
 

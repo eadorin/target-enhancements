@@ -1,7 +1,7 @@
 // For Zamrod.
 // Special thanks to Reaver.
 
-import { matchBoundKeyEvent, MODULE_NAME } from '../settings';
+import { getCanvas, matchBoundKeyEvent, MODULE_NAME } from '../settings';
 import {libWrapper} from '../libs/shim.js'
 import { TargetEnhancements } from '../TargetEnhancements';
 import { error } from '../../target-enhancements';
@@ -12,7 +12,7 @@ export class EasyTarget {
 		shape = shape[0].toUpperCase() + shape.substring(1);
 
 		const fn = MeasuredTemplate.prototype[`_get${shape}Shape`];
-		const dim = canvas.dimensions;
+		const dim = getCanvas().dimensions;
 		let {direction, distance, angle, width} = template.data;
 
 		distance *= (dim.size / dim.distance);
@@ -131,7 +131,7 @@ export class EasyTarget {
 			//if (KeyBinding.eventIsForBinding(oe, parsedValueKeyBindingTarget) !== 2) {
       		if (matchBoundKeyEvent(oe) && selectState !== 2) {
 				const {x: ox, y: oy} = event.data.origin;
-				const templates = canvas.templates.objects.children.filter(template => {
+				const templates = getCanvas().templates.objects.children.filter(template => {
 					const {x: cx, y: cy} = template.center;
 					return template.shape.contains(ox - cx, oy - cy);
 				});
@@ -146,7 +146,7 @@ export class EasyTarget {
 			const [ event ] = args;
 			const oe = event.data.originalEvent;
 			const tool = ui['controls'].control.activeTool;
-			const layer = canvas.activeLayer;
+			const layer = getCanvas().activeLayer;
 
 			//if (oe.altKey) {
 			//if (KeyBinding.eventIsForBinding(oe, parsedValueKeyBindingTarget)) {
@@ -275,13 +275,13 @@ export class EasyTarget {
 
 		}
 
-		canvas.tokens.objects.children.filter(token => {
+		getCanvas().tokens.objects.children.filter((token:Token) => {
 			const {x: ox, y: oy} = token.center;
 			return templates.some(template => {
 				const {x: cx, y: cy} = template.center;
 				return template.shape.contains(ox - cx, oy - cy);
 			});
-		}).forEach(token => token.setTarget(true, {releaseOthers: false, groupSelection: true}));
+		}).forEach((token:Token) => token.setTarget(true, {releaseOthers: false, groupSelection: true}));
 		//game.user.broadcastActivity({targets: game.user.targets['ids']});
 		game.user['broadcastActivity']({targets: game.user.targets['ids']});
 	}

@@ -83,7 +83,7 @@ export async function targetClassMessageCreate(message, tokenTargets) {
 
         let recipient;
         if (game.settings.get(MODULE_NAME, 'display_notificaton_gm_vision')) recipient = game.users.find((u) => u.isGM && u.active).id;
-        let chatData = {
+        let chatData:any = {
             type: 4,
             user: recipient,
             speaker: { alias: MODULE_NAME },

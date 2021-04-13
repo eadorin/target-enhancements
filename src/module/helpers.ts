@@ -1,3 +1,4 @@
+import { getCanvas } from "./settings";
 import { TargetEnhancements } from "./TargetEnhancements";
 
 /**
@@ -12,7 +13,7 @@ export async function getTokenOwner(token, includeGM=false) {
     let owners = getKeyByValue(token.actor.data.permission,3);
     let ret = [];
     for (let y = 0; y < owners.length; y++) {
-        let u = await Users['instance'].get(owners[y]);
+        let u = await Users.instance.get(owners[y]);
         if (includeGM) {
             ret.push(u);
             continue;
@@ -25,13 +26,13 @@ export async function getTokenOwner(token, includeGM=false) {
 }
 
 export function getTokenByTokenID(id) {
-    // return await game.scenes.active.data['tokens'].find( x => {return x.id === id});
-    return canvas.tokens.placeables.find( x => {return x.id === id});
+    // return await game.scenes.active.data.tokens.find( x => {return x.id === id});
+    return getCanvas().tokens.placeables.find( x => {return x.id === id});
 }
 export function getTokenByTokenName(name) {
-    // return await game.scenes.active.data['tokens'].find( x => {return x._name === name});
-    return canvas.tokens.placeables.find( x => { return x.name == name});
-    // return canvas.tokens.placeables.find( x => { return x.id == game.user.id});
+    // return await game.scenes.active.data.tokens.find( x => {return x._name === name});
+    return getCanvas().tokens.placeables.find( x => { return x.name == name});
+    // return getCanvas().tokens.placeables.find( x => { return x.id == game.user.id});
 }
 
 export function getInput(prompt) {
@@ -82,13 +83,19 @@ export function clearTargets() {
 
     // This adds handling to untarget and remove any animations
     for (let token of game.user.targets) {
-        if(token['target']){
-            token['target']['_lineStyle'].texture.destroy();
-            token['target']['_fillStyle'].visible = false;
-            token['target']['fill.visible'] = false;
-            token['target']['graphicsData'].length = 0;
+        // MOD 4535992 REMOVED AND MODIFY
+        // if(token['target']){
+        //     token['target']['_lineStyle'].texture.destroy();
+        //     token['target']['_fillStyle'].visible = false;
+        //     token['target']['fill.visible'] = false;
+        //     token['target']['graphicsData'].length = 0;
+        // }
+        if(token.targeted){
+            token.targeted.clear();
         }
+        // END MOD 4535992 REMOVED AND MODIFY
     }
 
-    game.user.targets = new Set();
+    //game.user.targets = new Set();
+    game.user.targets = new UserTargets(game.user);
 }

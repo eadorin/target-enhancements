@@ -2,7 +2,7 @@
  * main entry point
  * Used to kickoff our target enhancements
  *
- *  canvas.scene.update({"flags.-=target-enhancements":null}); // fixes random issues.
+ *  getCanvas().scene.update({"flags.-=target-enhancements":null}); // fixes random issues.
  */
 
 // const mod = "target-enhancements";
@@ -14,7 +14,7 @@ import { TargetIndicator } from './TargetIndicator';
 import * as Helpers from './helpers';
 //@ts-ignore
 // import ColorSetting from "../../colorsettings/colorSetting.js";
-import { MODULE_NAME } from './settings';
+import { getCanvas, MODULE_NAME } from './settings';
 import { TargetClass } from './lib-targeting/TargetClass';
 import { error } from '../target-enhancements';
 
@@ -81,8 +81,8 @@ export class TargetEnhancements {
 
         //     // consider moving to onHoverToken()
 
-        //     for (let x = canvas.tokens.placeables.length -1; x >=0; x--) {
-        //         let token = canvas.tokens.placeables[x];
+        //     for (let x = getCanvas().tokens.placeables.length -1; x >=0; x--) {
+        //         let token = getCanvas().tokens.placeables[x];
         //         token.on('mousedown',TargetEnhancements.handleTokenClick);
         //         try {
         //             token.data.scale = token.getFlag(MODULE_NAME,TargetEnhancements.resizeFlagKey) || 1;
@@ -202,14 +202,18 @@ export class TargetEnhancements {
         if (game.settings.get(MODULE_NAME,'enable-ctrl-resize-modifier')) {
             // 82 is the 'r' key
             if (TargetEnhancements.resizeModKeyPressed) {
-                let token = await Helpers.getTokenByTokenID(TargetEnhancements.resizeToken);
+                let token:Token = await Helpers.getTokenByTokenID(TargetEnhancements.resizeToken);
                 if (oe.deltaY < 0 ) {
-                    token.icon.scale.x += .05; // the icon scales at a different rate
-                    token.icon.scale.y += .05; // additionally scaling data maintains our changes
+                    // token.icon.scale.x += .05; // the icon scales at a different rate
+                    // token.icon.scale.y += .05; // additionally scaling data maintains our changes
+                    token.scale.x += .05; // the icon scales at a different rate
+                    token.scale.y += .05; // additionally scaling data maintains our changes
                     token.data.scale +=  0.2;
                 } else {
-                    token.icon.scale.x -= .05;
-                    token.icon.scale.y -= .05;
+                    // token.icon.scale.x -= .05;
+                    // token.icon.scale.y -= .05;
+                    token.scale.x -= .05;
+                    token.scale.y -= .05;
                     token.data.scale -= 0.2;
                 }
                 token.setFlag(MODULE_NAME,TargetEnhancements.resizeFlagKey,token.data.scale);
@@ -227,10 +231,11 @@ export class TargetEnhancements {
      * @param {*} userId -- user who made the change
      */
     static async updateTokenEventHandler(scene,token_obj,update,dif,userId) {
-        let token = canvas.tokens.get(token_obj._id);
+        let token = getCanvas().tokens.get(token_obj._id);
         // console.log("Token updated:",token.icon);
         try {
-            token?.target?.clear();
+            //token?.target?.clear(); // REMOVED 4535992
+            token?.targeted?.clear(); // MOD 4535992
         } catch (error) {}
         // patch for issue #11. Only fixes it for DND I think :(
         try {
@@ -303,10 +308,11 @@ export class TargetEnhancements {
      */
     static async npcTokensTargetingHandler() {
         // user clicked before GM targeted anything
-        if (!canvas.scene.getFlag(MODULE_NAME,TargetEnhancements.npc_targeting_key)) {
-            return false;
+        if (!getCanvas().scene.getFlag(MODULE_NAME,TargetEnhancements.npc_targeting_key)) {
+           // return false; // REMOVED 4535992
+           return []; // MOD 4535992
         }
-        return canvas.scene.getFlag(MODULE_NAME,TargetEnhancements.npc_targeting_key);
+        return await <any[]>getCanvas().scene.getFlag(MODULE_NAME,TargetEnhancements.npc_targeting_key);
     }
 
 
@@ -324,12 +330,12 @@ export class TargetEnhancements {
         let mySet = [];
 
         // get flag if exists, if not create it
-        if (typeof canvas.scene.getFlag(MODULE_NAME, (TargetEnhancements.npc_targeting_key)) === 'undefined'){
-            await canvas.scene.setFlag(MODULE_NAME, (TargetEnhancements.npc_targeting_key), mySet);
+        if (typeof getCanvas().scene.getFlag(MODULE_NAME, (TargetEnhancements.npc_targeting_key)) === 'undefined'){
+            await getCanvas().scene.setFlag(MODULE_NAME, (TargetEnhancements.npc_targeting_key), mySet);
         }
 
         // not really a set, an array of npc token info
-        mySet = canvas.scene.getFlag(MODULE_NAME,TargetEnhancements.npc_targeting_key);
+        mySet = <any[]>getCanvas().scene.getFlag(MODULE_NAME,TargetEnhancements.npc_targeting_key);
         console.log(MODULE_NAME,mySet);
 
         // cull out tokens not actively controlled.
@@ -344,8 +350,8 @@ export class TargetEnhancements {
         let toStore = Array.from(mySet);
 
         // update the flag. Have to unset first b/c sometimes it just doesn't take the setting
-        canvas.scene.unsetFlag(MODULE_NAME,TargetEnhancements.npc_targeting_key).then( () => {
-            canvas.scene.setFlag(MODULE_NAME, (TargetEnhancements.npc_targeting_key) , toStore);
+        getCanvas().scene.unsetFlag(MODULE_NAME,TargetEnhancements.npc_targeting_key).then( () => {
+            getCanvas().scene.setFlag(MODULE_NAME, (TargetEnhancements.npc_targeting_key) , toStore);
         })
         await token.target.clear();
 
@@ -406,7 +412,7 @@ export class TargetEnhancements {
         othersArray = targets.othersA;
 
         // handle npcs
-        let npcsArray = await TargetEnhancements.npcTokensTargetingHandler();
+        let npcsArray:any[] = await TargetEnhancements.npcTokensTargetingHandler();
         if (npcsArray) {
             npcs  = npcsArray;
         }
@@ -426,7 +432,7 @@ export class TargetEnhancements {
         //             othersArray.push(myTarget);
         //         }
         //     });
-        //     // canvas.scene.setFlag(MODULE_NAME,TargetEnhancements.npc_targeting_key,npcs);
+        //     // getCanvas().scene.setFlag(MODULE_NAME,TargetEnhancements.npc_targeting_key,npcs);
         //     targetingItems = await (usr.isGM) ? othersArray.concat(npcs) : othersArray;
         // }
         // END MOD 4535992
@@ -473,7 +479,7 @@ export class TargetEnhancements {
      */
     static async getTargetIcons(others,token) {
         // icon/avatar info
-        this.icon_size = canvas.dimensions.size / 3.5;
+        this.icon_size = getCanvas().dimensions.size / 3.5;
         let num_icons = others.length;
 
         let tc:any = await new PIXI.Container();
@@ -503,7 +509,7 @@ export class TargetEnhancements {
         // grab the user's avatar. If not available use mysteryman.
         try {
             if (user.avatar === "icons/svg/mystery-man.svg") {
-                let t = canvas.tokens.placeables.find( (x) => { return x.actor.id == user.data.character;});
+                let t = getCanvas().tokens.placeables.find( (x) => { return x.actor.id == user.data.character;});
                 icon = PIXI.Sprite.from(t.data.img);
             } else {
                 icon = PIXI.Sprite.from(user.avatar);
@@ -613,13 +619,13 @@ export class TargetEnhancements {
 
     static preUpdateSceneEventHandler(scene,flags,diff,id) {
         // MOD p4535992 REMOVED
-        /*
+        
         game.user.targets.forEach( t => {
             //t.target.clear();
             t.targeted.clear(); 
             TargetEnhancements.drawTargetIndicators(t);
         });
-        */
+        
         // END MOD p4535992 REMOVED
     }
 
@@ -627,7 +633,7 @@ export class TargetEnhancements {
         if (data instanceof Token) {
             let token:Token = data;
             if (token.getFlag(MODULE_NAME,TargetEnhancements.resizeFlagKey)) {
-                token.data.scale = token.getFlag(MODULE_NAME,TargetEnhancements.resizeFlagKey);
+                token.data.scale = <any>token.getFlag(MODULE_NAME,TargetEnhancements.resizeFlagKey);
             }
         }
     }
@@ -659,7 +665,7 @@ export class TargetEnhancements {
         });
         */
         if (user.isGM) {
-            canvas.scene.unsetFlag(MODULE_NAME,TargetEnhancements.npc_targeting_key);
+            getCanvas().scene.unsetFlag(MODULE_NAME,TargetEnhancements.npc_targeting_key);
         }
 
         // ADDED 4535992
@@ -734,13 +740,13 @@ export class TargetEnhancements {
                     mycolor = 0x33BC4E;  // Party Member
                 }
                 else if (d === 1){
-                    mycolor = colorStringToHex(game.settings.get(MODULE_NAME,"friendly-color")); // Friendly NPC
+                    mycolor = colorStringToHex(<string>game.settings.get(MODULE_NAME,"friendly-color")); // Friendly NPC
                 }
                 else if (d === 0){
-                    mycolor = colorStringToHex(game.settings.get(MODULE_NAME,"neutral-color"));// Neutral NPC
+                    mycolor = colorStringToHex(<string>game.settings.get(MODULE_NAME,"neutral-color"));// Neutral NPC
                 }
                 else{
-                    mycolor = colorStringToHex(game.settings.get(MODULE_NAME,"hostile-color")); // Hostile NPC
+                    mycolor = colorStringToHex(<string>game.settings.get(MODULE_NAME,"hostile-color")); // Hostile NPC
                 }
             }
             else{
@@ -821,12 +827,14 @@ export class TargetEnhancements {
      */
     static handleTokenClick = async function (wrapped, ...args) {
         const [event] = args;
-        let token = await Helpers.getTokenByTokenID(TargetEnhancements.clickedToken);
+        let token:Token = await Helpers.getTokenByTokenID(TargetEnhancements.clickedToken);
         if (game.settings.get(MODULE_NAME,'enable-target-modifier-key')) {
             if (TargetEnhancements.modKeyPressed) {
-                token.target.clear();
+                //token.target.clear();
+                token.targeted.clear();
                 if (!token.targeted.has(game.user)) {
-                    token.setTarget(game.user, {releaseOthers: false});
+                    //token.setTarget(game.user, {releaseOthers: false});
+                    token.setTarget(true, {releaseOthers: false});
                 } else {
                     token.setTarget(false, {user: game.user, releaseOthers: false, groupSelection: true});
                 }
@@ -835,9 +843,9 @@ export class TargetEnhancements {
           // DEFAULT IS EASY TARGET BEHAVIOUR
           if (event.altKey && event.key === 'C') {
             game.user.targets.forEach(token =>
-              token['setTarget'](false, {releaseOthers: false, groupSelection: true})
+              token.setTarget(false, {releaseOthers: false, groupSelection: true})
             );
-            game.user['broadcastActivity']({targets: game.user.targets['ids']});
+            game.user.broadcastActivity({targets: game.user.targets['ids']});
           }
 
         }

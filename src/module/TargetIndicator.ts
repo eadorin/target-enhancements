@@ -3,7 +3,7 @@
  */
 
 import { SpriteID } from './sprite-id.js';
-import { MODULE_NAME } from '../module/settings'
+import { getCanvas, MODULE_NAME } from '../module/settings'
 //const mod = "target-enhancements";
 
 export class TargetIndicator {
@@ -57,7 +57,7 @@ export class TargetIndicator {
         let hh = this.token.h / 2;
         let w = this.token.w;
         let hw = w / 2;
-        let ah = canvas.dimensions.size / 3;
+        let ah = getCanvas().dimensions.size / 3;
 
         this.i.beginFill(fillColor, 1.0).lineStyle(1, 0x000000)
             .drawPolygon([-p,hh, -p-aw,hh-ah, -p-aw,hh+ah])
@@ -65,7 +65,7 @@ export class TargetIndicator {
             .drawPolygon([hw,-p, hw-ah,-p-aw, hw+ah,-p-aw])
             .drawPolygon([hw,h+p, hw-ah,h+p+aw, hw+ah,h+p+aw]);
 
-            let texture = canvas.app.renderer.generateTexture(this.i);
+            let texture = getCanvas().app.renderer.generateTexture(this.i,PIXI.SCALE_MODES.LINEAR,PIXI.settings.RESOLUTION);
             return new SpriteID(texture, this.token.id);
     }
 
@@ -79,7 +79,7 @@ export class TargetIndicator {
         let hh = this.token.h / 2;
         let w = this.token.w;
         let hw = w / 2;
-        let ah = canvas.dimensions.size / 3;
+        let ah = getCanvas().dimensions.size / 3;
 
         let rw = 10; // rect width
         let rh = 30; // rect length
@@ -100,7 +100,7 @@ export class TargetIndicator {
             .beginFill(fillColor).lineStyle(2,borderColor).drawRect(leftX,leftY,rh,rw).endFill() // tleft bar
         ;
 
-        let texture = canvas.app.renderer.generateTexture(this.i);
+        let texture = getCanvas().app.renderer.generateTexture(this.i,PIXI.SCALE_MODES.LINEAR,PIXI.settings.RESOLUTION);
             return new SpriteID(texture, this.token.id);
     }
     drawCrossHairs2() {
@@ -113,7 +113,7 @@ export class TargetIndicator {
         let hh = this.token.h / 2;
         let w = this.token.w;
         let hw = w / 2;
-        let ah = canvas.dimensions.size / 3;
+        let ah = getCanvas().dimensions.size / 3;
 
         let rw = 10; // rect width
         let rh = 50; // rect length
@@ -134,7 +134,7 @@ export class TargetIndicator {
             .beginFill(fillColor).lineStyle(2,borderColor).drawRect(leftX,leftY,rh,rw).endFill() // tleft bar
         ;
 
-        let texture = canvas.app.renderer.generateTexture(this.i);
+        let texture = getCanvas().app.renderer.generateTexture(this.i,PIXI.SCALE_MODES.LINEAR,PIXI.settings.RESOLUTION);
             return new SpriteID(texture, this.token.id);
     }
 
@@ -149,7 +149,7 @@ export class TargetIndicator {
         let hh = this.token.h / 2;
         let w = this.token.w;
         let hw = w / 2;
-        let ah = canvas.dimensions.size / 3;
+        let ah = getCanvas().dimensions.size / 3;
         this.i
             .beginFill(borderColor, 0).lineStyle(6,borderColor).drawCircle(hw,hh,hh).endFill()
             .beginFill(fillColor, 0).lineStyle(4, fillColor).drawCircle(hw,hh,hh).endFill() // stop here for outer ring
@@ -158,7 +158,7 @@ export class TargetIndicator {
             // .beginFill(borderColor, 0).lineStyle(4,borderColor).drawCircle(hw,hh,hh/4.5).endFill()
             // .beginFill(fillColor, 0).lineStyle(2, fillColor).drawCircle(hw,hh,hh/4.5).endFill();
 
-        let texture = canvas.app.renderer.generateTexture(this.i);
+        let texture = getCanvas().app.renderer.generateTexture(this.i,PIXI.SCALE_MODES.LINEAR,PIXI.settings.RESOLUTION);
         return new SpriteID(texture, this.token.id);
     }
 
@@ -172,7 +172,7 @@ export class TargetIndicator {
         let hh = this.token.h / 2;
         let w = this.token.w;
         let hw = w / 2;
-        let ah = canvas.dimensions.size / 3;
+        let ah = getCanvas().dimensions.size / 3;
         this.i
             .beginFill(borderColor, 0).lineStyle(6,borderColor).drawCircle(hw,hh,hh).endFill()
             .beginFill(fillColor, 0).lineStyle(4, fillColor).drawCircle(hw,hh,hh).endFill() // stop here for outer ring
@@ -181,7 +181,7 @@ export class TargetIndicator {
             .beginFill(fillColor, 1).lineStyle(8,fillColor).drawCircle(hw,hh,2).endFill()
         ;
 
-        let texture = canvas.app.renderer.generateTexture(this.i);
+        let texture = getCanvas().app.renderer.generateTexture(this.i,PIXI.SCALE_MODES.LINEAR,PIXI.settings.RESOLUTION);
         return new SpriteID(texture, this.token.id);
     }
 
@@ -231,7 +231,7 @@ export class TargetIndicator {
         this.token.target.beginFill(color, 1.0).lineStyle(2, 0x0000000).drawCircle(2 + (i * 8), 0, 6);
       }
 
-      let texture = canvas.app.renderer.generateTexture(this.i);
+      let texture = getCanvas().app.renderer.generateTexture(this.i,PIXI.SCALE_MODES.LINEAR,PIXI.settings.RESOLUTION);
       return new SpriteID(texture, this.token.id);
     }
 
@@ -290,7 +290,7 @@ export class TargetIndicator {
         var pulse_ticks = 0;
         var max_ticks = 20;
         var pulse_grow = true;
-        canvas.app.ticker.add( function(delta) {
+        getCanvas().app.ticker.add( function(delta) {
             // Uncaught TypeError: Cannot read property 'scale' of null, when player chang scene
             if(_self){ 
                 _self.scale.set(size);
@@ -313,7 +313,7 @@ export class TargetIndicator {
             var _self = this.c;
             var spin = 1.2;
             var speed = 0.006;
-            canvas.app.ticker.add(function(delta) {
+            getCanvas().app.ticker.add(function(delta) {
                 // Uncaught TypeError: Cannot read property 'scale' of null, when player chang scene
                 if(_self){ 
                     _self.rotation = spin;
