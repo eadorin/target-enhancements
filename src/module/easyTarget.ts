@@ -61,15 +61,15 @@ export class EasyTarget {
 		static tokenOnClickLeft = function (wrapped, ...args) {
 			const [ event ] = args;
 			const oe = event.data.originalEvent;
-			const tool = ui['controls'].control.activeTool;
+			const tool = ui.controls.control.activeTool;
 
 			//if (oe.altKey) {
 			//if (KeyBinding.eventIsForBinding(oe, parsedValueKeyBindingTarget)) {
       		if(matchBoundKeyEvent(oe)){
-				ui['controls'].control.activeTool = 'target';
+				ui.controls.control.activeTool = 'target';
 			}
 
-			if (ui['controls'].control.activeTool === 'target') {
+			if (ui.controls.control.activeTool === 'target') {
 				EasyTarget.releaseOthersMap.set(this, EasyTarget.releaseBehaviour(oe));
 			}
 
@@ -77,7 +77,7 @@ export class EasyTarget {
 
 			EasyTarget.releaseOthersMap.delete(this);
 
-			ui['controls'].control.activeTool = tool;
+			ui.controls.control.activeTool = tool;
 		}
 
 		static tokenCanControl = function (wrapped, ...args) {
@@ -88,17 +88,17 @@ export class EasyTarget {
 			}
 
 			const oe = event.data.originalEvent;
-			const tool = ui['controls'].control.activeTool;
+			const tool = ui.controls.control.activeTool;
 
 			//if (oe.altKey) {
 			//if (KeyBinding.eventIsForBinding(oe, parsedValueKeyBindingTarget)) {
       		if(matchBoundKeyEvent(oe)){
-				ui['controls'].control.activeTool = 'target';
+				ui.controls.control.activeTool = 'target';
 			}
 
 			const canControl = wrapped(...args);
 
-			ui['controls'].control.activeTool = tool;
+			ui.controls.control.activeTool = tool;
 
 			return canControl;
 		}
@@ -116,13 +116,13 @@ export class EasyTarget {
 		static canvasOnClickLeft = function (wrapped, ...args) {
 			const [ event ] = args;
 			const oe = event.data.originalEvent;
-			const tool = ui['controls'].control.activeTool;
+			const tool = ui.controls.control.activeTool;
 			const selectState = event.data._selectState;
 
 			//if (oe.altKey) {
 			//if (KeyBinding.eventIsForBinding(oe, parsedValueKeyBindingTarget)) {
       		if(matchBoundKeyEvent(oe)){
-				ui['controls'].control.activeTool = 'target';
+				ui.controls.control.activeTool = 'target';
 			}
 
 			wrapped(...args);
@@ -139,22 +139,22 @@ export class EasyTarget {
 				EasyTarget.targetTokensInArea(templates, EasyTarget.releaseBehaviour(oe));
 			}
 
-			ui['controls'].control.activeTool = tool;
+			ui.controls.control.activeTool = tool;
 		}
 
 		static canvasOnDragLeftDrop = function (wrapped, ...args) {
 			const [ event ] = args;
 			const oe = event.data.originalEvent;
-			const tool = ui['controls'].control.activeTool;
+			const tool = ui.controls.control.activeTool;
 			const layer = getCanvas().activeLayer;
 
 			//if (oe.altKey) {
 			//if (KeyBinding.eventIsForBinding(oe, parsedValueKeyBindingTarget)) {
      		if(matchBoundKeyEvent(oe)){
-				ui['controls'].control.activeTool = 'target';
+				ui.controls.control.activeTool = 'target';
 			}
 
-			if (ui['controls'].control.activeTool === 'target') {
+			if (ui.controls.control.activeTool === 'target') {
 				EasyTarget.releaseOthersMap.set(layer, EasyTarget.releaseBehaviour(oe));
 			}
 
@@ -162,7 +162,7 @@ export class EasyTarget {
 
 			EasyTarget.releaseOthersMap.delete(layer);
 
-			ui['controls'].control.activeTool = tool;
+			ui.controls.control.activeTool = tool;
 		}
 
 		static templateLayerOnDragLeftDrop = function (wrapped, ...args) {
@@ -176,7 +176,7 @@ export class EasyTarget {
 			//if (KeyBinding.eventIsForBinding(oe, parsedValueKeyBindingTarget)) {
       		if(matchBoundKeyEvent(oe)){
 				const template = new MeasuredTemplate(object.data);
-				template['shape'] = EasyTarget.getTemplateShape(template);
+				template.shape = EasyTarget.getTemplateShape(template);
 				EasyTarget.targetTokensInArea([template], EasyTarget.releaseBehaviour(oe));
 			}
 		}
@@ -269,8 +269,7 @@ export class EasyTarget {
 	static targetTokensInArea = function (templates, releaseOthers) {
 		if (releaseOthers) {
 			game.user.targets.forEach(token =>
-				//token.setTarget(false, {releaseOthers: false, groupSelection: true})
-				token['setTarget'](false, {releaseOthers: false, groupSelection: true})
+				token.setTarget(false, {releaseOthers: false, groupSelection: true})
 			);
 
 		}
@@ -282,17 +281,16 @@ export class EasyTarget {
 				return template.shape.contains(ox - cx, oy - cy);
 			});
 		}).forEach((token:Token) => token.setTarget(true, {releaseOthers: false, groupSelection: true}));
-		//game.user.broadcastActivity({targets: game.user.targets['ids']});
-		game.user['broadcastActivity']({targets: game.user.targets['ids']});
+		game.user.broadcastActivity({targets: game.user.targets.ids});
 	}
 };
 
 // document.addEventListener('keydown', event => {
 // 	if (event.altKey && event.key === 'C') {
 // 		game.user.targets.forEach(token =>
-// 			token['setTarget'](false, {releaseOthers: false, groupSelection: true})
+// 			token.setTarget(false, {releaseOthers: false, groupSelection: true})
 // 		);
-// 		game.user['broadcastActivity']({targets: game.user.targets['ids']});
+// 		game.user.broadcastActivity({targets: game.user.targets.ids});
 // 	}
 // });
 
@@ -301,8 +299,8 @@ document.addEventListener('keydown', event => {
     event.stopPropagation();
     event.preventDefault();
     game.user.targets.forEach(token =>
-		token['setTarget'](false, {releaseOthers: false, groupSelection: true})
+		token.setTarget(false, {releaseOthers: false, groupSelection: true})
 	);
-	game.user['broadcastActivity']({targets: game.user.targets['ids']});
+	game.user.broadcastActivity({targets: game.user.targets.ids});
   }
 });

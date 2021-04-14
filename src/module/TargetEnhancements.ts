@@ -231,10 +231,10 @@ export class TargetEnhancements {
      * @param {*} userId -- user who made the change
      */
     static async updateTokenEventHandler(scene,token_obj,update,dif,userId) {
-        let token = getCanvas().tokens.get(token_obj._id);
+        let token:any = getCanvas().tokens.get(token_obj._id);
         // console.log("Token updated:",token.icon);
         try {
-            //token?.target?.clear(); // REMOVED 4535992
+            token?.target?.clear(); // REMOVED 4535992
             token?.targeted?.clear(); // MOD 4535992
         } catch (error) {}
         // patch for issue #11. Only fixes it for DND I think :(
@@ -279,10 +279,10 @@ export class TargetEnhancements {
 		const [others, user] = Array.from(token.targeted).partition(u => u === game.user);
 		const userTarget = user.length;
         // For other users, draw offset pips
-		for (let [i, u] of others.entries()) {
-			let color = colorStringToHex(u['data'].color);
-			TargetEnhancements.tickerFunctions[token.data._id].i.beginFill(color, 1.0).lineStyle(2, 0x0000000).drawCircle(2 + (i * 8), 0, 6);
-		}
+		// for (let [i, u] of others.entries()) {
+		// 	let color = colorStringToHex(u['data'].color);
+		// 	TargetEnhancements.tickerFunctions[token.data._id].i.beginFill(color, 1.0).lineStyle(2, 0x0000000).drawCircle(2 + (i * 8), 0, 6);       
+		// }
         //END MOD 4535992 2021-04-13
     }
 
@@ -307,9 +307,8 @@ export class TargetEnhancements {
         }
         // For other users, draw offset pips
 		for (let [i, u] of others.entries()) {
-			//let color = colorStringToHex(u['data'].color);
-			//this.target.beginFill(color, 1.0).lineStyle(2, 0x0000000).drawCircle(2 + (i * 8), 0, 6);
-            TargetEnhancements.drawTargetIndicators(token);
+			let color = colorStringToHex(u['data'].color);
+			token.target.beginFill(color, 1.0).lineStyle(2, 0x0000000).drawCircle(2 + (i * 8), 0, 6);
 		}
         return wrapped(...args);
     }
@@ -631,7 +630,7 @@ export class TargetEnhancements {
         p.addChild(oc);
         p.addChild(icon);
         return p;
-        return icon;
+        //return icon;
 
     }
 
@@ -650,7 +649,7 @@ export class TargetEnhancements {
         // MOD p4535992 REMOVED
         
         game.user.targets.forEach( t => {
-            //t.target.clear();
+            t['target'].clear();
             t.targeted.clear(); 
             TargetEnhancements.drawTargetIndicators(t);
         });

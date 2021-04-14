@@ -75,7 +75,7 @@ export let initHooks = () => {
   libWrapper.register(MODULE_NAME, 'Token.prototype.control', EasyTarget.tokenOnControl, 'WRAPPER');
 
   // This is a horrible hack where we replace the entire method body, but I'm not certain there's a better way.
-  libWrapper.register(MODULE_NAME, 'Token.prototype._refreshTarget', TargetEnhancements.TokenPrototypeRefreshTargetHandler, 'OVERRIDE');
+  //libWrapper.register(MODULE_NAME, 'Token.prototype._refreshTarget', TargetEnhancements.TokenPrototypeRefreshTargetHandler, 'MIXED');
 
   // /*
   // * This adds handling to untarget and remove any animations
