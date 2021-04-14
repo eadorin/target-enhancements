@@ -1,11 +1,11 @@
 // For Zamrod.
 // Special thanks to Reaver.
 
-import { getCanvas, matchBoundKeyEvent, MODULE_NAME } from '../settings';
-import {libWrapper} from '../libs/shim.js'
-import { TargetEnhancements } from '../TargetEnhancements';
-import { error } from '../../target-enhancements';
-import { TargetClass } from '../lib-targeting/TargetClass';
+import { getCanvas, matchBoundKeyEvent, MODULE_NAME } from './settings';
+import {libWrapper} from './libs/shim.js'
+import { TargetEnhancements } from './TargetEnhancements';
+import { error } from '../target-enhancements';
+import { TargetClass } from './lib-targeting/TargetClass';
 export class EasyTarget {
 	static getTemplateShape = function (template) {
 		let shape = template.data.t;

@@ -1,5 +1,5 @@
 import { warn, error, debug, i18n } from "../target-enhancements";
-import { EasyTarget } from "./easytarget/easyTarget";
+import { EasyTarget } from "./easyTarget";
 import { TargetClass } from "./lib-targeting/TargetClass";
 import { MODULE_NAME } from "./settings";
 import { TargetEnhancements } from "./TargetEnhancements";
@@ -50,7 +50,7 @@ export let initHooks = () => {
   // TODO NOT SURE IF WE NEED THIS
   //Hooks.on('preCreateScene', TargetEnhancements.preCreateSceneHandler);
   //Hooks.on('renderSceneConfig', TargetEnhancements.preCreateSceneHandler);
- 
+
   // Hooks.on("getSceneNavigationContext", (html, contextOptions) => {
   //   TargetEnhancements.clearTokenTargetsHandler(game.user, null);
   // });

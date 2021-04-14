@@ -21,7 +21,11 @@ So the scope of this module is to reduce the number of modules on your game and 
 
 Thanks to all the other developers who inspired this work.
 
-I'm trying to make this module a upgrade of my favorite tagetting module for all system 'Target Enhancements'.  
+I'm trying to make this module a upgrade of my favorite targetting module for all system 'Target Enhancements'.  
+
+### NOTE
+
+Another objective i will try to set up AFTER make it work this module is to build a module library for targetting on foundry system independent, in the specific a upgrade of this module [lib-targeting](https://github.com/eadorin/lib-targeting) always thanks to [eadorin](https://github.com/eadorin)
 
 ## Installation
 
