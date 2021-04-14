@@ -231,10 +231,10 @@ export class TargetEnhancements {
      * @param {*} userId -- user who made the change
      */
     static async updateTokenEventHandler(scene,token_obj,update,dif,userId) {
-        let token:any = getCanvas().tokens.get(token_obj._id);
+        let token:Token = getCanvas().tokens.get(token_obj._id);
         // console.log("Token updated:",token.icon);
         try {
-            token?.target?.clear(); // REMOVED 4535992
+            token['target']?.clear(); // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
             token?.targeted?.clear(); // MOD 4535992
         } catch (error) {}
         // patch for issue #11. Only fixes it for DND I think :(
@@ -276,8 +276,8 @@ export class TargetEnhancements {
 
         //MOD 4535992 2021-04-13
         // Determine whether the current user has target and any other users
-		const [others, user] = Array.from(token.targeted).partition(u => u === game.user);
-		const userTarget = user.length;
+		//const [others, user] = Array.from(token.targeted).partition(u => u === game.user);
+		//const userTarget = user.length;
         // For other users, draw offset pips
 		// for (let [i, u] of others.entries()) {
 		// 	let color = colorStringToHex(u['data'].color);
@@ -290,10 +290,10 @@ export class TargetEnhancements {
      * Helper function to draw consistent target indicators
      * @param {Token} token -- the Token
      */
-     static TokenPrototypeRefreshTargetHandler(wrapped, ...args) {
+     static TokenPrototypeRefreshTargetHandler = async function(wrapped, ...args) {
         //let token = args[0];
-        let token:any = this;
-        token.target.clear();
+        let token:Token = this;
+        token['target'].clear(); // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
 		if (!token.targeted.size){
              return;
         }
@@ -306,10 +306,13 @@ export class TargetEnhancements {
             TargetEnhancements.drawTargetIndicators(token);
         }
         // For other users, draw offset pips
-		for (let [i, u] of others.entries()) {
-			let color = colorStringToHex(u['data'].color);
-			token.target.beginFill(color, 1.0).lineStyle(2, 0x0000000).drawCircle(2 + (i * 8), 0, 6);
-		}
+		// for (let [i, u] of others.entries()) {
+		// 	let color = colorStringToHex(u['data'].color);
+		// 	token.target.beginFill(color, 1.0).lineStyle(2, 0x0000000).drawCircle(2 + (i * 8), 0, 6);
+		// }
+        for (var key in TargetEnhancements.tickerFunctions) {
+            token['target'].addChild(TargetEnhancements.tickerFunctions[key]); // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
+        }
         return wrapped(...args);
     }
 
@@ -393,14 +396,14 @@ export class TargetEnhancements {
      * @param {Token} token  -- Token object
      * @param {Boolean} targeted -- Is targeted or just is clicked?
      */
-    static async targetTokenEventHandler(usr, token, targeted) {
+    static async targetTokenEventHandler(usr:User, token:Token, targeted) {
         // initialize some values
         var userArray = [];
         var othersArray = [];
         var npcs = [];
         let tokenTargets = await token.targeted; // this takes time to arrive
         // SOMETHING WRONG
-        if(!token.target){
+        if(!token['target']){// THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
             Helpers.clearTargets();
             if (TargetEnhancements.tickerFunctions[token.data._id]) {
                 try{
@@ -416,8 +419,8 @@ export class TargetEnhancements {
         // clear any existing items/icons
         // if (game.settings.get(mod,"enable-target-portraits")) {
             try {
-                await token.target.clear(); // indicator & baubles
-                await token.target.removeChildren(); // baubles
+                await token['target'].clear(); // indicator & baubles // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
+                await token['target'].removeChildren(); // baubles // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
 
                 // baubles?
                 // token.target._lineStyle.texture.destroy();
@@ -469,8 +472,8 @@ export class TargetEnhancements {
         if (!game.settings.get(MODULE_NAME,"enable-target-portraits")) {
             for ( let [i, u] of othersArray.entries() ) {
                 let color = colorStringToHex(u.data.color);
-                token.target.beginFill(color, 1.0).lineStyle(2, 0x0000000).drawCircle(2 + (i * 8), 0, 6);
-              }
+                token['target'].beginFill(color, 1.0).lineStyle(2, 0x0000000).drawCircle(2 + (i * 8), 0, 6); // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
+            }
         }
 
         //-----------------------------
@@ -492,7 +495,7 @@ export class TargetEnhancements {
         }
         // get our icons & add them to the display
         let tokensContainer = await TargetEnhancements.getTargetIcons(targetingItems,token);
-        token.target.addChild(tokensContainer);
+        token['target'].addChild(tokensContainer); // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
 
         TargetClass.targetClassTargetTokenHandler(usr, token, targeted);
         return;
@@ -526,7 +529,7 @@ export class TargetEnhancements {
      * @param {int} idx  -- the current row count
      * @param {Token} token -- PIXI.js container for height & width (the token)
      */
-    static async getIcon(user,idx, token) {
+    static async getIcon(user:User, idx:number, token:Token) {
         let icon:any = {};
         let padding:number = 2;
 
@@ -546,6 +549,7 @@ export class TargetEnhancements {
 
         } catch (err) {
             try {
+                //@ts-ignore
                 icon = PIXI.Sprite.from(user.img); // npc- token.actor.type === "npc"; !actor.isPC
             } catch (er) {
                 icon = PIXI.Sprite.from("icons/svg/mystery-man.svg");
@@ -647,13 +651,13 @@ export class TargetEnhancements {
 
     static preUpdateSceneEventHandler(scene,flags,diff,id) {
         // MOD p4535992 REMOVED
-        
+        /*
         game.user.targets.forEach( t => {
-            t['target'].clear();
+            t['target'].clear();  // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
             t.targeted.clear(); 
             TargetEnhancements.drawTargetIndicators(t);
         });
-        
+        */
         // END MOD p4535992 REMOVED
     }
 
@@ -844,7 +848,7 @@ export class TargetEnhancements {
               t.setTarget(false, {user: user, releaseOthers: true, groupSelection:false })
           )
       );
-      //return onDelete.apply(this, options, userId);
+      // return onDelete.apply(this, options, userId);
       // return onDelete.apply(options, userId);
       return wrapped(...args);
     }

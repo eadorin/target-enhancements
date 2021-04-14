@@ -70,26 +70,26 @@ export function clearTargets() {
             }
         );
     }
-    // game.user.targets.forEach(
-    //     t => t['setTarget'](
-    //         false,
-    //         {
-    //             user: game.user,
-    //             releaseOthers: true,
-    //             groupSelection:false
-    //         }
-    //     )
-    // );
+    game.user.targets.forEach(
+        t => t['setTarget'](
+            false,
+            {
+                user: game.user,
+                releaseOthers: true,
+                groupSelection:false
+            }
+        )
+    );
 
     // This adds handling to untarget and remove any animations
     for (let token of game.user.targets) {
         // MOD 4535992 REMOVED AND MODIFY
-        // if(token['target']){
-        //     token['target']['_lineStyle'].texture.destroy();
-        //     token['target']['_fillStyle'].visible = false;
-        //     token['target']['fill.visible'] = false;
-        //     token['target']['graphicsData'].length = 0;
-        // }
+        if(token['target']){
+            token['target']['_lineStyle'].texture.destroy();
+            token['target']['_fillStyle'].visible = false;
+            token['target']['fill.visible'] = false;
+            token['target']['graphicsData'].length = 0;
+        }
         if(token.targeted){
             token.targeted.clear();
         }

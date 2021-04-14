@@ -272,8 +272,8 @@ export class TargetIndicator {
         this.c.position.x = this.token.w/2;
         this.c.position.y = this.token.h/2;
         this.c.addChild(this.sprite);
-        this.token['target'].addChild(this.c); //REMOVED 4535992
-        //this.token.addChild(this.c); // ADDED 4535992
+        this.token['target'].addChild(this.c); // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
+
         if (game.settings.get(MODULE_NAME,'use-fx-pulse')) {
             this.pulse();
         }
