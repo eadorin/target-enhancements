@@ -7,6 +7,8 @@ import {libWrapper} from './libs/shim.js'
 
 export let readyHooks = async () => {
   TargetClass.ready();
+
+  libWrapper.register(MODULE_NAME, 'Token.prototype.control', EasyTarget.tokenOnControl, 'WRAPPER');
 }
 
 export let initHooks = () => {
@@ -72,7 +74,7 @@ export let initHooks = () => {
   libWrapper.register(MODULE_NAME, 'Canvas.prototype._onDragLeftDrop', EasyTarget.canvasOnDragLeftDrop, 'WRAPPER');
   libWrapper.register(MODULE_NAME, 'TemplateLayer.prototype._onDragLeftDrop', EasyTarget.templateLayerOnDragLeftDrop, 'WRAPPER');
   libWrapper.register(MODULE_NAME, 'KeyboardManager.prototype._onKeyC', EasyTarget.keyboardManagerOnKeyC, 'MIXED');
-  libWrapper.register(MODULE_NAME, 'Token.prototype.control', EasyTarget.tokenOnControl, 'WRAPPER');
+  
 
   // This is a horrible hack where we replace the entire method body, but I'm not certain there's a better way.
   //libWrapper.register(MODULE_NAME, 'Token.prototype._refreshTarget', TargetEnhancements.TokenPrototypeRefreshTargetHandler, 'MIXED');

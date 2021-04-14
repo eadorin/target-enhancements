@@ -311,7 +311,9 @@ export class TargetEnhancements {
 		// 	token.target.beginFill(color, 1.0).lineStyle(2, 0x0000000).drawCircle(2 + (i * 8), 0, 6);
 		// }
         for (var key in TargetEnhancements.tickerFunctions) {
-            token['target'].addChild(TargetEnhancements.tickerFunctions[key]); // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
+            if(key === token.data._id){
+                token['target'].addChild(TargetEnhancements.tickerFunctions[key]); // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
+            }
         }
         return wrapped(...args);
     }
