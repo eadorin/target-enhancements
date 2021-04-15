@@ -133,6 +133,8 @@ This module uses the [FXMaster](https://gitlab.com/mesfoliesludiques/foundryvtt-
 
 ## TODO List / Known Issues / Limitations
 
+- [Bug] I commented the "pulse" and "rotate" options on the "TargetIndicator" class because they broke foundry when i delete the token or change the scene. I will try tso fix this.
+
 - [Feature] Show to others player the animated token marker
 
 - [Bug][Switching Scenes or Deleting tokens while target locks up game](https://github.com/eadorin/target-enhancements/issues/31)
