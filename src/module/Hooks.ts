@@ -1,13 +1,13 @@
 import { warn, error, debug, i18n } from "../target-enhancements";
 import { EasyTarget } from "./easyTarget";
-import { TargetClass } from "./lib-targeting/TargetClass";
+import { TargetContainer } from "./TargetContainer";
 import { MODULE_NAME } from "./settings";
 import { TargetEnhancements } from "./TargetEnhancements";
 //@ts-ignore
 import * as libWrapper  from "/modules/lib-wrapper/lib-wrapper.js";
 
 export let readyHooks = async () => {
-  TargetClass.ready();
+  TargetContainer.ready();
 
   libWrapper.register(MODULE_NAME, 'Token.prototype.control', EasyTarget.tokenOnControl, 'WRAPPER');
 }

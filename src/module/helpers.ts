@@ -1,4 +1,6 @@
+import { Flags, FlagScope } from "./lib-targeting/TargetsTable";
 import { getCanvas } from "./settings";
+import { TargetContainer } from "./TargetContainer";
 import { TargetEnhancements } from "./TargetEnhancements";
 
 /**
@@ -57,21 +59,21 @@ export function getInput(prompt) {
 /*
  * Clear Targets https://github.com/psyny/FoundryVTT/blob/master/CozyPlayer/cozy-player/scripts/hotkeys.js
  */
-export function clearTargets() {
-    const targets = game.user.targets.values();
-    for(let target = targets.next(); !target.done; target = targets.next())
-    {
-        target.value.setTarget(
-            false,
-            {
-                user: game.user,
-                releaseOthers: true,
-                groupSelection:false
-            }
-        );
-    }
+export const clearTargets = async function() {
+    // const targets = game.user.targets.values();
+    // for(let target = targets.next(); !target.done; target = targets.next())
+    // {
+    //     target.value.setTarget(
+    //         false,
+    //         {
+    //             user: game.user,
+    //             releaseOthers: true,
+    //             groupSelection:false
+    //         }
+    //     );
+    // }
     game.user.targets.forEach(
-        t => t['setTarget'](
+        t => t.setTarget(
             false,
             {
                 user: game.user,
@@ -84,12 +86,16 @@ export function clearTargets() {
     // This adds handling to untarget and remove any animations
     for (let token of game.user.targets) {
         // MOD 4535992 REMOVED AND MODIFY
-        if(token['target']){
-            token['target']['_lineStyle'].texture.destroy();
-            token['target']['_fillStyle'].visible = false;
-            token['target']['fill.visible'] = false;
-            token['target']['graphicsData'].length = 0;
-        }
+
+        // if(token['target']){
+        //     token['target']['_lineStyle'].texture.destroy();
+        //     token['target']['_fillStyle'].visible = false;
+        //     token['target']['fill.visible'] = false;
+        //     token['target']['graphicsData'].length = 0;
+        // }
+
+        TargetContainer.npcTargeting.targetTokenHandler(game.user, token, false);
+
         if(token.targeted){
             token.targeted.clear();
         }

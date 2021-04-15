@@ -4,13 +4,14 @@
 
 import { SpriteID } from './sprite-id.js';
 import { getCanvas, MODULE_NAME } from '../module/settings'
+import { TargetContainer } from './TargetContainer.js';
 //const mod = "target-enhancements";
 
 export class TargetIndicator {
 
     token:Token;
     sprite:PIXI.Sprite;
-    owner:any;
+    owner:Boolean;
     indicator_type:any;
     c:PIXI.Container;
     i:PIXI.Graphics;
@@ -272,8 +273,8 @@ export class TargetIndicator {
         this.c.position.x = this.token.w/2;
         this.c.position.y = this.token.h/2;
         this.c.addChild(this.sprite);
-        this.token['target'].addChild(this.c); // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
-
+        //this.token['target'].addChild(this.c); // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
+        TargetContainer.getTargetGraphics(game.user, this.token).addChild(this.sprite);
         if (game.settings.get(MODULE_NAME,'use-fx-pulse')) {
             this.pulse();
         }
@@ -292,7 +293,7 @@ export class TargetIndicator {
         var pulse_grow = true;
         getCanvas().app.ticker.add( function(delta) {
             // Uncaught TypeError: Cannot read property 'scale' of null, when player chang scene
-            if(_self){ 
+            if(_self){
                 _self.scale.set(size);
 
                 if (pulse_grow) {
@@ -315,7 +316,7 @@ export class TargetIndicator {
             var speed = 0.006;
             getCanvas().app.ticker.add(function(delta) {
                 // Uncaught TypeError: Cannot read property 'scale' of null, when player chang scene
-                if(_self){ 
+                if(_self){
                     _self.rotation = spin;
                     spin = spin + speed * delta;
                 }

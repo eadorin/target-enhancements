@@ -1,3 +1,5 @@
+import { TargetsTable } from "./TargetsTable";
+
 /**
  * NPCTargeting.js -   v0.5
  *
@@ -10,12 +12,12 @@
  */
 export class NPCTargeting {
 
-    static controlledUnits = [];
-    static tt:any = {};
-    static _self = "";
+    controlledUnits:Token[] = [];
+    tt:TargetsTable;
+    _self = "";
 
-    static init(table) {
-        NPCTargeting.tt = table;
+    init(table) {
+        this.tt = table;
 
         if (!game.user.isGM) {
           return;
@@ -27,12 +29,12 @@ export class NPCTargeting {
      * @param {Token} token the targeted token
      * @param {Boolean} tf  is token control enabled (true) or released (false)
      */
-    static async controlTokenHandler(token, tf) {
-        console.log("npc", NPCTargeting.controlledUnits);
+    async controlTokenHandler(token:Token, tf:Boolean) {
+        console.log("npc", this.controlledUnits);
         if (tf) {
-            NPCTargeting.controlledUnits.push(token);
+          this.controlledUnits.push(token);
         } else {
-            NPCTargeting.controlledUnits = NPCTargeting.controlledUnits.filter( i => i !== token); // remove token
+          this.controlledUnits = this.controlledUnits.filter( i => i !== token); // remove token
         }
     }
 
@@ -43,16 +45,24 @@ export class NPCTargeting {
      * @param {Boolean} tf is the token being targeted or untargeted
      */
 
-    static async targetTokenHandler(user, token, tf) {
+    async targetTokenHandler(user:User, token:Token, tf:Boolean) {
         if (tf) {
-            NPCTargeting.controlledUnits.forEach(t => {
-                NPCTargeting.tt.addTarget(t,token);
-            });
+          this.controlledUnits.forEach(t => {
+            this.tt.addTarget(t,token);
+          });
         } else {
-            NPCTargeting.controlledUnits.forEach(t => {
-                NPCTargeting.tt.removeTarget(t,token);
-            });
+          this.controlledUnits.forEach(t => {
+            this.tt.removeTarget(t,token);
+          });
         }
+    }
+
+    setNewTargetsTable(targetsTable:TargetsTable){
+      this.tt = targetsTable;
+    }
+
+    getTargetsTable():TargetsTable{
+      return this.tt;
     }
 
 }

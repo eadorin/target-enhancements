@@ -15,8 +15,9 @@ import * as Helpers from './helpers';
 //@ts-ignore
 // import ColorSetting from "../../colorsettings/colorSetting.js";
 import { getCanvas, MODULE_NAME } from './settings';
-import { TargetClass } from './lib-targeting/TargetClass';
+import { TargetContainer } from './TargetContainer';
 import { error } from '../target-enhancements';
+import { Flags, FlagScope, TargetsTable } from './lib-targeting/TargetsTable';
 
 Array.prototype.partition = function(rule) {
     return this.reduce((acc, val) => {
@@ -234,8 +235,8 @@ export class TargetEnhancements {
         let token:Token = getCanvas().tokens.get(token_obj._id);
         // console.log("Token updated:",token.icon);
         try {
-            token['target']?.clear(); // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
-            token?.targeted?.clear(); // MOD 4535992
+            //token['target']?.clear(); // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
+            TargetContainer.clear()
         } catch (error) {}
         // patch for issue #11. Only fixes it for DND I think :(
         try {
@@ -281,7 +282,7 @@ export class TargetEnhancements {
         // For other users, draw offset pips
 		// for (let [i, u] of others.entries()) {
 		// 	let color = colorStringToHex(u['data'].color);
-		// 	TargetEnhancements.tickerFunctions[token.data._id].i.beginFill(color, 1.0).lineStyle(2, 0x0000000).drawCircle(2 + (i * 8), 0, 6);       
+		// 	TargetEnhancements.tickerFunctions[token.data._id].i.beginFill(color, 1.0).lineStyle(2, 0x0000000).drawCircle(2 + (i * 8), 0, 6);
 		// }
         //END MOD 4535992 2021-04-13
     }
@@ -293,28 +294,32 @@ export class TargetEnhancements {
      static TokenPrototypeRefreshTargetHandler = async function(wrapped, ...args) {
         //let token = args[0];
         let token:Token = this;
-        token['target'].clear(); // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
-		if (!token.targeted.size){
+        //token['target'].clear(); // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
+        TargetContainer.clear();
+		    if (!token.targeted.size){
              return;
         }
         // Determine whether the current user has target and any other users
-		const [others, users] = Array.from(token.targeted).partition(u => u === game.user);
-		const userTarget = users.length;
+		    const [others, users] = Array.from(token.targeted).partition(u => u === game.user);
+		    const userTarget = users.length;
 
-		// For the current user, draw the target arrows
-		if (userTarget) {
-            TargetEnhancements.drawTargetIndicators(token);
+        // For the current user, draw the target arrows
+        if (userTarget) {
+          TargetEnhancements.drawTargetIndicators(token);
+          TargetContainer.addTarget(game.user,token);
         }
         // For other users, draw offset pips
-		// for (let [i, u] of others.entries()) {
-		// 	let color = colorStringToHex(u['data'].color);
-		// 	token.target.beginFill(color, 1.0).lineStyle(2, 0x0000000).drawCircle(2 + (i * 8), 0, 6);
-		// }
-        for (var key in TargetEnhancements.tickerFunctions) {
-            if(key === token.data._id){
-                token['target'].addChild(TargetEnhancements.tickerFunctions[key]); // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
-            }
-        }
+        // for (let [i, u] of others.entries()) {
+        // 	let color = colorStringToHex(u['data'].color);
+        // 	token.target.beginFill(color, 1.0).lineStyle(2, 0x0000000).drawCircle(2 + (i * 8), 0, 6);
+        // }
+
+        // for (var key in TargetEnhancements.tickerFunctions) {
+        //     if(key === token.data._id){
+        //         token['target'].addChild(TargetEnhancements.tickerFunctions[key]); // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
+        //     }
+        // }
+
         return wrapped(...args);
     }
 
@@ -388,7 +393,7 @@ export class TargetEnhancements {
         })
         await token.target.clear();
 
-        TargetClass.targetClassControlTokenHandler(token, opt);
+        TargetContainer.targetClassControlTokenHandler(token, opt);
         return;
     }
 
@@ -398,31 +403,33 @@ export class TargetEnhancements {
      * @param {Token} token  -- Token object
      * @param {Boolean} targeted -- Is targeted or just is clicked?
      */
-    static async targetTokenEventHandler(usr:User, token:Token, targeted) {
+    static async targetTokenEventHandler(usr:User, token:Token, targeted:Boolean) {
         // initialize some values
         var userArray = [];
         var othersArray = [];
         var npcs = [];
         let tokenTargets = await token.targeted; // this takes time to arrive
         // SOMETHING WRONG
-        if(!token['target']){// THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
-            Helpers.clearTargets();
-            if (TargetEnhancements.tickerFunctions[token.data._id]) {
-                try{
-                    TargetEnhancements.tickerFunctions[token.data._id].destroy();
-                }catch(e){
-                    // IGNORE THIS
-                }
-                delete TargetEnhancements.tickerFunctions[token.data._id];
-            }
-            return;
-        }
+        // if(!token['target']){// THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
+        //     Helpers.clearTargets();
+        //     if (TargetEnhancements.tickerFunctions[token.data._id]) {
+        //         try{
+        //             TargetEnhancements.tickerFunctions[token.data._id].destroy();
+        //         }catch(e){
+        //             // IGNORE THIS
+        //         }
+        //         delete TargetEnhancements.tickerFunctions[token.data._id];
+        //     }
+        //     return;
+        // }
+        TargetContainer.targetClassTargetTokenHandler(usr, token, targeted);
 
         // clear any existing items/icons
         // if (game.settings.get(mod,"enable-target-portraits")) {
             try {
-                await token['target'].clear(); // indicator & baubles // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
-                await token['target'].removeChildren(); // baubles // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
+                //await token['target'].clear(); // indicator & baubles // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
+                //await token['target'].removeChildren(); // baubles // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
+                TargetContainer.clear();
 
                 // baubles?
                 // token.target._lineStyle.texture.destroy();
@@ -474,7 +481,8 @@ export class TargetEnhancements {
         if (!game.settings.get(MODULE_NAME,"enable-target-portraits")) {
             for ( let [i, u] of othersArray.entries() ) {
                 let color = colorStringToHex(u.data.color);
-                token['target'].beginFill(color, 1.0).lineStyle(2, 0x0000000).drawCircle(2 + (i * 8), 0, 6); // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
+                //token['target'].beginFill(color, 1.0).lineStyle(2, 0x0000000).drawCircle(2 + (i * 8), 0, 6); // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
+                TargetContainer.getTargetGraphics(u, token).beginFill(color, 1.0).lineStyle(2, 0x0000000).drawCircle(2 + (i * 8), 0, 6);
             }
         }
 
@@ -497,9 +505,8 @@ export class TargetEnhancements {
         }
         // get our icons & add them to the display
         let tokensContainer = await TargetEnhancements.getTargetIcons(targetingItems,token);
-        token['target'].addChild(tokensContainer); // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
-
-        TargetClass.targetClassTargetTokenHandler(usr, token, targeted);
+        //token['target'].addChild(tokensContainer); // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
+        TargetContainer.targetClassTargetTokenHandler(usr, token, targeted);
         return;
 
     }
@@ -653,13 +660,13 @@ export class TargetEnhancements {
 
     static preUpdateSceneEventHandler(scene,flags,diff,id) {
         // MOD p4535992 REMOVED
-        /*
+
         game.user.targets.forEach( t => {
-            t['target'].clear();  // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
-            t.targeted.clear(); 
+            //t['target'].clear();  // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
+            TargetContainer.clear();
             TargetEnhancements.drawTargetIndicators(t);
         });
-        */
+
         // END MOD p4535992 REMOVED
     }
 
@@ -679,12 +686,12 @@ export class TargetEnhancements {
      */
     static clearTokenTargetsHandler(user,tokenlayer) {
 
-        user.targets.forEach( t => 
-            t.setTarget(false, 
+        user.targets.forEach( t =>
+            t.setTarget(false,
                 {
-                    user: user, 
-                    releaseOthers: true, 
-                    groupSelection:false 
+                    user: user,
+                    releaseOthers: true,
+                    groupSelection:false
                 }
             )
         );

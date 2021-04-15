@@ -1,4 +1,6 @@
 import { getCanvas } from "../settings";
+import { ObjectSet } from "./ObjectSet";
+import { TokenTarget } from "./TokenTarget";
 
 export const SOURCE_TYPES = {
     SOURCE_TYPE_TOKEN  : 0,
@@ -17,7 +19,7 @@ export const SOCKET_MESSAGE_TYPES = {
  export const FlagScope = "TargetsTable";
  export const Flags = {
      target: 'target', // Single target element on token
-     targets: 'targets' // Multiple Targets on tokne
+     targets: 'targets' // Multiple Targets on token
  };
 
  /**
@@ -86,7 +88,7 @@ export class TargetsTable {
      * @param {*} source
      * @param {*} target
      */
-    async addTarget(source, target) {
+    async addTarget(source: User | Token, target : Token | string) {
 
         let messageType = SOCKET_MESSAGE_TYPES.ADD_TARGET;
         let t = (target instanceof Token) ? target : this.getTokenByTokenId(target);
@@ -110,7 +112,7 @@ export class TargetsTable {
      * It should only be executed by the GM
      * @param {TokenTarget} record the record to be added
      */
-    async addTargetFromPlayer(record) {
+    async addTargetFromPlayer(record: TokenTarget) {
         await this.records.add(record);
         this.storeTable();
     }
@@ -130,7 +132,7 @@ export class TargetsTable {
      * @param {*} source
      * @param {*} target
      */
-    async removeTarget(source, target) {
+    async removeTarget(source: User | Token, target: Token | string) {
         let messageType = SOCKET_MESSAGE_TYPES.DELETE_TARGET;
         let t = (target instanceof Token) ? target : this.getTokenByTokenId(target);
         let record = await this.getRecord(source,t);
@@ -147,7 +149,7 @@ export class TargetsTable {
      * It should only be executed by the GM
      * @param {TokenTarget} record the record to be removed
      */
-    async removeTargetFromPlayer(record) {
+    async removeTargetFromPlayer(record:TokenTarget) {
         await this.records.delete(record);
         this.storeTable();
     }
@@ -156,11 +158,11 @@ export class TargetsTable {
      * Get everyone targeting a given source
      * @param {*} target
      */
-    async getTargetSources(target) {
+    async getTargetSources(target: Token | string):Promise<TokenTarget[]> {
         let t = (target instanceof Token) ? target : this.getTokenByTokenId(target);
         let returnValues = [];
-        let vals = await this.records.values();
-        returnValues.push(vals.filter(obj => { return obj.targetID === target.id }));
+        let vals:TokenTarget[] = await this.records.values();
+        returnValues.push(vals.filter(obj => { return obj.targetID === t.id }));
         return returnValues;
 
     }
@@ -169,7 +171,7 @@ export class TargetsTable {
      * Get all targets for a given source
      * @param {*} source
      */
-    async getSourceTargets(source) {
+    async getSourceTargets(source: User | Token):Promise<TokenTarget[]> {
         let returnValues = [];
         let vals = await this.records.values();
         console.log(vals);
@@ -186,24 +188,32 @@ export class TargetsTable {
     }
 
     /**
-     * Get all records
+     * Get record
      * @param {*} source
      * @param {*} target
      */
-    async getRecord(source, target) {
-        let record = {};
-        if (source instanceof User) {
-            if (source.isGM) {
-                // check if GM controls tokens
-                // TODO
-                record = new TokenTarget(target.id, source.id, SOURCE_TYPES.SOURCE_TYPE_GM);
-            } else {
-                record = new TokenTarget(target.id, source.id, SOURCE_TYPES.SOURCE_TYPE_PLAYER);
-            }
-        } else if (source instanceof Token) {
-            record = new TokenTarget(target.id, source.id, SOURCE_TYPES.SOURCE_TYPE_TOKEN);
+    getRecord(source: User | Token, target:Token):TokenTarget {
+        let record:TokenTarget;
+        for(let recordTmp of this.records.values()){
+          let idTmp:string = (<TokenTarget>recordTmp).getID();
+          if(idTmp == String(target.id+"_"+source.id)){
+            record = recordTmp;
+            break;
+          }
         }
-
+        if(!record){
+          if (source instanceof User) {
+              if (source.isGM) {
+                  // check if GM controls tokens
+                  // TODO
+                  record = new TokenTarget(target.id, source.id, SOURCE_TYPES.SOURCE_TYPE_GM);
+              } else {
+                  record = new TokenTarget(target.id, source.id, SOURCE_TYPES.SOURCE_TYPE_PLAYER);
+              }
+          } else if (source instanceof Token) {
+              record = new TokenTarget(target.id, source.id, SOURCE_TYPES.SOURCE_TYPE_TOKEN);
+          }
+        }
         return record;
     }
 
@@ -217,95 +227,28 @@ export class TargetsTable {
         return await scene.setFlag(this.flagScope,this.flagKey,this.records);
     }
 
+
+    /**
+     * dump the entire table
+     */
+    async clear() {
+      return this.records.values();
+    }
+
+    // UTILITY
+
     /**
      * Helper function to get a token by its ID
      * @param {int} item the id of the token we're looking for
      */
-    getTokenByTokenId(item) {
-        return getCanvas().tokens.placeables.find(x => { return x.id === item });
+    private getTokenByTokenId(tokenId:string) {
+        return getCanvas().tokens.placeables.find(x => { return x.id === tokenId });
     }
-}
 
-
-/**
- * Generic class to hold our records
- */
-class TokenTarget {
-
-    targetID:string;
-    sourceID:string;
-    sourceType:number;
-
-    constructor(targetID:string, sourceID:string, sourceType:number) {
-        this.targetID = targetID;
-        this.sourceID = sourceID;
-        this.sourceType = sourceType;
-    }
-    toString() {
-        return this.targetID + this.sourceID;
-    }
 }
 
 
 
-// Set of objects.  Requires a .toString() overload to distinguish objects.
-// Credit: https://stackoverflow.com/users/177222/ashleysbrain
-// taken from https://stackoverflow.com/questions/5657219/set-of-objects-in-javascript
-export class ObjectSet {
 
-    items = {};
-    item_count = 0;
 
-    constructor() {
-        this.items = {};
-        this.item_count = 0;
-    }
 
-    contains(x) {
-        return this.items.hasOwnProperty(x.toString());
-    }
-
-    add(x) {
-        if (!this.contains(x)) {
-            this.items[x.toString()] = x;
-            this.item_count++;
-        }
-
-        return this;
-    }
-
-    delete(x) {
-        if (this.contains(x)) {
-            delete this.items[x.toString()];
-            this.item_count--;
-        }
-
-        return this;
-    }
-
-    clear() {
-        this.items = {};
-        this.item_count = 0;
-
-        return this;
-    }
-
-    isEmpty() {
-        return this.item_count === 0;
-    }
-
-    count() {
-        return this.item_count;
-    }
-
-    values() {
-        var i, ret = [];
-
-        for (i in this.items) {
-            if (this.items.hasOwnProperty(i))
-                ret.push(this.items[i]);
-        }
-
-        return ret;
-    }
-}
