@@ -1,7 +1,4 @@
-import { Flags, FlagScope } from "./lib-targeting/TargetsTable";
 import { getCanvas } from "./settings";
-import { TargetContainer } from "./TargetContainer";
-import { TargetEnhancements } from "./TargetEnhancements";
 
 /**
  * Some utility functions
@@ -85,21 +82,9 @@ export const clearTargets = async function() {
 
     // This adds handling to untarget and remove any animations
     for (let token of game.user.targets) {
-        // MOD 4535992 REMOVED AND MODIFY
-
-        // if(token['target']){
-        //     token['target']['_lineStyle'].texture.destroy();
-        //     token['target']['_fillStyle'].visible = false;
-        //     token['target']['fill.visible'] = false;
-        //     token['target']['graphicsData'].length = 0;
-        // }
-
-        TargetContainer.npcTargeting.targetTokenHandler(game.user, token, false);
-
         if(token.targeted){
             token.targeted.clear();
         }
-        // END MOD 4535992 REMOVED AND MODIFY
     }
 
     //game.user.targets = new Set();

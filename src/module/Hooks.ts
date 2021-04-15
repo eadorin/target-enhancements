@@ -1,14 +1,13 @@
 import { warn, error, debug, i18n } from "../target-enhancements";
 import { EasyTarget } from "./easyTarget";
-import { TargetContainer } from "./TargetContainer";
+// import { TargetContainer } from "./TargetContainer";
 import { MODULE_NAME } from "./settings";
 import { TargetEnhancements } from "./TargetEnhancements";
-//@ts-ignore
-import * as libWrapper  from "/modules/lib-wrapper/lib-wrapper.js";
+//import * as libWrapper  from "/modules/lib-wrapper/lib-wrapper";
 
 export let readyHooks = async () => {
-  TargetContainer.ready();
-
+  // TargetContainer.ready();
+  //@ts-ignore
   libWrapper.register(MODULE_NAME, 'Token.prototype.control', EasyTarget.tokenOnControl, 'WRAPPER');
 }
 
@@ -66,14 +65,21 @@ export let initHooks = () => {
   //   TargetEnhancements.clearTokenTargetsHandler(game.user, null);
   // });
 
-
+  //@ts-ignore
   libWrapper.register(MODULE_NAME, 'Token.prototype.setTarget', EasyTarget.tokenSetTarget, 'WRAPPER');
+  //@ts-ignore
   libWrapper.register(MODULE_NAME, 'Token.prototype._onClickLeft', EasyTarget.tokenOnClickLeft, 'WRAPPER');
+  //@ts-ignore
   libWrapper.register(MODULE_NAME, 'Token.prototype._canControl', EasyTarget.tokenCanControl, 'WRAPPER');
+  //@ts-ignore
   libWrapper.register(MODULE_NAME, 'TokenLayer.prototype.targetObjects', EasyTarget.tokenLayerTargetObjects, 'WRAPPER');
+  //@ts-ignore
   libWrapper.register(MODULE_NAME, 'Canvas.prototype._onClickLeft', EasyTarget.canvasOnClickLeft, 'WRAPPER');
+  //@ts-ignore
   libWrapper.register(MODULE_NAME, 'Canvas.prototype._onDragLeftDrop', EasyTarget.canvasOnDragLeftDrop, 'WRAPPER');
+  //@ts-ignore
   libWrapper.register(MODULE_NAME, 'TemplateLayer.prototype._onDragLeftDrop', EasyTarget.templateLayerOnDragLeftDrop, 'WRAPPER');
+  //@ts-ignore
   libWrapper.register(MODULE_NAME, 'KeyboardManager.prototype._onKeyC', EasyTarget.keyboardManagerOnKeyC, 'MIXED');
 
 
@@ -101,10 +107,12 @@ export let initHooks = () => {
   //     //return onDelete.apply(this, options, userId);
   //     return onDelete.apply(options, userId);
   // }
-
+  
+  //@ts-ignore
   libWrapper.register(MODULE_NAME, 'Token.prototype.delete', TargetEnhancements.tokenDeleteHandler, 'WRAPPER');
+  //@ts-ignore
   libWrapper.register(MODULE_NAME, 'Token.prototype._onDelete', TargetEnhancements.tokenDeleteHandler, 'WRAPPER');
-
+  //@ts-ignore
   libWrapper.register(MODULE_NAME, 'Token.prototype._getBorderColor', TargetEnhancements.customBorderColors, 'WRAPPER');
   // libWrapper.register(MODULE_NAME, 'PIXI.Graphics.prototype.drawEllipse', TargetEnhancements.drawDashLine, 'WRAPPER');
   PIXI.Graphics.prototype['drawDashLine'] = TargetEnhancements.drawDashLine;

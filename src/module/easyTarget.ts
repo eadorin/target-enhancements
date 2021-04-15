@@ -3,8 +3,7 @@
 
 import { getCanvas, matchBoundKeyEvent, MODULE_NAME } from './settings';
 import { TargetEnhancements } from './TargetEnhancements';
-import { error } from '../target-enhancements';
-import { TargetContainer } from './TargetContainer';
+
 export class EasyTarget {
 	static getTemplateShape = function (template) {
 		let shape = template.data.t;

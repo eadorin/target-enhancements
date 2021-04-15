@@ -1,12 +1,10 @@
 import { debug, log, setDebugLevel, warn, i18n } from '../target-enhancements';
-import { TargetsTable } from './lib-targeting/TargetsTable';
-import { NPCTargeting } from './lib-targeting/NPCTargeting';
 //@ts-ignore
 import ColorSetting from '../../colorsettings/colorSetting.js';
 // import './libs/settings-extender.js';
 
-window['TargetsTable'] = TargetsTable;
-window['NPCTargeting'] = NPCTargeting;
+// window['TargetsTable'] = TargetsTable;
+// window['NPCTargeting'] = NPCTargeting;
 
 export const MODULE_NAME = 'target-enhancements';
 

@@ -19,9 +19,6 @@ import { initHooks, readyHooks } from './module/Hooks';
 // import { installedModules, setupModules } from './module/setupModules';
 import { TargetEnhancements } from './module/TargetEnhancements';
 
-import { TargetsTable } from './module/lib-targeting/TargetsTable';
-import { NPCTargeting } from './module/lib-targeting/NPCTargeting';
-
 export let debugEnabled = 0;
 // 0 = none, warnings = 1, debug = 2, all = 3
 export let debug = (...args) => {if (debugEnabled > 1) console.log(`DEBUG:${MODULE_NAME} | `, ...args)};
@@ -50,8 +47,8 @@ Hooks.once('init', async () => {
 	console.log(`${MODULE_NAME} | Initializing ${MODULE_NAME}`);
 
   // Load lib-targetting module
-  window['TargetsTable'] = TargetsTable;
-  window['NPCTargeting'] = NPCTargeting;
+//   window['TargetsTable'] = TargetsTable;
+//   window['NPCTargeting'] = NPCTargeting;
 
 	initHooks();
 	// Assign custom classes and constants here

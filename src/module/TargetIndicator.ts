@@ -4,7 +4,7 @@
 
 import { SpriteID } from './sprite-id.js';
 import { getCanvas, MODULE_NAME } from '../module/settings'
-import { TargetContainer } from './TargetContainer.js';
+// import { TargetContainer } from './TargetContainer.js';
 //const mod = "target-enhancements";
 
 export class TargetIndicator {
@@ -66,8 +66,8 @@ export class TargetIndicator {
             .drawPolygon([hw,-p, hw-ah,-p-aw, hw+ah,-p-aw])
             .drawPolygon([hw,h+p, hw-ah,h+p+aw, hw+ah,h+p+aw]);
 
-            let texture = getCanvas().app.renderer.generateTexture(this.i,PIXI.SCALE_MODES.LINEAR,PIXI.settings.RESOLUTION);
-            return new SpriteID(texture, this.token.id);
+        let texture = getCanvas().app.renderer.generateTexture(this.i,PIXI.SCALE_MODES.LINEAR,PIXI.settings.RESOLUTION);
+        return new SpriteID(texture, this.token.id);
     }
 
     drawCrossHairs1() {
@@ -102,7 +102,7 @@ export class TargetIndicator {
         ;
 
         let texture = getCanvas().app.renderer.generateTexture(this.i,PIXI.SCALE_MODES.LINEAR,PIXI.settings.RESOLUTION);
-            return new SpriteID(texture, this.token.id);
+        return new SpriteID(texture, this.token.id);
     }
     drawCrossHairs2() {
         let fillColor = this.fillColor;
@@ -136,7 +136,7 @@ export class TargetIndicator {
         ;
 
         let texture = getCanvas().app.renderer.generateTexture(this.i,PIXI.SCALE_MODES.LINEAR,PIXI.settings.RESOLUTION);
-            return new SpriteID(texture, this.token.id);
+        return new SpriteID(texture, this.token.id);
     }
 
 
@@ -226,17 +226,11 @@ export class TargetIndicator {
         */
       // }
 
-    //   // For other users, draw offset pips
-    //   for (let [i, u] of others.entries()) {
-    //     let color = colorStringToHex(u['data'].color);
-    //     this.token.target.beginFill(color, 1.0).lineStyle(2, 0x0000000).drawCircle(2 + (i * 8), 0, 6);
-    //   }
-
       let texture = getCanvas().app.renderer.generateTexture(this.i,PIXI.SCALE_MODES.LINEAR,PIXI.settings.RESOLUTION);
       return new SpriteID(texture, this.token.id);
     }
 
-    async create(sprite="") {
+    async create(sprite=""): Promise<PIXI.Container> {
         if (!this.sprite && sprite == "") {
             this.sprite = await this.drawDefault();
         } else if (sprite != "") {
@@ -273,15 +267,15 @@ export class TargetIndicator {
         this.c.position.x = this.token.w/2;
         this.c.position.y = this.token.h/2;
         this.c.addChild(this.sprite);
-        //this.token['target'].addChild(this.c); // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
-        TargetContainer.getTargetGraphics(game.user, this.token).addChild(this.sprite);
+        this.token['target'].addChild(this.c); // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
+        //TargetContainer.getTargetGraphics(game.user, this.token).addChild(this.sprite);
         if (game.settings.get(MODULE_NAME,'use-fx-pulse')) {
             this.pulse();
         }
         if (game.settings.get(MODULE_NAME,'use-fx-rotate')) {
             this.rotate();
         }
-
+        return this.c;
     }
     pulse() {
         //pulse code

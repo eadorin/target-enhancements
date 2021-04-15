@@ -1,3 +1,4 @@
+import { initHooks } from "../Hooks";
 import { TargetsTable } from "./TargetsTable";
 
 /**
@@ -12,11 +13,15 @@ import { TargetsTable } from "./TargetsTable";
  */
 export class NPCTargeting {
 
-    controlledUnits:Token[] = [];
-    tt:TargetsTable;
-    _self = "";
+    static controlledUnits:Token[] = [];
+    static tt:TargetsTable;
+    static _self = "";
 
-    init(table) {
+    constructor(table){
+      NPCTargeting.init(table);
+    }
+
+    static init(table) {
         this.tt = table;
 
         if (!game.user.isGM) {
@@ -29,7 +34,7 @@ export class NPCTargeting {
      * @param {Token} token the targeted token
      * @param {Boolean} tf  is token control enabled (true) or released (false)
      */
-    async controlTokenHandler(token:Token, tf:Boolean) {
+     static async controlTokenHandler(token:Token, tf:Boolean) {
         console.log("npc", this.controlledUnits);
         if (tf) {
           this.controlledUnits.push(token);
@@ -45,7 +50,7 @@ export class NPCTargeting {
      * @param {Boolean} tf is the token being targeted or untargeted
      */
 
-    async targetTokenHandler(user:User, token:Token, tf:Boolean) {
+     static async targetTokenHandler(user:User, token:Token, tf:Boolean) {
         if (tf) {
           this.controlledUnits.forEach(t => {
             this.tt.addTarget(t,token);
@@ -57,11 +62,11 @@ export class NPCTargeting {
         }
     }
 
-    setNewTargetsTable(targetsTable:TargetsTable){
+    static setNewTargetsTable(targetsTable:TargetsTable){
       this.tt = targetsTable;
     }
 
-    getTargetsTable():TargetsTable{
+    static getTargetsTable():TargetsTable{
       return this.tt;
     }
 

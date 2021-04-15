@@ -3,13 +3,37 @@ import { getCanvas, MODULE_NAME } from './settings';
 import { NPCTargeting } from './lib-targeting/NPCTargeting';
 import { TargetsTable } from './lib-targeting/TargetsTable';
 
+/* ------------------------------------ */
+/* Initialize module					*/
+/* ------------------------------------ */
+Hooks.once('init', async () => {
+  // Load lib-targetting module
+  window['TargetsTable'] = TargetsTable;
+  window['NPCTargeting'] = NPCTargeting;
+});
+
+/* ------------------------------------ */
+/* Setup module							*/
+/* ------------------------------------ */
+Hooks.once('setup', function () {
+	// Do anything after initialization but before ready
+});
+
+/* ------------------------------------ */
+/* When ready							*/
+/* ------------------------------------ */
+Hooks.once('ready', () => {
+	TargetContainer.ready();
+});
+
+
 // TODO Integrated in separate library module
 export class TargetContainer {
 
-    static npcTargeting:NPCTargeting ;
+    // static npcTargeting:NPCTargeting ;
 
     static ready() {
-      this.npcTargeting = window['NPCTargeting'];
+      //NPCTargeting = window['NPCTargeting'];
       let targetsTable;
       try {
           targetsTable = new TargetsTable(MODULE_NAME);
@@ -18,16 +42,17 @@ export class TargetContainer {
           ui.notifications.error("You need to load the Lib-Targeting Module");
       }
 
-      this.npcTargeting.init(targetsTable);
+      NPCTargeting.init(targetsTable);
+      
     } // -- end ready
 
 
     static async targetClassTargetTokenHandler(user: User ,token: Token, targeted:Boolean) {
         // TODO Check out the code targeted as some problem 'true'
-        await this.npcTargeting.targetTokenHandler(user,token,targeted);
+        await NPCTargeting.targetTokenHandler(user,token,targeted);
 
-        let targetSources =  await this.npcTargeting.getTargetsTable().getTargetSources(token);
-        let sourceTargets = await this.npcTargeting.getTargetsTable().getSourceTargets(user);
+        let targetSources =  await NPCTargeting.getTargetsTable().getTargetSources(token);
+        let sourceTargets = await NPCTargeting.getTargetsTable().getSourceTargets(user);
 
         console.log(MODULE_NAME,"Token is Targeted By:", targetSources);
         console.log(MODULE_NAME,"User is targeting:", sourceTargets);
@@ -42,24 +67,28 @@ export class TargetContainer {
     }
 
     static async targetClassControlTokenHandler(token:Token, tf:Boolean) {
-        await this.npcTargeting.controlTokenHandler(token, tf);
+        await NPCTargeting.controlTokenHandler(token, tf);
     }
 
 
     static async addTarget(source: User | Token, target : Token | string){
-      await this.npcTargeting.getTargetsTable().addTarget(source,target);
+      await NPCTargeting.getTargetsTable().addTarget(source,target);
     }
 
     static async removeTarget(source: User | Token, target : Token | string){
-      await this.npcTargeting.getTargetsTable().removeTarget(source,target);
+      await NPCTargeting.getTargetsTable().removeTarget(source,target);
     }
 
     static async clear(){
-      await this.npcTargeting.getTargetsTable().clear();
+      await NPCTargeting.getTargetsTable().clear();
     }
 
-    static getTargetGraphics(u: any, token: Token):PIXI.Graphics {
-      return this.npcTargeting.getTargetsTable().getRecord(u, token).getTargetGraphics();
+    static getTargetGraphics(u: User, token: Token):PIXI.Graphics {
+      return NPCTargeting.getTargetsTable().getRecord(u, token).getTargetGraphics();
+    }
+
+    static getTargetToken(u: User, token: Token){
+      return NPCTargeting.getTargetsTable().getRecord(u, token);
     }
 
     // UTILITY
