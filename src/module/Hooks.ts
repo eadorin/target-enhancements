@@ -3,7 +3,8 @@ import { EasyTarget } from "./easyTarget";
 import { TargetClass } from "./lib-targeting/TargetClass";
 import { MODULE_NAME } from "./settings";
 import { TargetEnhancements } from "./TargetEnhancements";
-import {libWrapper} from './libs/shim.js'
+//@ts-ignore
+import * as libWrapper  from "/modules/lib-wrapper/lib-wrapper.js";
 
 export let readyHooks = async () => {
   TargetClass.ready();
@@ -74,7 +75,7 @@ export let initHooks = () => {
   libWrapper.register(MODULE_NAME, 'Canvas.prototype._onDragLeftDrop', EasyTarget.canvasOnDragLeftDrop, 'WRAPPER');
   libWrapper.register(MODULE_NAME, 'TemplateLayer.prototype._onDragLeftDrop', EasyTarget.templateLayerOnDragLeftDrop, 'WRAPPER');
   libWrapper.register(MODULE_NAME, 'KeyboardManager.prototype._onKeyC', EasyTarget.keyboardManagerOnKeyC, 'MIXED');
-  
+
 
   // This is a horrible hack where we replace the entire method body, but I'm not certain there's a better way.
   //libWrapper.register(MODULE_NAME, 'Token.prototype._refreshTarget', TargetEnhancements.TokenPrototypeRefreshTargetHandler, 'MIXED');

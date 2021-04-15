@@ -17,7 +17,9 @@ export class NPCTargeting {
     static init(table) {
         NPCTargeting.tt = table;
 
-        if (!game.user.isGM) { return; }
+        if (!game.user.isGM) {
+          return;
+        }
     }
 
     /**

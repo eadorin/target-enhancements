@@ -12,14 +12,32 @@ export const SOCKET_MESSAGE_TYPES = {
 };
 
 /**
+ * Flag Info
+ */
+ export const FlagScope = "TargetsTable";
+ export const Flags = {
+     target: 'target', // Single target element on token
+     targets: 'targets' // Multiple Targets on tokne
+ };
+
+ /**
+  * Socket Info
+  */
+ export const socketName = 'module.'+"TargetsTable";
+ export const socketAction = {
+     Target: 0,
+     Untarget: 1,
+ };
+
+/**
  * Targets Table is responsible for building a simple array of records,
  * storing entities that target other entities
  * It also provides helper methods for querying/updating/modifying the table
  */
 export class TargetsTable {
-    flagScope = "TargetsTable"
-    flagKey = "targets"
-    socketScope = "module." + this.flagScope;
+    flagScope = FlagScope; //"TargetsTable"
+    flagKey = Flags.targets;//"targets"
+    socketScope = socketName;//"module." + this.flagScope;
     records:ObjectSet;
 
     /**
@@ -42,8 +60,7 @@ export class TargetsTable {
     }
 
     async initGMListener() {
-        // TODO MAYBE TO UPGRADE THE CODE
-        game.socket['on'](this.socketScope, async data => {
+        game.socket.on(this.socketScope, async data => {
             switch (data.type) {
                 case SOCKET_MESSAGE_TYPES.ADD_TARGET :
                   {
@@ -99,8 +116,7 @@ export class TargetsTable {
     }
 
     async sendSocketData(dataToSend, messageType) {
-        // TODO MAYBE TO UPGRADE THE CODE
-        let res = await game.socket['emit'](this.socketScope, {
+        let res = await game.socket.emit(this.socketScope, {
             type: messageType,
             payload : {
                 data: dataToSend
@@ -216,11 +232,11 @@ export class TargetsTable {
  */
 class TokenTarget {
 
-    targetID;
-    sourceID;
-    sourceType;
+    targetID:string;
+    sourceID:string;
+    sourceType:number;
 
-    constructor(targetID, sourceID, sourceType) {
+    constructor(targetID:string, sourceID:string, sourceType:number) {
         this.targetID = targetID;
         this.sourceID = sourceID;
         this.sourceType = sourceType;

@@ -1,10 +1,8 @@
-import { log } from '../../target-enhancements';
-import { MODULE_NAME } from '../settings';
+import { getCanvas, MODULE_NAME } from '../settings';
 import { NPCTargeting } from './NPCTargeting';
 import { TargetsTable } from './TargetsTable';
-import {libWrapper} from '../libs/shim.js';
-import { getTokenByTokenID } from '../helpers';
 
+// TODO Integrated in separate library module
 export class TargetClass {
 
     static targetsTable:TargetsTable;
@@ -30,8 +28,8 @@ export class TargetClass {
         let targetSources =  await TargetClass.targetsTable.getTargetSources(token);
         let sourceTargets = await TargetClass.targetsTable.getSourceTargets(user);
 
-        log(MODULE_NAME,"Token is Targeted By:", targetSources);
-        log(MODULE_NAME,"User is targeting:", sourceTargets);
+        console.log(MODULE_NAME,"Token is Targeted By:", targetSources);
+        console.log(MODULE_NAME,"User is targeting:", sourceTargets);
         if(game.settings.get(MODULE_NAME, 'display_notificaton_enable_notification')){
             // for (let targetSource of targetSources) {
                 targetClassMessageCreate("Token is Targeted By:",targetSources);
@@ -49,10 +47,11 @@ export class TargetClass {
 
 export async function targetClassMessageCreate(message, tokenTargets) {
     let gm = game.user === game.users.find((u) => u.isGM && u.active)
-    if (!gm && game.settings.get(MODULE_NAME, 'display_notificaton_gm_vision')) return;
-
-    let isPlayer = game.settings.get(MODULE_NAME, 'display_notificaton_npc_name');
-    let hideName = game.settings.get(MODULE_NAME, 'display_notificaton_show_to_players_the_player_updates');
+    if (!gm && game.settings.get(MODULE_NAME, 'display_notificaton_gm_vision')){
+       return;
+    }
+    let isPlayer = <boolean>game.settings.get(MODULE_NAME, 'display_notificaton_npc_name');
+    let hideName = <boolean>game.settings.get(MODULE_NAME, 'display_notificaton_show_to_players_the_player_updates');
     let content;
 
     let nameSources = [];
@@ -82,7 +81,9 @@ export async function targetClassMessageCreate(message, tokenTargets) {
         }
 
         let recipient;
-        if (game.settings.get(MODULE_NAME, 'display_notificaton_gm_vision')) recipient = game.users.find((u) => u.isGM && u.active).id;
+        if (game.settings.get(MODULE_NAME, 'display_notificaton_gm_vision')){
+           recipient = game.users.find((u) => u.isGM && u.active).id;
+        }
         let chatData:any = {
             type: 4,
             user: recipient,
@@ -94,7 +95,14 @@ export async function targetClassMessageCreate(message, tokenTargets) {
 
         ChatMessage.create(chatData, {});
         // if((chatData)!== '' && game.settings.get('health-monitor', 'Enable_Disable')) {
-        // 	ChatMessage.create(chatData, {});	
+        // 	ChatMessage.create(chatData, {});
         // }
     }
+}
+
+export function getTokenByTokenID(id) {
+  return getCanvas().tokens.placeables.find( x => {return x.id === id});
+}
+export function getTokenByTokenName(name) {
+  return getCanvas().tokens.placeables.find( x => { return x.name == name});
 }

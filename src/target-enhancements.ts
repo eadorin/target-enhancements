@@ -10,8 +10,7 @@
  * 					 determines how others may use and modify your module
  */
 // Import JavaScript modules
-import {libWrapper} from './module/libs/shim.js'
-import { PIXI } from './module/libs/pixi-filters.js';
+
 // Import TypeScript modules
 import { registerSettings } from './module/settings';
 import { preloadTemplates } from './module/preloadTemplates';
@@ -22,9 +21,6 @@ import { TargetEnhancements } from './module/TargetEnhancements';
 
 import { TargetsTable } from './module/lib-targeting/TargetsTable';
 import { NPCTargeting } from './module/lib-targeting/NPCTargeting';
-
-window['TargetsTable'] = TargetsTable;
-window['NPCTargeting'] = NPCTargeting;
 
 export let debugEnabled = 0;
 // 0 = none, warnings = 1, debug = 2, all = 3
@@ -52,6 +48,10 @@ export let setDebugLevel = (debugText: string) => {
 /* ------------------------------------ */
 Hooks.once('init', async () => {
 	console.log(`${MODULE_NAME} | Initializing ${MODULE_NAME}`);
+
+  // Load lib-targetting module
+  window['TargetsTable'] = TargetsTable;
+  window['NPCTargeting'] = NPCTargeting;
 
 	initHooks();
 	// Assign custom classes and constants here
@@ -91,7 +91,10 @@ Hooks.once('ready', () => {
 	  ui.notifications.error(`The '${MODULE_NAME}', please make sure you have the "lib - ColorSettings" module installed and enabled.`);
     return;
 	}
-
+	if (!game.modules.get("fxmaster")?.active && game.user.isGM){
+	  ui.notifications.error(`The '${MODULE_NAME}', please make sure you have the "FXMaster" module installed and enabled.`);
+    return;
+	}
 	readyHooks();
 });
 
