@@ -94,11 +94,6 @@ export let initHooks = () => {
   // // Token.prototype['_onDelete'] = function(options, userId) {
   // const onDelete = Token.prototype.delete;
   // Token.prototype.delete = function(options, userId) {
-
-  //     if (TargetEnhancements.tickerFunctions[this.data._id]) {
-  //         TargetEnhancements.tickerFunctions[this.data._id].destroy();
-  //         delete TargetEnhancements.tickerFunctions[this.data._id];
-  //     }
   //     this.targeted.forEach((user) =>
   //         user.targets.forEach((t) =>
   //             t.setTarget(false, {user: user, releaseOthers: true, groupSelection:false })

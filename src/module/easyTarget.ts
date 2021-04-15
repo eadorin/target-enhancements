@@ -37,17 +37,6 @@ export class EasyTarget {
 			}
 
 			// MOD 4535992
-			if(releaseOthers){
-				//This adds handling to untarget and remove any animations
-				if (TargetEnhancements.tickerFunctions[this.data._id]) {
-					try{
-						TargetEnhancements.tickerFunctions[this.data._id].destroy();
-					}catch(e){
-						// IGNORE THIS
-					}
-					delete TargetEnhancements.tickerFunctions[this.data._id];
-				}
-			}
 			let targeted = this.targeted.size == 0 ? false : true;
 
 			TargetEnhancements.targetTokenEventHandler(game.user, this, targeted);

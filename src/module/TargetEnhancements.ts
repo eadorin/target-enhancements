@@ -40,9 +40,6 @@ export class TargetEnhancements {
     static neutral_text = new PIXI.Text('Neutral Unit',{fontFamily : 'Signika', fontSize: 24, fill : 0xff1010, align : 'center'});
     static hostile_text = new PIXI.Text('Hostile Unit',{fontFamily : 'Signika', fontSize: 24, fill : 0xFF0000, align : 'center'});
 
-    // Collection of running tickers to be used when a token is deleted
-    static tickerFunctions = {};
-
     /**
      * Event listener on keydown to enable resize modifier
      */
@@ -108,7 +105,7 @@ export class TargetEnhancements {
     //     let token = await Helpers.getTokenByTokenID(TargetEnhancements.clickedToken);
     //     if (game.settings.get(MODULE_NAME,'enable-target-modifier-key')) {
     //         if (TargetEnhancements.modKeyPressed) {
-    //             token['target'].clear();
+    //              if(token['target'] && token['target']._geometry) token['target'].clear();
     //             if (!token.targeted.has(game.user)) {
     //                 token.setTarget(game.user, {releaseOthers: false});
     //             } else {
@@ -124,7 +121,7 @@ export class TargetEnhancements {
      * @param {*} tf
      */
     static async hoverTokenEventHandler(token:Token,hovered:Boolean) {
-        token['target'].clear();
+        if(token['target'] && token['target']._geometry) token['target'].clear();
         // TargetContainer.clear();
         if (TargetEnhancements.getTargets(await token.targeted).selfA.length) {
 
@@ -271,9 +268,6 @@ export class TargetEnhancements {
             let indicator = new TargetIndicator(token);
             indicator.create(selectedIndicator);
 
-            TargetEnhancements.tickerFunctions[token.data._id] = new TargetIndicator(token);
-            TargetEnhancements.tickerFunctions[token.data._id].create(selectedIndicator);
-
             // TargetContainer.addTarget(game.user,token);
             // TargetContainer.getTargetGraphics(game.user, token).addChild(indicator.c);
             // END MOD 4535992 2021-03-08
@@ -287,7 +281,7 @@ export class TargetEnhancements {
         // For other users, draw offset pips
 		// for (let [i, u] of others.entries()) {
 		// 	let color = colorStringToHex(u['data'].color);
-		// 	TargetEnhancements.tickerFunctions[token.data._id].i.beginFill(color, 1.0).lineStyle(2, 0x0000000).drawCircle(2 + (i * 8), 0, 6);
+		// 	ZZZ.beginFill(color, 1.0).lineStyle(2, 0x0000000).drawCircle(2 + (i * 8), 0, 6);
 		// }
         //END MOD 4535992 2021-04-13
     }
@@ -299,7 +293,7 @@ export class TargetEnhancements {
      static TokenPrototypeRefreshTargetHandler = async function(wrapped, ...args) {
         //let token = args[0];
         let token:Token = this;
-        token['target'].clear(); // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
+        if(token['target'] && token['target']._geometry) token['target'].clear(); // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
         // TargetContainer.clear();
         if (!token.targeted.size){
             return;
@@ -316,12 +310,6 @@ export class TargetEnhancements {
         // for (let [i, u] of others.entries()) {
         // 	let color = colorStringToHex(u['data'].color);
         // 	token['target'].beginFill(color, 1.0).lineStyle(2, 0x0000000).drawCircle(2 + (i * 8), 0, 6);
-        // }
-
-        // for (var key in TargetEnhancements.tickerFunctions) {
-        //     if(key === token.data._id){
-        //         token['target'].addChild(TargetEnhancements.tickerFunctions[key]); // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
-        //     }
         // }
 
         return wrapped(...args);
@@ -415,37 +403,17 @@ export class TargetEnhancements {
         var othersArray = [];
         var npcs = [];
         let tokenTargets = await token.targeted; // this takes time to arrive
-        // SOMETHING WRONG
-        // if(!token['target']){// THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
-        //     Helpers.clearTargets();
-        //     if (TargetEnhancements.tickerFunctions[token.data._id]) {
-        //         try{
-        //             TargetEnhancements.tickerFunctions[token.data._id].destroy();
-        //         }catch(e){
-        //             // IGNORE THIS
-        //         }
-        //         delete TargetEnhancements.tickerFunctions[token.data._id];
-        //     }
-        //     return;
-        // }
-        //TargetContainer.targetClassTargetTokenHandler(usr, token, targeted);
-
+        
         // clear any existing items/icons
         // if (game.settings.get(mod,"enable-target-portraits")) {
             try {
                 await token['target'].clear(); // indicator & baubles // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
                 await token['target'].removeChildren(); // baubles // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
+
                 //TargetContainer.clear();
-
-                // baubles?
-                // token['target']._lineStyle.texture.destroy();
-                // token['target']._fillStyle.visible = false;
-                // token['target'].fill.visible = false;
-                // token['target'].graphicsData.length = 0;
-
             } catch(err) {
                 // something weird happeened. return;
-                error(err);
+                //error(err);
             }
         // }
 
@@ -718,16 +686,7 @@ export class TargetEnhancements {
 
         // ADDED 4535992
         Helpers.clearTargets();
-        // user.targets.forEach(token => {
-        //     if (TargetEnhancements.tickerFunctions[token.data._id]) {
-        //         try{
-        //             TargetEnhancements.tickerFunctions[token.data._id].destroy();
-        //         }catch(e){
-        //             // IGNORE THIS
-        //         }
-        //         delete TargetEnhancements.tickerFunctions[token.data._id];
-        //     }
-        // });
+       
         //game.users['updateTokenTargets']();
 
         return true;
@@ -855,17 +814,13 @@ export class TargetEnhancements {
     * The tokenDelete event is called after a token is destroyed which is too late to handle un-targeting
     */
     static tokenDeleteHandler = function (wrapped, ...args) {
-        if (TargetEnhancements.tickerFunctions[this.data._id]) {
-            TargetEnhancements.tickerFunctions[this.data._id].destroy();
-            delete TargetEnhancements.tickerFunctions[this.data._id];
-        }
         // if( TargetContainer.getTargetGraphics(this.targeted,this.data)){
         //     TargetContainer.getTargetGraphics(this.targeted,this.data).destroy();
         // }
-        this.targeted.forEach((user) =>
-          user.targets.forEach((t) =>
-              t.setTarget(false, {user: user, releaseOthers: true, groupSelection:false })
-          )
+        this.targeted.forEach((user:User) =>
+          user.targets.forEach((t:Token) => {
+              t.setTarget(false, {user: user, releaseOthers: true, groupSelection:false });
+          })
         );
         // return onDelete.apply(this, options, userId);
         // return onDelete.apply(options, userId);
@@ -881,7 +836,7 @@ export class TargetEnhancements {
         let token:Token = await Helpers.getTokenByTokenID(TargetEnhancements.clickedToken);
         if (game.settings.get(MODULE_NAME,'enable-target-modifier-key')) {
             if (TargetEnhancements.modKeyPressed) {
-                //token['target'].clear();
+                //if(token['target'] && token['target']._geometry)token['target'].clear();
                 if (!token.targeted.has(game.user)) {
                     //token.setTarget(game.user, {releaseOthers: false});
                     token.setTarget(true, {releaseOthers: false});
