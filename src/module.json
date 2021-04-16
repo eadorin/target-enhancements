@@ -1,0 +1,74 @@
+{
+  "name": "target-enhancements",
+  "title": "Target Enhancements",
+  "description": "Provides a number of enhancements for targetting",
+  "version": "1.0.0",
+  "author": "Eadorin",
+  "type": "module",
+  "socket": true,
+  "includes": [
+    "./assets/**",
+    "./lang/**",
+    "./scripts/**",
+    "./styles/**",
+    "./templates/**",
+    "./module.json",
+    "./README.md",
+    "./icons/**",
+    "./packs/**"
+  ],
+  "media": [
+    {
+      "type": "icon",
+      "location": ""
+    },
+    {
+      "type": "cover",
+      "location": ""
+    },
+    {
+      "type": "screenshot",
+      "location": ""
+    }
+  ],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    },
+    {
+      "lang": "es",
+      "name": "Español",
+      "path": "lang/es.json"
+    }
+  ],
+  "scripts": [
+    "./module/libs/settings-extender.js"
+  ],
+  "esmodules": [
+    "target-enhancements.js"
+  ],
+  "styles": [
+      "./styles/target-enhancements.css"
+  ],
+  "url": "https://github.com/eadorin/target-enhancements/tree/master",
+  "manifest": "https://raw.githubusercontent.com/eadorin/target-enhancements/master/src/module.json",
+  "download": "https://raw.githubusercontent.com/eadorin/target-enhancements/master/package/target-enhancements-v1.0.0.zip",
+  "minimumCoreVersion": "0.7.6",
+  "compatibleCoreVersion": "0.7.9",
+  "changelog": "https://raw.githubusercontent.com/eadorin/target-enhancements/master/changelog.md",
+  "bugs": "https://github.com/eadorin/target-enhancements/issues",
+  "allowBugReporter": true,
+  "dependencies": [
+    {
+      "name": "colorsettings"
+    },
+    {
+      "name": "lib-wrapper"
+    },
+    {
+      "name": "fxmaster"
+    }
+  ]
+}
