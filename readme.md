@@ -131,6 +131,51 @@ This module uses the [FXMaster](https://gitlab.com/mesfoliesludiques/foundryvtt-
 5. Select the options that you want and save
 -->
 
+# Build
+
+## Install all packages
+
+```bash
+npm install
+```
+## npm build scripts
+### build
+
+will build the code and copy all necessary assets into the dist folder and make a symlink to install the result into your foundry data; create a
+`foundryconfig.json` file with your Foundry Data path.
+
+```json
+{
+  "dataPath": "~/.local/share/FoundryVTT/"
+}
+```
+
+`build` will build and set up a symlink between `dist` and your `dataPath`.
+
+```bash
+npm run-script build
+```
+
+### NOTE:
+
+You don't need to build the `foundryconfig.json` file you can just copy the content of the `dist` folder on the module folder under `modules` of Foundry
+
+### build:watch
+
+`build:watch` will build and watch for changes, rebuilding automatically.
+
+```bash
+npm run-script build:watch
+```
+
+### clean
+
+`clean` will remove all contents in the dist folder (but keeps the link from build:install).
+
+```bash
+npm run-script clean
+```
+
 ## TODO List / Known Issues / Limitations
 
 - [Bug] I commented the "pulse" and "rotate" options on the "TargetIndicator" class because they broke foundry when i delete the token or change the scene. I will try tso fix this.
