@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## [1.0.0] (Beta) 2021-03-13
+
+- Direct integration with easy target
+- Direct integration with lib-targeting + minor bug fix
+- Direct integration with better-target
+- Converted to typescript project
+- Minor and major bug fix
+- Preparation to foundryvtt 0.8.0
 
 ## [0.9.5] 2020-06-28
 
