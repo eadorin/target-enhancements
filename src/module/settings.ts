@@ -1,6 +1,7 @@
 import { debug, log, setDebugLevel, warn, i18n } from '../target-enhancements';
+//import { hotkeys } from './libs/lib-df-hotkeys.shim.js';
 //@ts-ignore
-import ColorSetting from '../../colorsettings/colorSetting.js';
+import ColorSetting from '/modules/colorsettings/colorSetting.js';
 // import './libs/settings-extender.js';
 
 // window['TargetsTable'] = TargetsTable;
@@ -179,6 +180,13 @@ export const registerSettings = function () {
       default: true,
       type: Boolean
   });
+
+  //   hotkeys.registerShortcut({
+//     name : i18n(MODULE_NAME+".enable-target-modifier-key-name"),
+//     label: i18n(MODULE_NAME+".enable-target-modifier-key-hint"),
+//     default: { key: hotkeys.keys.KeyT, alt: false, ctrl: false, shift: false },
+//     onKeyDown: () => trigger(false)
+//   });
 
   game.settings.register(MODULE_NAME,'enable-target-portraits', {
       name : i18n(MODULE_NAME+".enable-target-portraits-name"),

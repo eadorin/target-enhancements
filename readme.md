@@ -53,6 +53,10 @@ This module uses the [color settings](https://github.com/ardittristan/VTTColorSe
 
 This module uses the [FXMaster](https://gitlab.com/mesfoliesludiques/foundryvtt-fxmaster) library like a dependency. It is a hard dependency and it is recommended for the best experience and compatibility with other modules.
 
+### Custom Token Animations
+
+This module uses the [Custom Token Animations](https://github.com/kandashi/Custom-Token-Animations) library like a dependency. It is a hard dependency and it is recommended for the best experience and compatibility with other modules.
+
 ## Usage & features
 
 - Replaces the colored baubles for users targeting a token with their avatar. (Now with NPC Support!) It will fall back to token if an avatar is not supplied
