@@ -1,3 +1,5 @@
+import { SOURCE_TYPES_TARGETING } from "./utilsTargeting";
+
 /**
  * Generic class to hold our records
  */
@@ -5,16 +7,16 @@
 
   targetID:string;
   sourceID:string;
-  sourceType:number;
-  targetGraphics:PIXI.Graphics;
+  sourceType:SOURCE_TYPES_TARGETING;
+  // targetGraphics:PIXI.Graphics;
   id:string;
 
-  constructor(targetID:string, sourceID:string, sourceType:number) {
+  constructor(targetID:string, sourceID:string, sourceType:SOURCE_TYPES_TARGETING) {
       this.id = sourceID+"_"+targetID;
       this.targetID = targetID;
       this.sourceID = sourceID;
       this.sourceType = sourceType;
-      this.targetGraphics = new PIXI.Graphics();
+      // this.targetGraphics = new PIXI.Graphics();
   }
 
   toString() {
@@ -37,11 +39,11 @@
     return this.sourceType;
   }
 
-  setTargetGraphics(targetGraphics:PIXI.Graphics){
-    this.targetGraphics = targetGraphics;
-  }
+  // setTargetGraphics(targetGraphics:PIXI.Graphics){
+  //   this.targetGraphics = targetGraphics;
+  // }
 
-  getTargetGraphics(){
-    return this.targetGraphics;
-  }
+  // getTargetGraphics(){
+  //   return this.targetGraphics;
+  // }
 }

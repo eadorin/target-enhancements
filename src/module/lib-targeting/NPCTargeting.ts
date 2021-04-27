@@ -13,9 +13,9 @@ import { TargetsTable } from "./TargetsTable";
  */
 export class NPCTargeting {
 
-    static controlledUnits:Token[] = [];
-    static tt:TargetsTable;
-    static _self = "";
+    private static controlledUnits:Token[] = [];
+    private static tt:TargetsTable;
+    private static _self = "";
 
     constructor(table){
       NPCTargeting.init(table);
@@ -48,6 +48,7 @@ export class NPCTargeting {
      * @param {User} user the user who did the targeting
      * @param {Token} token the token being targeted
      * @param {Boolean} tf is the token being targeted or untargeted
+     * @param {Any} data associated to the token
      */
 
      static async targetTokenHandler(user:User, token:Token, tf:Boolean) {
@@ -68,6 +69,10 @@ export class NPCTargeting {
 
     static getTargetsTable():TargetsTable{
       return this.tt;
+    }
+
+    static async isEmpty(){
+      return (await this.tt.getAllRecords()).length <= 0;
     }
 
 }

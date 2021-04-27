@@ -17,6 +17,8 @@ import * as Helpers from './helpers';
 import { getCanvas, MODULE_NAME } from './settings';
 // import { TargetContainer } from './TargetContainer';
 import { error } from '../target-enhancements';
+import { TargetContainer } from './lib-targeting/TargetContainer';
+import { FlagsTargeting } from './lib-targeting/utilsTargeting';
 
 Array.prototype.partition = function(rule) {
     return this.reduce((acc, val) => {
@@ -121,13 +123,15 @@ export class TargetEnhancements {
      * @param {*} tf
      */
     static async hoverTokenEventHandler(token:Token,hovered:Boolean) {
-        if(token['target'] && token['target']._geometry) token['target'].clear();
-        // TargetContainer.clear();
+        // if(token['target'] && token['target']._geometry){
+        //   token['target'].clear();
+        // }
+        TargetContainer.clear();
         if (TargetEnhancements.getTargets(await token.targeted).selfA.length) {
 
             // only redraw if not already existing
-            if (token['target'].children.length <= 0) {
-            // if(TargetContainer.getTargetGraphics(game.user,token)){
+            // if (token['target'].children.length <= 0) {
+            if(TargetContainer.getTargetToken(game.user,token).){
                 TargetEnhancements.drawTargetIndicators(token);
             }
         }
@@ -250,7 +254,7 @@ export class TargetEnhancements {
      * Helper function to draw consistent target indicators
      * @param {Token} token -- the Token
      */
-    static async drawTargetIndicators(token) {
+    static async drawTargetIndicators(token:Token) {
         let selectedIndicator = <string>game.settings.get(MODULE_NAME,"target-indicator");
 
         if(game.settings.get(MODULE_NAME,"enable-better-target")){
@@ -262,13 +266,13 @@ export class TargetEnhancements {
         // token.icon.filters = new ImageFilters().Glow().filters;
 
          // only redraw if not already existing
-        if (token['target'].children.length <= 0) {
-        // if (TargetContainer.getTargetGraphics(game.user,token).children.length <= 0) {
+        //if (token['target'].children.length <= 0) {
+        if (TargetContainer.isEmpty()) {
             // MOD 4535992 2021-03-08
             let indicator = new TargetIndicator(token);
             indicator.create(selectedIndicator);
 
-            // TargetContainer.addTarget(game.user,token);
+            TargetContainer.addTarget(game.user,token,indicator);
             // TargetContainer.getTargetGraphics(game.user, token).addChild(indicator.c);
             // END MOD 4535992 2021-03-08
 
