@@ -1,3 +1,5 @@
+![](https://img.shields.io/badge/Foundry-v0.7.9-informational)
+
 # Target Enhancements -- FoundryVTT Module
 
 ## THIS MODULE IS STILL IN BETA IF YOU WANT TO CONTIBUTE ADD SOME BOUNTY FOR DEVELOPING
@@ -35,7 +37,7 @@ To install this module manually:
 1.  Inside the Foundry "Configuration and Setup" screen, click "Add-on Modules"
 2.  Click "Install Module"
 3.  In the "Manifest URL" field, paste the following url:
-`https://raw.githubusercontent.com/p4535992/target-enhancements/master/src/module.json`
+`https://raw.githubusercontent.com/eadorin/target-enhancements/master/src/module.json`
 4.  Click 'Install' and wait for installation to complete
 5.  Don't forget to enable the module in game using the "Manage Module" button
 
@@ -190,6 +192,15 @@ npm run-script clean
 
 - [Feature][Low priority] Adjust size of target token icons
 
+- [Bug][High priority] When reload/refresh mantain the targets active
+
+- [Bug][High priority] Show to other player the PIXI.Graphics of targetted token
+
+- [Feature][Low priority] Make a customizable key for the selection of the targets for now is the 'Alt' button form easy target
+
+- [Feature][Low priority] Change the target image hover the tokens by using local image file (png,webm,ecc.), possible integration with [Custom-Token-Animations](https://github.com/kandashi/Custom-Token-Animations)
+
+
 - [OTHER ISSUE ARE SET ON TRELLO](https://trello.com/c/KvEZVMtw/213-modulebountyrevive-target-enhancements) 
 
 ## [Changelog](./changelog.md)
@@ -199,7 +210,7 @@ npm run-script clean
 - Users should report issues to the github issues. Reaching out on Discord is a good option as well, but please follow-up with a github issue
 - Try clearing all tokens using the new button before selecting/targeting other tokens. this should resolve most issues.
 
-Any issues, bugs, or feature requests are always welcome to be reported directly to the [Issue Tracker](https://github.com/p4535992/target-enhancements/issues ), or using the [Bug Reporter Module](https://foundryvtt.com/packages/bug-reporter/).
+Any issues, bugs, or feature requests are always welcome to be reported directly to the [Issue Tracker](https://github.com/eadorin/target-enhancements/issues ), or using the [Bug Reporter Module](https://foundryvtt.com/packages/bug-reporter/).
 
 
 ## Acknowledgements

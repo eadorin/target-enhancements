@@ -37,10 +37,10 @@
       "name": "English",
       "path": "lang/en.json"
     },
-    { 
-      "lang": "es", 
-      "name": "Español", 
-      "path": "lang/es.json" 
+    {
+      "lang": "es",
+      "name": "Español",
+      "path": "lang/es.json"
     }
   ],
   "scripts": [
@@ -52,13 +52,13 @@
   "styles": [
       "./styles/target-enhancements.css"
   ],
-  "url": "https://github.com/p4535992/target-enhancements/tree/master",
-  "manifest": "https://raw.githubusercontent.com/p4535992/target-enhancements/master/src/module.json",
-  "download": "https://raw.githubusercontent.com/p4535992/target-enhancements/master/package/target-enhancements-v1.0.0.zip",
+  "url": "https://github.com/eadorin/target-enhancements/tree/master",
+  "manifest": "https://raw.githubusercontent.com/eadorin/target-enhancements/master/src/module.json",
+  "download": "https://raw.githubusercontent.com/eadorin/target-enhancements/master/package/target-enhancements-v1.0.0.zip",
   "minimumCoreVersion": "0.7.6",
   "compatibleCoreVersion": "0.7.9",
-  "changelog": "https://raw.githubusercontent.com/p4535992/target-enhancements/master/changelog.md",
-  "bugs": "https://github.com/p4535992/target-enhancements/issues",
+  "changelog": "https://raw.githubusercontent.com/eadorin/target-enhancements/master/changelog.md",
+  "bugs": "https://github.com/eadorin/target-enhancements/issues",
   "allowBugReporter": true,
   "dependencies": [
     {

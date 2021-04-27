@@ -354,8 +354,8 @@ export class TargetEnhancements {
     static async controlTokenEventHandler(token:Token, opt) {
 
         // exit out if not GM. Need to change this to check for token ownership
-        if (!game.user.isGM) { 
-            return false; 
+        if (!game.user.isGM) {
+            return false;
         }
         await token['target'].clear();
         //await TargetContainer.removeTarget(game.user, token);
@@ -403,7 +403,7 @@ export class TargetEnhancements {
         var othersArray = [];
         var npcs = [];
         let tokenTargets = await token.targeted; // this takes time to arrive
-        
+
         // clear any existing items/icons
         // if (game.settings.get(mod,"enable-target-portraits")) {
             try {
@@ -634,7 +634,7 @@ export class TargetEnhancements {
 
 
     static preUpdateSceneEventHandler(scene:Scene,flags,diff,id) {
-        // MOD p4535992 REMOVED
+        // MOD p4535992 REMOVED NOT NEED THIS ?
         /*
         game.user.targets.forEach( t => {
             //t['target'].clear();  // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
@@ -642,7 +642,7 @@ export class TargetEnhancements {
             TargetEnhancements.drawTargetIndicators(t);
         });
         */
-        // END MOD p4535992 REMOVED
+        // END MOD p4535992 REMOVED NOT NEED THIS ?
     }
 
     static renderTokenEventHandler(a, div, data) {
@@ -686,7 +686,7 @@ export class TargetEnhancements {
 
         // ADDED 4535992
         Helpers.clearTargets();
-       
+
         //game.users['updateTokenTargets']();
 
         return true;
