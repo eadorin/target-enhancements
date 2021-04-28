@@ -1,7 +1,11 @@
-import { TokenTarget } from './lib-targeting/TokenTarget';
-import { getCanvas, MODULE_NAME } from './settings';
-import { NPCTargeting } from './lib-targeting/NPCTargeting';
-import { TargetsTable } from './lib-targeting/TargetsTable';
+import { TokenTarget } from './TokenTarget';
+import { getCanvas, MODULE_NAME } from '../settings';
+import { NPCTargeting } from './NPCTargeting';
+import { TargetsTable } from './TargetsTable';
+
+// ==========================================================
+// THIS IS A IMPLEMENTATION OF THE LIB TARGET LIBRARY
+// ==========================================================
 
 /* ------------------------------------ */
 /* Initialize module					*/
@@ -43,7 +47,7 @@ export class TargetContainer {
       }
 
       NPCTargeting.init(targetsTable);
-      
+
     } // -- end ready
 
 
@@ -83,12 +87,20 @@ export class TargetContainer {
       await NPCTargeting.getTargetsTable().clear();
     }
 
-    static getTargetGraphics(u: User, token: Token):PIXI.Graphics {
-      return NPCTargeting.getTargetsTable().getRecord(u, token).getTargetGraphics();
-    }
+    // static getTargetGraphics(u: User, token: Token):PIXI.Graphics {
+    //   return NPCTargeting.getTargetsTable().getRecord(u, token).getTargetGraphics();
+    // }
 
     static getTargetToken(u: User, token: Token){
       return NPCTargeting.getTargetsTable().getRecord(u, token);
+    }
+
+    static getTargetsToken(u: User, token: Token):TokenTarget[]{
+      return NPCTargeting.getTargetsTable().getAllRecords();
+    }
+
+    static isEmpty(){
+      return NPCTargeting.isEmpty();
     }
 
     // UTILITY

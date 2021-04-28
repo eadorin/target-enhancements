@@ -70,5 +70,9 @@ export class NPCTargeting {
       return this.tt;
     }
 
+    static async isEmpty(){
+      return (await this.tt.getAllRecords()).length <= 0;
+    }
+
 }
 

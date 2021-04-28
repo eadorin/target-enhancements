@@ -1,35 +1,7 @@
 import { getCanvas } from "../settings";
 import { ObjectSet } from "./ObjectSet";
 import { TokenTarget } from "./TokenTarget";
-
-export const SOURCE_TYPES = {
-    SOURCE_TYPE_TOKEN  : 0,
-    SOURCE_TYPE_PLAYER : 1,
-    SOURCE_TYPE_GM     : 2
-};
-
-export const SOCKET_MESSAGE_TYPES = {
-    ADD_TARGET : 0,
-    DELETE_TARGET : 1,
-};
-
-/**
- * Flag Info
- */
- export const FlagScope = "TargetsTable";
- export const Flags = {
-     target: 'target', // Single target element on token
-     targets: 'targets' // Multiple Targets on token
- };
-
- /**
-  * Socket Info
-  */
- export const socketName = 'module.'+"TargetsTable";
- export const socketAction = {
-     Target: 0,
-     Untarget: 1,
- };
+import { FlagsTargeting, FlagScopeTargeting, socketNameTargeting, SOCKET_MESSAGE_TYPES_TARGETING, SOURCE_TYPES_TARGETING } from "./utilsTargeting";
 
 /**
  * Targets Table is responsible for building a simple array of records,
@@ -37,9 +9,9 @@ export const SOCKET_MESSAGE_TYPES = {
  * It also provides helper methods for querying/updating/modifying the table
  */
 export class TargetsTable {
-    flagScope = FlagScope; //"TargetsTable"
-    flagKey = Flags.targets;//"targets"
-    socketScope = socketName;//"module." + this.flagScope;
+    flagScope = FlagScopeTargeting; //"TargetsTable"
+    flagKeyTargets = FlagsTargeting.targets;//"targets"
+    socketScope = socketNameTargeting;//"module." + this.flagScope;
     records:ObjectSet;
 
     /**
@@ -53,23 +25,25 @@ export class TargetsTable {
         this.flagScope = scope;
 
         if(game.scenes.active){
-            if ( (typeof game.scenes.active.getFlag(this.flagScope, this.flagKey)) === 'undefined') {
-                game.scenes.active.setFlag(this.flagScope, this.flagKey, this.records);
+            if ( (typeof game.scenes.active.getFlag(this.flagScope, this.flagKeyTargets)) === 'undefined') {
+                game.scenes.active.setFlag(this.flagScope, this.flagKeyTargets, this.records);
             }
         }
 
-        if (game.isGM) { this.initGMListener();}
+        if (game.isGM) {
+          this.initGMListener();
+        }
     }
 
     async initGMListener() {
         game.socket.on(this.socketScope, async data => {
             switch (data.type) {
-                case SOCKET_MESSAGE_TYPES.ADD_TARGET :
+                case SOCKET_MESSAGE_TYPES_TARGETING.ADD_TARGET :
                   {
                     this.addTargetFromPlayer(data.payload);
                     break;
                   }
-                case SOCKET_MESSAGE_TYPES.DELETE_TARGET :
+                case SOCKET_MESSAGE_TYPES_TARGETING.DELETE_TARGET :
                   {
                     this.removeTargetFromPlayer(data.payload);
                     break;
@@ -90,7 +64,7 @@ export class TargetsTable {
      */
     async addTarget(source: User | Token, target : Token | string) {
 
-        let messageType = SOCKET_MESSAGE_TYPES.ADD_TARGET;
+        let messageType = SOCKET_MESSAGE_TYPES_TARGETING.ADD_TARGET;
         let t = (target instanceof Token) ? target : this.getTokenByTokenId(target);
         let record = await this.getRecord(source,t)
         await this.records.add(record);
@@ -133,7 +107,7 @@ export class TargetsTable {
      * @param {*} target
      */
     async removeTarget(source: User | Token, target: Token | string) {
-        let messageType = SOCKET_MESSAGE_TYPES.DELETE_TARGET;
+        let messageType = SOCKET_MESSAGE_TYPES_TARGETING.DELETE_TARGET;
         let t = (target instanceof Token) ? target : this.getTokenByTokenId(target);
         let record = await this.getRecord(source,t);
         this.records.delete(record);
@@ -162,7 +136,9 @@ export class TargetsTable {
         let t = (target instanceof Token) ? target : this.getTokenByTokenId(target);
         let returnValues = [];
         let vals:TokenTarget[] = await this.records.values();
-        returnValues.push(vals.filter(obj => { return obj.targetID === t.id }));
+        returnValues.push(vals.filter(obj => {
+           return obj.targetID === t.id
+        }));
         return returnValues;
 
     }
@@ -176,7 +152,9 @@ export class TargetsTable {
         let vals = await this.records.values();
         console.log(vals);
         console.log(source);
-        returnValues.push(vals.filter( obj => {return obj.sourceID === source.id}));
+        returnValues.push(vals.filter( obj => {
+          return obj.sourceID === source.id
+        }));
         return returnValues;
     }
 
@@ -206,12 +184,12 @@ export class TargetsTable {
               if (source.isGM) {
                   // check if GM controls tokens
                   // TODO
-                  record = new TokenTarget(target.id, source.id, SOURCE_TYPES.SOURCE_TYPE_GM);
+                  record = new TokenTarget(target.id, source.id, SOURCE_TYPES_TARGETING.SOURCE_TYPE_GM);
               } else {
-                  record = new TokenTarget(target.id, source.id, SOURCE_TYPES.SOURCE_TYPE_PLAYER);
+                  record = new TokenTarget(target.id, source.id, SOURCE_TYPES_TARGETING.SOURCE_TYPE_PLAYER);
               }
           } else if (source instanceof Token) {
-              record = new TokenTarget(target.id, source.id, SOURCE_TYPES.SOURCE_TYPE_TOKEN);
+              record = new TokenTarget(target.id, source.id, SOURCE_TYPES_TARGETING.SOURCE_TYPE_TOKEN);
           }
         }
         return record;
@@ -223,8 +201,8 @@ export class TargetsTable {
     async storeTable() {
 
         let scene = game.scenes.active;
-        scene.unsetFlag(this.flagScope, this.flagKey);
-        return await scene.setFlag(this.flagScope,this.flagKey,this.records);
+        scene.unsetFlag(this.flagScope, this.flagKeyTargets);
+        return await scene.setFlag(this.flagScope,this.flagKeyTargets,this.records);
     }
 
 
