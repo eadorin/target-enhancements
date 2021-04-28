@@ -1,21 +1,20 @@
 import { warn, error, debug, i18n } from "../target-enhancements";
 import { EasyTarget } from "./easyTarget";
+import { TargetContainer } from "./lib-targeting/TargetContainer";
 // import { TargetContainer } from "./TargetContainer";
 import { MODULE_NAME } from "./settings";
 import { TargetEnhancements } from "./TargetEnhancements";
 //import * as libWrapper  from "/modules/lib-wrapper/lib-wrapper";
 
 export let readyHooks = async () => {
-  // TargetContainer.ready();
+  TargetContainer.ready(MODULE_NAME);
   //@ts-ignore
   libWrapper.register(MODULE_NAME, 'Token.prototype.control', EasyTarget.tokenOnControl, 'WRAPPER');
 }
 
 export let initHooks = () => {
   warn("Init Hooks processing");
-
-  // setup all the hooks
-
+  
   // ==================================
   // INTEGRATION EASY TARGET
   // ==================================

@@ -1,46 +1,31 @@
 import { TokenTarget } from './TokenTarget';
-import { getCanvas, MODULE_NAME } from '../settings';
 import { NPCTargeting } from './NPCTargeting';
 import { TargetsTable } from './TargetsTable';
+import { getCanvas, MODULE_NAME } from '../settings';
+import { TargetIndicator } from '../TargetIndicator';
 
 // ==========================================================
 // THIS IS A IMPLEMENTATION OF THE LIB TARGET LIBRARY
 // ==========================================================
 
-/* ------------------------------------ */
-/* Initialize module					*/
-/* ------------------------------------ */
 Hooks.once('init', async () => {
   // Load lib-targetting module
   window['TargetsTable'] = TargetsTable;
   window['NPCTargeting'] = NPCTargeting;
 });
 
-/* ------------------------------------ */
-/* Setup module							*/
-/* ------------------------------------ */
-Hooks.once('setup', function () {
-	// Do anything after initialization but before ready
-});
-
-/* ------------------------------------ */
-/* When ready							*/
-/* ------------------------------------ */
-Hooks.once('ready', () => {
-	TargetContainer.ready();
-});
-
-
 // TODO Integrated in separate library module
 export class TargetContainer {
 
     // static npcTargeting:NPCTargeting ;
+    static nameSpace:string;
 
-    static ready() {
+    static ready(moduleName) {
       //NPCTargeting = window['NPCTargeting'];
       let targetsTable;
       try {
-          targetsTable = new TargetsTable(MODULE_NAME);
+          TargetContainer.nameSpace = moduleName;
+          targetsTable = new TargetsTable(moduleName);
       } catch(error) {
           console.error(error);
           ui.notifications.error("You need to load the Lib-Targeting Module");
@@ -51,15 +36,15 @@ export class TargetContainer {
     } // -- end ready
 
 
-    static async targetClassTargetTokenHandler(user: User ,token: Token, targeted:Boolean) {
+    static async targetClassTargetTokenHandler(user: User ,token: Token, targeted:Boolean, data:PIXI.Graphics) {
         // TODO Check out the code targeted as some problem 'true'
-        await NPCTargeting.targetTokenHandler(user,token,targeted);
+        await NPCTargeting.targetTokenHandler(user,token,targeted, data);
 
         let targetSources =  await NPCTargeting.getTargetsTable().getTargetSources(token);
         let sourceTargets = await NPCTargeting.getTargetsTable().getSourceTargets(user);
 
-        console.log(MODULE_NAME,"Token is Targeted By:", targetSources);
-        console.log(MODULE_NAME,"User is targeting:", sourceTargets);
+        console.log(TargetContainer.nameSpace,"Token is Targeted By:", targetSources);
+        console.log(TargetContainer.nameSpace,"User is targeting:", sourceTargets);
         if(game.settings.get(MODULE_NAME, 'display_notificaton_enable_notification')){
             // for (let targetSource of targetSources) {
               TargetContainer.targetClassMessageCreate("Token is Targeted By:",targetSources);
@@ -70,13 +55,13 @@ export class TargetContainer {
         }
     }
 
-    static async targetClassControlTokenHandler(token:Token, tf:Boolean) {
-        await NPCTargeting.controlTokenHandler(token, tf);
+    static async targetClassControlTokenHandler(token:Token, targeted:Boolean) {
+        await NPCTargeting.controlTokenHandler(token, targeted);
     }
 
 
-    static async addTarget(source: User | Token, target : Token | string){
-      await NPCTargeting.getTargetsTable().addTarget(source,target);
+    static async addTarget(source: User | Token, target : Token | string, data:PIXI.Graphics){
+      await NPCTargeting.getTargetsTable().addTarget(source,target,data);
     }
 
     static async removeTarget(source: User | Token, target : Token | string){
@@ -95,7 +80,7 @@ export class TargetContainer {
       return NPCTargeting.getTargetsTable().getRecord(u, token);
     }
 
-    static getTargetsToken(u: User, token: Token):TokenTarget[]{
+    static getTargetsToken(u: User, token: Token){
       return NPCTargeting.getTargetsTable().getAllRecords();
     }
 

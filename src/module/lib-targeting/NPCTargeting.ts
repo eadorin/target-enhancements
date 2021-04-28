@@ -50,10 +50,10 @@ export class NPCTargeting {
      * @param {Boolean} tf is the token being targeted or untargeted
      */
 
-     static async targetTokenHandler(user:User, token:Token, tf:Boolean) {
+     static async targetTokenHandler(user:User, token:Token, tf:Boolean, data?:any) {
         if (tf) {
           this.controlledUnits.forEach(t => {
-            this.tt.addTarget(t,token);
+            this.tt.addTarget(t, token, data);
           });
         } else {
           this.controlledUnits.forEach(t => {

@@ -1,4 +1,3 @@
-import { getCanvas } from "../settings";
 import { ObjectSet } from "./ObjectSet";
 import { TokenTarget } from "./TokenTarget";
 import { FlagsTargeting, FlagScopeTargeting, socketNameTargeting, SOCKET_MESSAGE_TYPES_TARGETING, SOURCE_TYPES_TARGETING } from "./utilsTargeting";
@@ -14,15 +13,19 @@ export class TargetsTable {
     socketScope = socketNameTargeting;//"module." + this.flagScope;
     records:ObjectSet;
 
+    namespace:string;
+
     /**
      * The constructor initalizes all records to be of type ObjectSet. This is a wrapper
      * class that is required because Set compares two object instances, which is not
      * what we need.
      * @param {String} scope The scope needs to match an existing module
      */
-    constructor(scope) {
+    constructor(scope:string) {
         this.records = new ObjectSet();
         this.flagScope = scope;
+
+        this.namespace = scope;
 
         if(game.scenes.active){
             if ( (typeof game.scenes.active.getFlag(this.flagScope, this.flagKeyTargets)) === 'undefined') {
@@ -62,7 +65,7 @@ export class TargetsTable {
      * @param {*} source
      * @param {*} target
      */
-    async addTarget(source: User | Token, target : Token | string) {
+    async addTarget(source: User | Token, target : Token | string, data : any) {
 
         let messageType = SOCKET_MESSAGE_TYPES_TARGETING.ADD_TARGET;
         let t = (target instanceof Token) ? target : this.getTokenByTokenId(target);
@@ -76,7 +79,8 @@ export class TargetsTable {
             this.sendSocketData(record,messageType);
             return;
         }
-
+        t.setFlag(this.namespace,FlagsTargeting.target,data);
+        t[FlagsTargeting.target].addChild(data);
         this.storeTable();
     }
 
@@ -115,6 +119,8 @@ export class TargetsTable {
             this.sendSocketData(record,messageType);
             return;
         }
+        t.unsetFlag(this.namespace,FlagsTargeting.target);
+        t[FlagsTargeting.target].removeChild()
         this.storeTable();
     }
 
@@ -162,7 +168,7 @@ export class TargetsTable {
      * dump the entire table
      */
     async getAllRecords() {
-        return this.records.values();
+        return await this.records.values();
     }
 
     /**
@@ -220,9 +226,24 @@ export class TargetsTable {
      * @param {int} item the id of the token we're looking for
      */
     private getTokenByTokenId(tokenId:string) {
-        return getCanvas().tokens.placeables.find(x => { return x.id === tokenId });
+        return this.getCanvas().tokens.placeables.find(x => { return x.id === tokenId });
     }
 
+    /**
+     * Because typescript doesn't know when in the lifecycle of foundry your code runs, we have to assume that the
+     * canvas is potentially not yet initialized, so it's typed as declare let canvas: Canvas | {ready: false}.
+     * That's why you get errors when you try to access properties on canvas other than ready.
+     * In order to get around that, you need to type guard canvas.
+     * Also be aware that this will become even more important in 0.8.x because no canvas mode is being introduced there.
+     * So you will need to deal with the fact that there might not be an initialized canvas at any point in time.
+     * @returns
+     */
+    private getCanvas(): Canvas {
+        if (!(canvas instanceof Canvas) || !canvas.ready) {
+            throw new Error("Canvas Is Not Initialized");
+        }
+        return canvas;
+    }
 }
 
 
