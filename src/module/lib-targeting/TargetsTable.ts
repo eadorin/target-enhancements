@@ -247,6 +247,9 @@ export class TargetsTable {
 }
 
 
+// Hooks.on('init', TargetsTable.init);
+//@ts-ignore
+window.TargetsTable = TargetsTable;
 
 
 

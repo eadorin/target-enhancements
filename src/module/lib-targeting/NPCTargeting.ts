@@ -22,7 +22,7 @@ export class NPCTargeting {
     }
 
     static init(table) {
-        this.tt = table;
+        NPCTargeting.tt = table;
 
         if (!game.user.isGM) {
           return;
@@ -35,11 +35,11 @@ export class NPCTargeting {
      * @param {Boolean} tf  is token control enabled (true) or released (false)
      */
      static async controlTokenHandler(token:Token, tf:Boolean) {
-        console.log("npc", this.controlledUnits);
+        console.log("npc", NPCTargeting.controlledUnits);
         if (tf) {
-          this.controlledUnits.push(token);
+          NPCTargeting.controlledUnits.push(token);
         } else {
-          this.controlledUnits = this.controlledUnits.filter( i => i !== token); // remove token
+          NPCTargeting.controlledUnits = NPCTargeting.controlledUnits.filter( i => i !== token); // remove token
         }
     }
 
@@ -52,27 +52,30 @@ export class NPCTargeting {
 
      static async targetTokenHandler(user:User, token:Token, tf:Boolean, data?:any) {
         if (tf) {
-          this.controlledUnits.forEach(t => {
-            this.tt.addTarget(t, token, data);
+          NPCTargeting.controlledUnits.forEach(t => {
+            NPCTargeting.tt.addTarget(t, token, data);
           });
         } else {
-          this.controlledUnits.forEach(t => {
-            this.tt.removeTarget(t,token);
+          NPCTargeting.controlledUnits.forEach(t => {
+            NPCTargeting.tt.removeTarget(t,token);
           });
         }
     }
 
     static setNewTargetsTable(targetsTable:TargetsTable){
-      this.tt = targetsTable;
+      NPCTargeting.tt = targetsTable;
     }
 
     static getTargetsTable():TargetsTable{
-      return this.tt;
+      return NPCTargeting.tt;
     }
 
     static async isEmpty(){
-      return (await this.tt.getAllRecords()).length <= 0;
+      return (await NPCTargeting.tt.getAllRecords()).length <= 0;
     }
 
 }
 
+Hooks.on('init', NPCTargeting.init);
+//@ts-ignore
+window.NPCTargeting = NPCTargeting;

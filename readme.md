@@ -235,6 +235,7 @@ Thanks to anyone who helps me with this code! I appreciate the user community's 
 - [Foundry VTT - Bullseye](https://gitlab.com/Ionshard/foundry-vtt-bullseye) ty to [Ionshard](https://gitlab.com/Ionshard)
 - [settings-extender](https://gitlab.com/cswendrowski/settings-extender) ty to [foundry-azzurrite](https://gitlab.com/foundry-azzurite)
 - [T is for target](https://github.com/basicer/foundryvtt-t-is-for-target) ty to [basicer](https://github.com/basicer)
+- [Custom-Token-Animations](https://github.com/kandashi/Custom-Token-Animations) ty to [kandashi](https://github.com/kandashi)
 
 and of course a huge ty to all the developers of 'League of Extraordinary foundryvtt developers' for give me a hand every time i ask.
 
