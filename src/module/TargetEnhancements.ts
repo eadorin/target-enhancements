@@ -17,8 +17,9 @@ import * as Helpers from './helpers';
 import { getCanvas, MODULE_NAME } from './settings';
 // import { TargetContainer } from './TargetContainer';
 import { error } from '../target-enhancements';
-import { TargetContainer } from './lib-targeting/TargetContainer';
+import { TargetContainer } from './TargetContainer';
 import { FlagsTargeting } from './lib-targeting/utilsTargeting';
+import { helpers } from 'handlebars';
 
 Array.prototype.partition = function(rule) {
     return this.reduce((acc, val) => {
@@ -127,7 +128,7 @@ export class TargetEnhancements {
         //   token['target'].clear();
         // }
         if(!TargetContainer.isEmpty){
-            await TargetContainer.removeTarget(game.user, token);
+            await TargetContainer.targetClassTargetTokenHandler(game.user, token, false, undefined);
         }
         if (TargetEnhancements.getTargets(await token.targeted).selfA.length) {
 
@@ -270,15 +271,9 @@ export class TargetEnhancements {
          // only redraw if not already existing
         //if (token['target'].children.length <= 0) {
         if (TargetContainer.isEmpty()) {
-            // MOD 4535992 2021-03-08
             let indicator = new TargetIndicator(token);
-            let pixi = await indicator.create(selectedIndicator);
-
-            TargetContainer.addTarget(game.user,token, pixi);
-            // TargetContainer.getTargetGraphics(game.user, token).addChild(indicator.c);
-            // END MOD 4535992 2021-03-08
-
-         }
+            await indicator.create(selectedIndicator);
+        }
 
         //MOD 4535992 2021-04-13
         // Determine whether the current user has target and any other users
@@ -303,7 +298,7 @@ export class TargetEnhancements {
         //     token['target'].clear(); // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
         // }
         if(!TargetContainer.isEmpty){
-            await TargetContainer.removeTarget(game.user, token);
+            await TargetContainer.targetClassTargetTokenHandler(game.user, token, false, undefined);
         }
         if (!token.targeted.size){
             return;
@@ -377,8 +372,8 @@ export class TargetEnhancements {
         if (!game.user.isGM) {
             return false;
         }
-        //await token['target'].clear();
-        await TargetContainer.removeTarget(game.user, token);
+        await token['target'].clear();
+        //await TargetContainer.clear();
         let mySet = [];
 
         // get flag if exists, if not create it
@@ -405,8 +400,8 @@ export class TargetEnhancements {
         getCanvas().scene.unsetFlag(MODULE_NAME,TargetEnhancements.npc_targeting_key).then( () => {
             getCanvas().scene.setFlag(MODULE_NAME, (TargetEnhancements.npc_targeting_key) , toStore);
         })
-        //await token['target'].clear();
-        await TargetContainer.removeTarget(game.user, token);
+        await token['target'].clear();
+        //await TargetContainer.clear();
         //TargetContainer.targetClassControlTokenHandler(token, opt);
         return;
     }
@@ -425,17 +420,17 @@ export class TargetEnhancements {
         let tokenTargets = await token.targeted; // this takes time to arrive
 
         // clear any existing items/icons
-        // if (game.settings.get(mod,"enable-target-portraits")) {
+        // // if (game.settings.get(mod,"enable-target-portraits")) {
             try {
-                //await token['target'].clear(); // indicator & baubles // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
-                //await token['target'].removeChildren(); // baubles // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
+                await token['target'].clear(); // indicator & baubles // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
+                await token['target'].removeChildren(); // baubles // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
 
-                await TargetContainer.removeTarget(game.user, token);
+                //await TargetContainer.clear();
             } catch(err) {
                 // something weird happeened. return;
-                //error(err);
+                error(err);
             }
-        // }
+        // // }
 
         // if for some reason we still don't have a size
         if (!tokenTargets.size){
@@ -473,12 +468,12 @@ export class TargetEnhancements {
         // END MOD 4535992
 
         // if not using our indicators, then redraw the baubles
-        // if (!game.settings.get(MODULE_NAME,"enable-target-portraits")) {
-        //     for ( let [i, u] of othersArray.entries() ) {
-        //         let color = colorStringToHex(u.data.color);
-        //         token['target'].beginFill(color, 1.0).lineStyle(2, 0x0000000).drawCircle(2 + (i * 8), 0, 6); // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
-        //     }
-        // }
+        if (!game.settings.get(MODULE_NAME,"enable-target-portraits")) {
+            for ( let [i, u] of othersArray.entries() ) {
+                let color = colorStringToHex(u.data.color);
+                token['target'].beginFill(color, 1.0).lineStyle(2, 0x0000000).drawCircle(2 + (i * 8), 0, 6); // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
+            }
+        }
 
         //-----------------------------
         //           Target
@@ -499,8 +494,8 @@ export class TargetEnhancements {
         }
         // get our icons & add them to the display
         let tokensContainer = await TargetEnhancements.getTargetIcons(targetingItems,token);
-        //token['target'].addChild(tokensContainer); // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
-        TargetContainer.targetClassTargetTokenHandler(usr, token, targeted, tokensContainer);
+        token['target'].addChild(tokensContainer); // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
+        
         return;
 
     }
@@ -661,7 +656,16 @@ export class TargetEnhancements {
             TargetEnhancements.drawTargetIndicators(t);
         });
         */
-        // END MOD p4535992 REMOVED NOT NEED THIS ?
+       // END MOD p4535992 REMOVED NOT NEED THIS ?
+        if(game.scenes.active){
+           if(game.scenes.active.getFlag(MODULE_NAME,TargetEnhancements.npc_targeting_key)){
+                const targets = <any[]>game.scenes.active.getFlag(MODULE_NAME,TargetEnhancements.npc_targeting_key);
+                targets.forEach( (t:any) => {
+                    const token:Token = Helpers.getTokenByTokenID(t.id);
+                    TargetEnhancements.drawTargetIndicators(t);
+                });
+           }  
+        }
     }
 
     static renderTokenEventHandler(a, div, data) {
@@ -689,22 +693,26 @@ export class TargetEnhancements {
                 }
             )
         );
+    
+        // This adds handling to untarget and remove any animations
+        for (let token of game.user.targets) {
+            if(token.targeted){
+                token.targeted.clear();
+            }
+            token['target'].clear(); // indicator & baubles // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
+            token['target'].removeChildren(); // baubles // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
+    
+        }
+    
+        game.user.targets.clear();
 
-        /*
-        tokenlayer.selectObjects({
-            x:0,
-            y:0,
-            height:0,
-            releaseOptions:{},
-            controlOptions:{releaseOthers:true,updateSight:true}
-        });
-        */
         if (user.isGM) {
             getCanvas().scene.unsetFlag(MODULE_NAME,TargetEnhancements.npc_targeting_key);
         }
 
-        // ADDED 4535992
-        Helpers.clearTargets();
+        // ADDED AND REMOVED 4535992
+        // //Helpers.clearTargets();
+
 
         //game.users['updateTokenTargets']();
 

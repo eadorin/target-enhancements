@@ -208,14 +208,14 @@ export class CTA {
     }
 
 
-    static addAnimation(token, textureData, pushActor, name, oldID) {
+    static addAnimation(token:Token, textureData:TextureData, pushActor:boolean, name:string, oldID:string) {
         if (typeof token === "string") token = getCanvas().tokens.get(token)
         if (!game.user.isGM) {
             CTAsocket.executeAsGM("addAnimation", token.id, textureData, pushActor, name, oldID)
             return;
         }
         let flagId = oldID || randomID()
-        let flagData = {
+        let flagData:FlagData = {
             name: name,
             textureData: textureData,
             id: flagId
@@ -453,7 +453,7 @@ export class CTA {
                         let equip = Boolean(html.find("#equip")[0].checked)
                         //@ts-ignore
                         let lock = Boolean(html.find("#lock")[0].checked)
-                        let textureData = {
+                        let textureData:TextureData = {
                             texturePath: path,
                             scale: scale,
                             speed: speed,

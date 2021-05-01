@@ -8,9 +8,9 @@ import { FlagsTargeting, FlagScopeTargeting, socketNameTargeting, SOCKET_MESSAGE
  * It also provides helper methods for querying/updating/modifying the table
  */
 export class TargetsTable {
-    flagScope = FlagScopeTargeting; //"TargetsTable"
+    flagScope; // FlagScopeTargeting; //"TargetsTable"
     flagKeyTargets = FlagsTargeting.targets;//"targets"
-    socketScope = socketNameTargeting;//"module." + this.flagScope;
+    socketScope;// = socketNameTargeting;//"module." + this.flagScope;
     records:ObjectSet;
 
     namespace:string;
@@ -24,7 +24,7 @@ export class TargetsTable {
     constructor(scope:string) {
         this.records = new ObjectSet();
         this.flagScope = scope;
-
+        this.socketScope = "module." + this.flagScope;
         this.namespace = scope;
 
         if(game.scenes.active){

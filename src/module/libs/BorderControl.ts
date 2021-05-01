@@ -1,4 +1,8 @@
+import { TokenTarget } from "../lib-targeting/TokenTarget";
+import { FlagsTargeting } from "../lib-targeting/utilsTargeting";
 import { getCanvas, MODULE_NAME } from "../settings";
+import { TargetEnhancements } from "../TargetEnhancements";
+import { TargetIndicator } from "../TargetIndicator";
 
 Hooks.on('renderTokenHUD', (app, html, data) => {
     BorderFrame.AddBorderToggle(app, html, data)
@@ -158,7 +162,7 @@ export class BorderFrame {
         else return null;
     }
 
-    static newTarget = function() {
+    static newTarget = async function() {
         const multiplier = <number>game.settings.get(MODULE_NAME, "targetSize");
         const INT = parseInt(String(game.settings.get(MODULE_NAME, "targetColor")).substr(1), 16);
         const EX = parseInt(String(game.settings.get(MODULE_NAME, "targetColorEx")).substr(1), 16);
@@ -173,68 +177,92 @@ export class BorderFrame {
 
 
         // For the current user, draw the target arrows
-        if (userTarget) {
-            if (game.settings.get(MODULE_NAME, "internatTarget")) {
-                let p = -4; // padding
-                let aw = -12 * multiplier; // arrow width
-                let h = this.h; // token height
-                let hh = h / 2; // half height
-                let w = this.w; // token width
-                let hw = w / 2; // half width
-                let ah = getCanvas().dimensions.size / 3 * multiplier;
-                this.target.beginFill(INT, 1.0).lineStyle(1, EX)
-                    .drawPolygon([
-                        -p - aw, hh,
-                        -p, hh - ah,
-                        -p, hh + ah
-                    ])
-                    .drawPolygon([
-                        w + p + aw, hh,
-                        w + p, hh - ah,
-                        w + p, hh + ah
-                    ])
-                    .drawPolygon([
-                        hw, -p - aw,
-                        hw - ah, -p,
-                        hw + ah, -p
-                    ])
-                    .drawPolygon([
-                        hw, h + p + aw,
-                        hw - ah, h + p,
-                        hw + ah, h + p
-                    ]);
-            }
-            else {
-                let p = 4; // padding
-                let aw = 12 * multiplier; // arrow width
-                let h = this.h; // token height
-                let hh = h / 2; // half height
-                let w = this.w; // token width
-                let hw = w / 2; // half width
-                let ah = getCanvas().dimensions.size / 3 * multiplier;
-                this.target.beginFill(INT, 1.0).lineStyle(1, EX)
-                    .drawPolygon([
-                        -p, hh,
-                        -p - aw, hh - ah,
-                        -p - aw, hh + ah
-                    ])
-                    .drawPolygon([
-                        w + p, hh,
-                        w + p + aw, hh - ah,
-                        w + p + aw, hh + ah
-                    ])
-                    .drawPolygon([
-                        hw, -p, hw - ah,
-                        -p - aw, hw + ah,
-                        -p - aw
-                    ])
-                    .drawPolygon([
-                        hw, h + p,
-                        hw - ah, h + p + aw,
-                        hw + ah, h + p + aw
-                    ]);
+        // REMOVED p4535992
+        // if (userTarget) {
+        //     if (game.settings.get(MODULE_NAME, "internatTarget")) {
+        //         let p = -4; // padding
+        //         let aw = -12 * multiplier; // arrow width
+        //         let h = this.h; // token height
+        //         let hh = h / 2; // half height
+        //         let w = this.w; // token width
+        //         let hw = w / 2; // half width
+        //         let ah = getCanvas().dimensions.size / 3 * multiplier;
+        //         this.target.beginFill(INT, 1.0).lineStyle(1, EX)
+        //             .drawPolygon([
+        //                 -p - aw, hh,
+        //                 -p, hh - ah,
+        //                 -p, hh + ah
+        //             ])
+        //             .drawPolygon([
+        //                 w + p + aw, hh,
+        //                 w + p, hh - ah,
+        //                 w + p, hh + ah
+        //             ])
+        //             .drawPolygon([
+        //                 hw, -p - aw,
+        //                 hw - ah, -p,
+        //                 hw + ah, -p
+        //             ])
+        //             .drawPolygon([
+        //                 hw, h + p + aw,
+        //                 hw - ah, h + p,
+        //                 hw + ah, h + p
+        //             ]);
+        //     }
+        //     else {
+        //         let p = 4; // padding
+        //         let aw = 12 * multiplier; // arrow width
+        //         let h = this.h; // token height
+        //         let hh = h / 2; // half height
+        //         let w = this.w; // token width
+        //         let hw = w / 2; // half width
+        //         let ah = getCanvas().dimensions.size / 3 * multiplier;
+        //         this.target.beginFill(INT, 1.0).lineStyle(1, EX)
+        //             .drawPolygon([
+        //                 -p, hh,
+        //                 -p - aw, hh - ah,
+        //                 -p - aw, hh + ah
+        //             ])
+        //             .drawPolygon([
+        //                 w + p, hh,
+        //                 w + p + aw, hh - ah,
+        //                 w + p + aw, hh + ah
+        //             ])
+        //             .drawPolygon([
+        //                 hw, -p, hw - ah,
+        //                 -p - aw, hw + ah,
+        //                 -p - aw
+        //             ])
+        //             .drawPolygon([
+        //                 hw, h + p,
+        //                 hw - ah, h + p + aw,
+        //                 hw + ah, h + p + aw
+        //             ]);
+        //     }
+        // }
+        // END REMOVED p4535992
+        // MOD 4535992
+
+        // Recover the target from lib-targeting library
+        if(game.scenes.active){
+            if ( (typeof game.scenes.active.getFlag(MODULE_NAME, FlagsTargeting.targets)) !== 'undefined') {
+                const myTargets = <TokenTarget[]>game.scenes.active.getFlag(MODULE_NAME, FlagsTargeting.targets);
+                if(myTargets && myTargets.length > 0){
+                    myTargets.forEach(element => {
+                        const targetId = element.getTargetID;
+                        const targetToken = getCanvas().tokens.placeables.find( (x:any) => {return x.id === targetId});
+                        TargetEnhancements.drawTargetIndicators(targetToken);
+                    });
+
+                    // For other users, draw offset pips
+                    for (let [i, u] of others.entries()) {
+                        
+                    }
+                }
             }
         }
+
+        // END MOD 4535992
     }
 
     static componentToHex(c) {

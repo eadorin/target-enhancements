@@ -4,8 +4,8 @@
 
 import { SpriteID } from './sprite-id.js';
 import { getCanvas, MODULE_NAME } from '../module/settings'
-import { FlagScopeTargeting, FlagsTargeting } from './lib-targeting/utilsTargeting.js';
-import { TargetContainer } from './lib-targeting/TargetContainer.js';
+import { FlagsTargeting } from './lib-targeting/utilsTargeting.js';
+import { TargetContainer } from './TargetContainer.js';
 // import { TargetContainer } from './TargetContainer.js';
 //const mod = "target-enhancements";
 
@@ -269,7 +269,18 @@ export class TargetIndicator {
         this.c.position.x = this.token.w/2;
         this.c.position.y = this.token.h/2;
         this.c.addChild(this.sprite);
-        //this.token['target'].addChild(this.c); // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
+
+        this.token['target'].addChild(this.c); // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
+        
+        // if(this.token.getFlag(MODULE_NAME, FlagsTargeting.target)){
+        //     this.token.unsetFlag(MODULE_NAME, FlagsTargeting.target).then( () => {
+        //         this.token.setFlag(MODULE_NAME,FlagsTargeting.target,this.c);
+        //     });
+        // }else{
+        //  this.token.setFlag(MODULE_NAME,FlagsTargeting.target,this.c);
+        // }
+
+        TargetContainer.targetClassTargetTokenHandler(game.user, this.token, true,  this.c);
 
          // TODO CAN'T UNDERSTAND THEY BROKE FOUNDRY
         /*

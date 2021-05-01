@@ -1,6 +1,6 @@
 import { warn, error, debug, i18n } from "../target-enhancements";
 import { EasyTarget } from "./easyTarget";
-import { TargetContainer } from "./lib-targeting/TargetContainer";
+import { TargetContainer } from "./TargetContainer";
 import { BorderFrame } from "./libs/BorderControl";
 import { CTA } from "./libs/CTA";
 // import { TargetContainer } from "./TargetContainer";
@@ -9,9 +9,36 @@ import { TargetEnhancements } from "./TargetEnhancements";
 //import * as libWrapper  from "/modules/lib-wrapper/lib-wrapper";
 
 export let readyHooks = async () => {
+
+  // ===========================================
+  // TARGET ENCHANTMENTS
+  // ===========================================
+
   TargetContainer.ready(MODULE_NAME);
+  
   //@ts-ignore
   libWrapper.register(MODULE_NAME, 'Token.prototype.control', EasyTarget.tokenOnControl, 'WRAPPER');
+
+  Hooks.on("preUpdateScene",TargetEnhancements.preUpdateSceneEventHandler);
+  Hooks.on("renderSceneControls",TargetEnhancements.preUpdateSceneEventHandler);
+
+  // ===========================================
+  // CUSTOM TOKEN ANIMATION (CUSTOMIZED)
+  // ============================================
+
+  CTA.ready();
+
+  // ===========================================
+  // BORDER CONTROL (CUSTOMIZED)
+  // ===========================================
+
+  //@ts-ignore
+  //libWrapper.register(MODULE_NAME, 'Token.prototype._refreshBorder', BorderFrame.newBorder, 'OVERRIDE')
+  //@ts-ignore
+  //libWrapper.register(MODULE_NAME, 'Token.prototype._getBorderColor', BorderFrame.newBorderColor, 'OVERRIDE')
+  //@ts-ignore
+  libWrapper.register(MODULE_NAME, 'Token.prototype._refreshTarget', BorderFrame.newTarget, 'OVERRIDE')
+
 }
 
 export let initHooks = () => {
@@ -43,8 +70,8 @@ export let initHooks = () => {
   Hooks.on("hoverToken", TargetEnhancements.hoverTokenEventHandler);
   Hooks.on("updateToken",TargetEnhancements.updateTokenEventHandler);
   Hooks.on("render",TargetEnhancements.renderTokenEventHandler);
-  Hooks.on("preUpdateScene",TargetEnhancements.preUpdateSceneEventHandler);
-  Hooks.on("renderSceneControls",TargetEnhancements.preUpdateSceneEventHandler);
+
+  
   //Hooks.on("controlToken",TargetEnhancements.controlTokenEventHandler); // MOVED TO ESYTARGET CLASS
   Hooks.on("clearTokenTargets",TargetEnhancements.clearTokenTargetsHandler);
   Hooks.on("getSceneControlButtons",TargetEnhancements.getSceneControlButtonsHandler);
@@ -113,22 +140,6 @@ export let initHooks = () => {
   // libWrapper.register(MODULE_NAME, 'PIXI.Graphics.prototype.drawEllipse', TargetEnhancements.drawDashLine, 'WRAPPER');
   PIXI.Graphics.prototype['drawDashLine'] = TargetEnhancements.drawDashLine;
 
-  // ===========================================
-  //
-  // ============================================
-
-  CTA.ready();
-
-  // ===========================================
-  // BORDER CONTROL
-  // ===========================================
-
-  //@ts-ignore
-  libWrapper.register(MODULE_NAME, 'Token.prototype._refreshBorder', BorderFrame.newBorder, 'OVERRIDE')
-  //@ts-ignore
-  libWrapper.register(MODULE_NAME, 'Token.prototype._getBorderColor', BorderFrame.newBorderColor, 'OVERRIDE')
-  //@ts-ignore
-  libWrapper.register(MODULE_NAME, 'Token.prototype._refreshTarget', BorderFrame.newTarget, 'OVERRIDE')
 }
 
 

@@ -76,6 +76,6 @@ export class NPCTargeting {
 
 }
 
-Hooks.on('init', NPCTargeting.init);
+// Hooks.on('init', NPCTargeting.init);
 //@ts-ignore
 window.NPCTargeting = NPCTargeting;
