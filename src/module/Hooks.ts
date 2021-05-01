@@ -2,6 +2,7 @@ import { warn, error, debug, i18n } from "../target-enhancements";
 import { EasyTarget } from "./easyTarget";
 import { TargetContainer } from "./lib-targeting/TargetContainer";
 import { BorderFrame } from "./libs/BorderControl";
+import { CTA } from "./libs/CTA";
 // import { TargetContainer } from "./TargetContainer";
 import { MODULE_NAME } from "./settings";
 import { TargetEnhancements } from "./TargetEnhancements";
@@ -113,8 +114,15 @@ export let initHooks = () => {
   PIXI.Graphics.prototype['drawDashLine'] = TargetEnhancements.drawDashLine;
 
   // ===========================================
+  //
+  // ============================================
+
+  CTA.ready();
+
+  // ===========================================
   // BORDER CONTROL
   // ===========================================
+
   //@ts-ignore
   libWrapper.register(MODULE_NAME, 'Token.prototype._refreshBorder', BorderFrame.newBorder, 'OVERRIDE')
   //@ts-ignore

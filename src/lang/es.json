@@ -85,11 +85,11 @@
     "target-enhancements.Replicate" : "Replicar a una Macro",
     "target-enhancements.AddNew" : "Añadir Nuevo",
     "target-enhancements.Animations" : "Animaciones",
-    "target-enhancements.AnimationPicker" : "Selector de Anim. CTA",
+    "target-enhancements.AnimationPicker" : "Selector de Anim. target",
     "target-enhancements.AddAnimation" : "Añadir Anim.",
 
     "target-enhancements.Permissions" : "Permisos de Jugador",
-    "target-enhancements.Permissions_hint" : "Permitir a jugadores editar sus efectos de CTA",
+    "target-enhancements.Permissions_hint" : "Permitir a jugadores editar sus efectos de target",
 
     "target-enhancements.FadeAnims" : "Anim. de desvanecimiento",
     "target-enhancements.FadeAnims_hint" : "Las anim. se desvanecerán antes de ser eliminadas",

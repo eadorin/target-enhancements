@@ -1,4 +1,4 @@
-import { debug, log, setDebugLevel, warn, i18n } from '../target-enhancements';
+import { debug, log, setDebugLevel, warn, i18n, i18nFormat } from '../target-enhancements';
 //import { hotkeys } from './libs/lib-df-hotkeys.shim.js';
 //@ts-ignore
 import ColorSetting from '/modules/colorsettings/colorSetting.js';
@@ -234,13 +234,28 @@ export const registerSettings = function () {
   // CUSTOM TOKEN ANIMATION (CUSTOMIZED)
   // ========================================================
 
-
+  game.settings.register(MODULE_NAME, "playerPermissions", {
+        name: i18nFormat("target-enhancements.Permissions"),
+        hint: i18nFormat("target-enhancements.Permissions_hint"),
+        scope: "world",
+        config: true,
+        default: false,
+        type: Boolean,
+    });
+    game.settings.register(MODULE_NAME, "fadeOut", {
+        name: i18nFormat("target-enhancements.FadeAnims"),
+        hint: i18nFormat("target-enhancements.FadeAnims_hint"),
+        scope: "world",
+        config: true,
+        default: true,
+        type: Boolean,
+    });
   
   // ========================================================
   // BORDER CONTROL SETTINGS (CUSTOMIZED)
   // ========================================================
 
-    game.settings.register("Border-Control", "removeBorders", {
+    game.settings.register(MODULE_NAME, "removeBorders", {
         name: 'Remove Borders',
         hint: 'Remove the border from specific tokens',
         scope: 'world',
@@ -254,28 +269,28 @@ export const registerSettings = function () {
         config: true,
     });
 
-    game.settings.register("Border-Control", "healthGradient", {
+    game.settings.register(MODULE_NAME, "healthGradient", {
         name: 'HP Gradient',
         scope: 'world',
         type: Boolean,
         default: false,
         config: true,
     });
-    game.settings.register("Border-Control", "healthGradientA", {
+    game.settings.register(MODULE_NAME, "healthGradientA", {
         name: 'HP Gradient Start',
         scope: 'world',
         type: String,
         default: "#1b9421",
         config: true,
     });
-    game.settings.register("Border-Control", "healthGradientB", {
+    game.settings.register(MODULE_NAME, "healthGradientB", {
         name: 'HP Gradient End',
         scope: 'world',
         type: String,
         default: "#c9240a",
         config: true,
     });
-    game.settings.register("Border-Control", "stepLevel", {
+    game.settings.register(MODULE_NAME, "stepLevel", {
         name: 'Gradient Step Level',
         hint: 'How many individual colors are part of the gradient',
         scope: 'world',
@@ -284,7 +299,7 @@ export const registerSettings = function () {
         config: true,
     });
 
-    game.settings.register("Border-Control", "borderWidth", {
+    game.settings.register(MODULE_NAME, "borderWidth", {
         name: 'Border Width',
         hint: 'Override border width',
         scope: 'client',
@@ -292,7 +307,7 @@ export const registerSettings = function () {
         default: 4,
         config: true,
     });
-    game.settings.register("Border-Control", "borderOffset", {
+    game.settings.register(MODULE_NAME, "borderOffset", {
         name: 'Border Offset',
         hint: 'Customize border offset',
         scope: 'client',
@@ -300,14 +315,14 @@ export const registerSettings = function () {
         default: 0,
         config: true,
     });
-    game.settings.register("Border-Control", "targetSize", {
+    game.settings.register(MODULE_NAME, "targetSize", {
         name: 'Target Size Multiplier',
         scope: 'client',
         type: Number,
         default: 1,
         config: true,
     });
-    game.settings.register("Border-Control", "internatTarget", {
+    game.settings.register(MODULE_NAME, "internatTarget", {
         name: 'Internal Target',
         hint: "Target reticule inside  token borders",
         scope: 'client',
@@ -315,14 +330,14 @@ export const registerSettings = function () {
         default: false,
         config: true,
     });
-    game.settings.register("Border-Control", "circleBorders", {
+    game.settings.register(MODULE_NAME, "circleBorders", {
         name: 'Circular Borders',
         scope: 'client',
         type: Boolean,
         default: false,
         config: true,
     });
-    game.settings.register("Border-Control", "hudPos", {
+    game.settings.register(MODULE_NAME, "hudPos", {
         name: 'Border Control HUD Position',
         scope: 'client',
         type: String,
@@ -333,84 +348,84 @@ export const registerSettings = function () {
         },
         config: true,
     });
-    game.settings.register("Border-Control", "controlledColor", {
+    game.settings.register(MODULE_NAME, "controlledColor", {
         name: 'Color: Controlled',
         scope: 'client',
         type: String,
         default: "#FF9829",
         config: true,
     });
-    game.settings.register("Border-Control", "controlledColorEx", {
+    game.settings.register(MODULE_NAME, "controlledColorEx", {
         name: 'Color: Controlled External',
         scope: 'client',
         type: String,
         default: "#000000",
         config: true,
     });
-    game.settings.register("Border-Control", "hostileColor", {
+    game.settings.register(MODULE_NAME, "hostileColor", {
         name: 'Color: Hostile',
         scope: 'client',
         type: String,
         default: "#E72124",
         config: true,
     });
-    game.settings.register("Border-Control", "hostileColorEx", {
+    game.settings.register(MODULE_NAME, "hostileColorEx", {
         name: 'Color: Hostile External',
         scope: 'client',
         type: String,
         default: "#000000",
         config: true,
     });
-    game.settings.register("Border-Control", "friendlyColor", {
+    game.settings.register(MODULE_NAME, "friendlyColor", {
         name: 'Color: Friendly',
         scope: 'client',
         type: String,
         default: "#43DFDF",
         config: true,
     });
-    game.settings.register("Border-Control", "friendlyColorEx", {
+    game.settings.register(MODULE_NAME, "friendlyColorEx", {
         name: 'Color: Friendly External',
         scope: 'client',
         type: String,
         default: "#000000",
         config: true,
     });
-    game.settings.register("Border-Control", "neutralColor", {
+    game.settings.register(MODULE_NAME, "neutralColor", {
         name: 'Color: Neutral',
         scope: 'client',
         type: String,
         default: "#F1D836",
         config: true,
     });
-    game.settings.register("Border-Control", "neutralColorEx", {
+    game.settings.register(MODULE_NAME, "neutralColorEx", {
         name: 'Color: Neutral External',
         scope: 'client',
         type: String,
         default: "#000000",
         config: true,
     });
-    game.settings.register("Border-Control", "partyColor", {
+    game.settings.register(MODULE_NAME, "partyColor", {
         name: 'Color: Party',
         scope: 'client',
         type: String,
         default: "#33BC4E",
         config: true,
     });
-    game.settings.register("Border-Control", "partyColorEx", {
+    game.settings.register(MODULE_NAME, "partyColorEx", {
         name: 'Color: Party External',
         scope: 'client',
         type: String,
         default: "#000000",
         config: true,
     });
-    game.settings.register("Border-Control", "targetColor", {
+    game.settings.register(MODULE_NAME, "targetColor", {
         name: 'Color: Target',
         scope: 'client',
         type: String,
         default: "#FF9829",
         config: true,
     });
-    game.settings.register("Border-Control", "targetColorEx", {
+    game.settings.register(MODULE_NAME, "targetColorEx", {
         name: 'Color: Target External',
         scope: 'client',
         type: String,
