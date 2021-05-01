@@ -44,6 +44,55 @@
     "target-enhancements.enable-color-name" : "Enable color feature",
     "target-enhancements.enable-color-hint" : "Enable color feature",
     "target-enhancements.set-customize-hotkey-target-name" : "Customize the hotkey for targetting",
-    "target-enhancements.set-customize-hotkey-target-hint" : "Customize the hotkey for targetting"
+    "target-enhancements.set-customize-hotkey-target-hint" : "Customize the hotkey for targetting",
+
+
+    "target-enhancements.ImagePath" : "Image Path",
+    "target-enhancements.ImageScale" : "(compared to token size)",
+    "target-enhancements.StaticImage" : "Static Image",
+    "target-enhancements.StaticImage_hint" : "A single, non-rotating asset",
+    "target-enhancements.SpeedOfRotation" : "Speed of Rotation",
+    "target-enhancements.SpeedOfRotation_hint" : "(seconds per rotation)",
+    "target-enhancements.RadiusOfRotation" : "Radius of Rotation",
+    "target-enhancements.RadiusOfRotation_hint" : "(per token width)",
+    "target-enhancements.NumberOfCopies" : "Number of Copies",
+    "target-enhancements.PositionXScale" : "Position on X Scale",
+    "target-enhancements.PositionXScale_hint" : "0 for far left, 1 for far right",
+    "target-enhancements.PositionYScale" : "Position on Y Scale",
+    "target-enhancements.PositionYScale_hint" : "0 for top, 1 for bottom",
+    "target-enhancements.AssetOpacity" : "Asset Opacity",
+    "target-enhancements.AssetTint" : "Asset Tint",
+    "target-enhancements.RenderBelow" : "Render Underneath Token",
+    "target-enhancements.RenderBelow_hint" : "Render asset underneath the token on the z index",
+    "target-enhancements.PermanentActor" : "Permanent On Actor",
+    "target-enhancements.PermanentActor_hint" : "Permanent On Actor",
+    "target-enhancements.ApplyEquipment" : "Apply as Equipment",
+    "target-enhancements.ApplyEquipment_hint" : "Lock to token image, rotate alongside the token image",
+    "target-enhancements.PickEffects" : "Pick Animation Effects",
+    "target-enhancements.NoRotation" : "Ignore Rotation",
+    "target-enhancements.NoRotation_hint" : "Asset will not rotate with the token",
+    "target-enhancements.Create" : "Create",
+    "target-enhancements.RePick" : "Re-pick asset",
+
+    "target-enhancements.TokenError" : "Please select only one token",
+    "target-enhancements.Confirm" : "Confirmation",
+    "target-enhancements.Confirm_Content" : "Are you sure you want to remove this animation",
+    "target-enhancements.ActorDelete" : "Delete from Actor",
+    "target-enhancements.TokenDelete" : "Delete from Token",
+    "target-enhancements.Return" : "Return",
+    "target-enhancements.Replicate" : "Replicate to Macro",
+    "target-enhancements.AddNew" : "Add New",
+    "target-enhancements.Animations" : "Animations",
+    "target-enhancements.AnimationPicker" : "CTA Animation Picker",
+    "target-enhancements.AddAnimation" : "Add Animation",
+
+    "target-enhancements.Permissions" : "Player Permissions",
+    "target-enhancements.Permissions_hint" : "Allow players to alter their own CTA effects",
+
+    "target-enhancements.FadeAnims" : "Fade Animations",
+    "target-enhancements.FadeAnims_hint" : "Animations will fade to opaque before removal",
+
+    "target-enhancements.MacroPrompt" : "A macro named {macroName} was generated in your macro folder",
+    "target-enhancements.SocketLib_warn" : "Custom Token Animations requires socketLib to be installed and active"
 
 }

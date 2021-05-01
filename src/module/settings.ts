@@ -230,6 +230,197 @@ export const registerSettings = function () {
   //   // }
   // });
 
+  // ========================================================
+  // CUSTOM TOKEN ANIMATION (CUSTOMIZED)
+  // ========================================================
+
+
+  
+  // ========================================================
+  // BORDER CONTROL SETTINGS (CUSTOMIZED)
+  // ========================================================
+
+    game.settings.register("Border-Control", "removeBorders", {
+        name: 'Remove Borders',
+        hint: 'Remove the border from specific tokens',
+        scope: 'world',
+        type: String,
+        choices: {
+            "0": "None",
+            "1": "Non Owned",
+            "2": "All",
+        },
+        default: "0",
+        config: true,
+    });
+
+    game.settings.register("Border-Control", "healthGradient", {
+        name: 'HP Gradient',
+        scope: 'world',
+        type: Boolean,
+        default: false,
+        config: true,
+    });
+    game.settings.register("Border-Control", "healthGradientA", {
+        name: 'HP Gradient Start',
+        scope: 'world',
+        type: String,
+        default: "#1b9421",
+        config: true,
+    });
+    game.settings.register("Border-Control", "healthGradientB", {
+        name: 'HP Gradient End',
+        scope: 'world',
+        type: String,
+        default: "#c9240a",
+        config: true,
+    });
+    game.settings.register("Border-Control", "stepLevel", {
+        name: 'Gradient Step Level',
+        hint: 'How many individual colors are part of the gradient',
+        scope: 'world',
+        type: Number,
+        default: 10,
+        config: true,
+    });
+
+    game.settings.register("Border-Control", "borderWidth", {
+        name: 'Border Width',
+        hint: 'Override border width',
+        scope: 'client',
+        type: Number,
+        default: 4,
+        config: true,
+    });
+    game.settings.register("Border-Control", "borderOffset", {
+        name: 'Border Offset',
+        hint: 'Customize border offset',
+        scope: 'client',
+        type: Number,
+        default: 0,
+        config: true,
+    });
+    game.settings.register("Border-Control", "targetSize", {
+        name: 'Target Size Multiplier',
+        scope: 'client',
+        type: Number,
+        default: 1,
+        config: true,
+    });
+    game.settings.register("Border-Control", "internatTarget", {
+        name: 'Internal Target',
+        hint: "Target reticule inside  token borders",
+        scope: 'client',
+        type: Boolean,
+        default: false,
+        config: true,
+    });
+    game.settings.register("Border-Control", "circleBorders", {
+        name: 'Circular Borders',
+        scope: 'client',
+        type: Boolean,
+        default: false,
+        config: true,
+    });
+    game.settings.register("Border-Control", "hudPos", {
+        name: 'Border Control HUD Position',
+        scope: 'client',
+        type: String,
+        default: ".right",
+        choices: {
+            ".right": "Right",
+            ".left": "Left",
+        },
+        config: true,
+    });
+    game.settings.register("Border-Control", "controlledColor", {
+        name: 'Color: Controlled',
+        scope: 'client',
+        type: String,
+        default: "#FF9829",
+        config: true,
+    });
+    game.settings.register("Border-Control", "controlledColorEx", {
+        name: 'Color: Controlled External',
+        scope: 'client',
+        type: String,
+        default: "#000000",
+        config: true,
+    });
+    game.settings.register("Border-Control", "hostileColor", {
+        name: 'Color: Hostile',
+        scope: 'client',
+        type: String,
+        default: "#E72124",
+        config: true,
+    });
+    game.settings.register("Border-Control", "hostileColorEx", {
+        name: 'Color: Hostile External',
+        scope: 'client',
+        type: String,
+        default: "#000000",
+        config: true,
+    });
+    game.settings.register("Border-Control", "friendlyColor", {
+        name: 'Color: Friendly',
+        scope: 'client',
+        type: String,
+        default: "#43DFDF",
+        config: true,
+    });
+    game.settings.register("Border-Control", "friendlyColorEx", {
+        name: 'Color: Friendly External',
+        scope: 'client',
+        type: String,
+        default: "#000000",
+        config: true,
+    });
+    game.settings.register("Border-Control", "neutralColor", {
+        name: 'Color: Neutral',
+        scope: 'client',
+        type: String,
+        default: "#F1D836",
+        config: true,
+    });
+    game.settings.register("Border-Control", "neutralColorEx", {
+        name: 'Color: Neutral External',
+        scope: 'client',
+        type: String,
+        default: "#000000",
+        config: true,
+    });
+    game.settings.register("Border-Control", "partyColor", {
+        name: 'Color: Party',
+        scope: 'client',
+        type: String,
+        default: "#33BC4E",
+        config: true,
+    });
+    game.settings.register("Border-Control", "partyColorEx", {
+        name: 'Color: Party External',
+        scope: 'client',
+        type: String,
+        default: "#000000",
+        config: true,
+    });
+    game.settings.register("Border-Control", "targetColor", {
+        name: 'Color: Target',
+        scope: 'client',
+        type: String,
+        default: "#FF9829",
+        config: true,
+    });
+    game.settings.register("Border-Control", "targetColorEx", {
+        name: 'Color: Target External',
+        scope: 'client',
+        type: String,
+        default: "#000000",
+        config: true,
+    });
+
+
+
+
 }
 
 // function setup(templateSettings) {

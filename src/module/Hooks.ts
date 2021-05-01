@@ -1,6 +1,7 @@
 import { warn, error, debug, i18n } from "../target-enhancements";
 import { EasyTarget } from "./easyTarget";
 import { TargetContainer } from "./lib-targeting/TargetContainer";
+import { BorderFrame } from "./libs/BorderControl";
 // import { TargetContainer } from "./TargetContainer";
 import { MODULE_NAME } from "./settings";
 import { TargetEnhancements } from "./TargetEnhancements";
@@ -110,6 +111,16 @@ export let initHooks = () => {
   libWrapper.register(MODULE_NAME, 'Token.prototype._getBorderColor', TargetEnhancements.customBorderColors, 'WRAPPER');
   // libWrapper.register(MODULE_NAME, 'PIXI.Graphics.prototype.drawEllipse', TargetEnhancements.drawDashLine, 'WRAPPER');
   PIXI.Graphics.prototype['drawDashLine'] = TargetEnhancements.drawDashLine;
+
+  // ===========================================
+  // BORDER CONTROL
+  // ===========================================
+  //@ts-ignore
+  libWrapper.register(MODULE_NAME, 'Token.prototype._refreshBorder', BorderFrame.newBorder, 'OVERRIDE')
+  //@ts-ignore
+  libWrapper.register(MODULE_NAME, 'Token.prototype._getBorderColor', BorderFrame.newBorderColor, 'OVERRIDE')
+  //@ts-ignore
+  libWrapper.register(MODULE_NAME, 'Token.prototype._refreshTarget', BorderFrame.newTarget, 'OVERRIDE')
 }
 
 
