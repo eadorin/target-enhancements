@@ -1,4 +1,4 @@
-import { i18n } from "../../target-enhancements";
+import { i18n, i18nFormat } from "../../target-enhancements";
 import { getCanvas, MODULE_NAME } from "../settings";
 
 let CTAsocket;
@@ -10,8 +10,8 @@ class CTArender {
                 textureData: this.textureData,
                 id: this.flagId
             }
-     * @param {*} token 
-     * @param {*} flagData 
+     * @param {*} token
+     * @param {*} flagData
      */
     static async RenderAnim(tokenID, flagData:FlagData, duplicate) {
         if (duplicate) { await CTArender.DeleteSpecificAnim, tokenID, duplicate.id }
@@ -100,9 +100,9 @@ class CTArender {
     }
 
     /**
-     * 
-     * @param {Object} token 
-     * @param {String} id 
+     *
+     * @param {Object} token
+     * @param {String} id
      */
     static async FadeAnim(tokenID, id) {
         let token = getCanvas().tokens.get(tokenID)
@@ -112,9 +112,9 @@ class CTArender {
     }
 
     /**
-     * 
-     * @param {Object} token 
-     * @param {String} id 
+     *
+     * @param {Object} token
+     * @param {String} id
      */
     static DeleteSpecificAnim(tokenID, id) {
         let token = getCanvas().tokens.get(tokenID)
@@ -193,8 +193,8 @@ class CTA {
 
     /**
          * Does given token have an animation of given name
-         * @param {Object <token5e>} token 
-         * @param {String} name 
+         * @param {Object <token5e>} token
+         * @param {String} name
          */
     static hasAnim(token, name) {
         let anims = token.getFlag(MODULE_NAME, "anim")
@@ -261,10 +261,10 @@ class CTA {
 
 
     /**
-     * 
-     * @param {*} token 
+     *
+     * @param {*} token
      * @param {*} flagData {name : effectName, textureData: textureData, id : id}
-     * @param {*} pushActor 
+     * @param {*} pushActor
      */
     static async PushFlags(token, flagData:FlagData, pushActor) {
         if (!game.user.isGM) return;
@@ -297,16 +297,16 @@ class CTA {
     }
 
     /**
-   * 
+   *
    * @param {String} OGpath original texture path
    * @param {Object} token Token to apply to
    * @param {Object} oldData Previous effect data, used in update pathway
    * @param {String} name name of the effect
-   * @returns 
+   * @returns
    */
     static async animationDialog(OGpath, token, oldData, name) {
         if (getCanvas().tokens.controlled.length > 1 && !token) {
-            ui.notifications.error(i18n("CTA.TokenError"));
+            ui.notifications.error(i18n(MODULE_NAME+".TokenError"));
             return;
         }
         if (!OGpath) OGpath = oldData.texturePath
@@ -325,7 +325,7 @@ class CTA {
         let oldY = typeof oldData?.yScale === "number" ? oldData.yScale : 0.5
 
         let content = `
-        <style> 
+        <style>
         .pickDialog .form-group {
             clear: both;
             display: flex;
@@ -345,69 +345,69 @@ class CTA {
             <input id="name" name="name" type="text" value= "${name || ""}"></input>
         </div>
         <div class="form-group">
-            <label for="path">${i18n("CTA.ImagePath")}: </label>
+            <label for="path">${i18n(MODULE_NAME+".ImagePath")}: </label>
             <input id="path" name="path" type="text" value= "${shortLeft(OGpath, 20)}" required></input>
         </div>
         <div class="form-group">
             <label for="scale"><span>${i18n("Scale")}:</span>
-            <span class="units">${i18n("CTA.ImageScale")}</span></label>
+            <span class="units">${i18n(MODULE_NAME+".ImageScale")}</span></label>
             <input id="scale" name="scale" type="text" value= "${oldData?.scale || "1"}" required></input>
         </div>
         <div class="form-group">
-            <label for="rotation"><span>${i18n("CTA.StaticImage")}:</span>
-            <span class="units">${i18n("CTA.StaticImage_hint")}</span> </label>
+            <label for="rotation"><span>${i18n(MODULE_NAME+".StaticImage")}:</span>
+            <span class="units">${i18n(MODULE_NAME+".StaticImage_hint")}</span> </label>
             <input id="rotation" name="rotation" type="checkbox" ${oldData?.rotation === "static" ? 'checked' : ''} ></input>
         </div>
         <div class="form-group">
-            <label for="speed"><span>${i18n("CTA.SpeedOfRotation")}:</span>
-            <span class="units">${i18n("CTA.SpeedOfRotation_hint")}</span></label>
+            <label for="speed"><span>${i18n(MODULE_NAME+".SpeedOfRotation")}:</span>
+            <span class="units">${i18n(MODULE_NAME+".SpeedOfRotation_hint")}</span></label>
             <input id="speed" name="speed" type="number" step="0.1" value= "${oldData?.speed || 0}" ${oldData?.rotation === "static" ? 'disabled' : ''}></input>
         </div>
         <div class="form-group">
-            <label for="radius"><span>${i18n("CTA.RadiusOfRotation")}:</span>
-            <span class="units">${i18n("CTA.RadiusOfRotation_hint")}</span> </label>
+            <label for="radius"><span>${i18n(MODULE_NAME+".RadiusOfRotation")}:</span>
+            <span class="units">${i18n(MODULE_NAME+".RadiusOfRotation_hint")}</span> </label>
             <input id="radius" name="radius" type="number" step="0.1"  value= "${oldData?.radius / 2 || 1}" ${oldData?.rotation === "static" ? 'disabled' : ''}></input>
         </div>
         <div class="form-group">
-            <label for="multiple">${i18n("CTA.NumberOfCopies")}:</label>
+            <label for="multiple">${i18n(MODULE_NAME+".NumberOfCopies")}:</label>
             <input id="multiple" name="multiple" type="number" min="1" value= "${oldData?.multiple || 1}" ${oldData?.rotation === "static" ? 'disabled' : ''}></input>
         </div>
         <div class="form-group">
-            <label for="xScale"><span>${i18n("CTA.PositionXScale")}:</span>
-            <span class="units">${i18n("CTA.PositionXScale_hint")}</span> </label>
+            <label for="xScale"><span>${i18n(MODULE_NAME+".PositionXScale")}:</span>
+            <span class="units">${i18n(MODULE_NAME+".PositionXScale_hint")}</span> </label>
             <input id="xScale" name="xScale" type="number" value= "${oldX}" required></input>
         </div>
         <div class="form-group">
-            <label for="yScale"><span>${i18n("CTA.PositionYScale")}:</span>
-            <span class="units">${i18n("CTA.PositionYScale_hint")}</span> </label>
+            <label for="yScale"><span>${i18n(MODULE_NAME+".PositionYScale")}:</span>
+            <span class="units">${i18n(MODULE_NAME+".PositionYScale_hint")}</span> </label>
             <input id="yScale" name="yScale" type="number" value= "${oldY}" required></input>
         </div>
         <div class="form-group">
-            <label for="opacity">${i18n("CTA.AssetOpacity")}:</label>
+            <label for="opacity">${i18n(MODULE_NAME+".AssetOpacity")}:</label>
             <input id="opacity" name="opacity" type="number" min="0" max="1" value= "${oldData?.opacity || 1}" required></input>
         </div>
         <div class="form-group">
-            <label for="tint">${i18n("CTA.AssetTint")}:</label>
+            <label for="tint">${i18n(MODULE_NAME+".AssetTint")}:</label>
             <input type="color" id="tint" name="tint" value="#${hexColour || "FFFFFF"}">
         </div>
         <div class="form-group">
-            <label for="belowToken"><span>${i18n("CTA.RenderBelow")}:</span>
-            <span class="units">${i18n("CTA.RenderBelow_hint")}</label>
+            <label for="belowToken"><span>${i18n(MODULE_NAME+".RenderBelow")}:</span>
+            <span class="units">${i18n(MODULE_NAME+".RenderBelow_hint")}</label>
             <input id="belowToken" name="belowToken" type="checkbox" ${oldData?.belowToken === true ? 'checked' : ''}></input>
         </div>
         <div class="form-group">
-            <label for="pushActor"><span>${i18n("CTA.PermanentActor")}:</span>
-            <span class="units">${i18n("CTA.PermanentActor_hint")}</label>
+            <label for="pushActor"><span>${i18n(MODULE_NAME+".PermanentActor")}:</span>
+            <span class="units">${i18n(MODULE_NAME+".PermanentActor_hint")}</label>
             <input id="pushActor" name="pushActor" type="checkbox" ${animFlag === true ? 'checked' : ''}></input>
         </div>
         <div class="form-group">
-            <label for="equip"><span>${i18n("CTA.ApplyEquipment")}:</span>
-            <span class="units">${i18n("CTA.ApplyEquipment_hint")}</span> </label>
+            <label for="equip"><span>${i18n(MODULE_NAME+".ApplyEquipment")}:</span>
+            <span class="units">${i18n(MODULE_NAME+".ApplyEquipment_hint")}</span> </label>
             <input id="equip" name="equip" type="checkbox" ${oldData?.equip === true ? 'checked' : ''}></input>
         </div>
         <div class="form-group">
-            <label for="lock"><span>${i18n("CTA.NoRotation")}:</span>
-            <span class="units">${i18n("CTA.NoRotation_hint")}</span> </label>
+            <label for="lock"><span>${i18n(MODULE_NAME+".NoRotation")}:</span>
+            <span class="units">${i18n(MODULE_NAME+".NoRotation_hint")}</span> </label>
             <input id="lock" name="lock" type="checkbox" ${oldData?.lock === true ? 'checked' : ''}></input>
         </div>
     </form>
@@ -415,27 +415,42 @@ class CTA {
 
         let dialog = await new Dialog({
 
-            title: i18n("CTA.PickEffects"),
+            title: i18n(MODULE_NAME+".PickEffects"),
             content: content,
             buttons: {
                 one: {
-                    label: i18n("CTA.Create"),
-                    callback: (html) => {
-                        let path = OGpath ? OGpath : html.find("#path")[0].value
-                        let name = html.find("#name")[0].value
-                        let scale = html.find("#scale")[0].value
+                    label: i18n(MODULE_NAME+".Create"),
+                    callback: (html) => { //TODO OPE ISSUE FOR INSERT IN TYPE SCRIPT
+                        //@ts-ignore
+                        let path = String(OGpath ? OGpath : html.find("#path")[0].value)
+                        //@ts-ignore
+                        let name = String(html.find("#name")[0].value)
+                        //@ts-ignore
+                        let scale = String(html.find("#scale")[0].value)
+                        //@ts-ignore
                         let speed = Number(html.find("#speed")[0].value)
-                        let rotation = html.find("#rotation")[0].checked ? "static" : "rotation"
-                        let pushActor = html.find("#pushActor")[0].checked
+                        //@ts-ignore
+                        let rotation = String(html.find("#rotation")[0].checked ? "static" : "rotation")
+                        //@ts-ignore
+                        let pushActor = Boolean(html.find("#pushActor")[0].checked)
+                        //@ts-ignore
                         let multiple = Number(html.find("#multiple")[0].value)
+                        //@ts-ignore
                         let xScale = Number(html.find("#xScale")[0].value)
+                        //@ts-ignore
                         let yScale = Number(html.find("#yScale")[0].value)
+                        //@ts-ignore
                         let opacity = Number(html.find("#opacity")[0].value)
-                        let tint = parseInt(html.find("#tint")[0].value.substr(1), 16)
-                        let belowToken = html.find("#belowToken")[0].checked
+                        //@ts-ignore
+                        let tint = parseInt(String(html.find("#tint")[0].value.substr(1)), 16)
+                        //@ts-ignore
+                        let belowToken = Boolean(html.find("#belowToken")[0].checked)
+                        //@ts-ignore
                         let radius = Number(html.find("#radius")[0].value) * 2
-                        let equip = html.find("#equip")[0].checked
-                        let lock = html.find("#lock")[0].checked
+                        //@ts-ignore
+                        let equip = Boolean(html.find("#equip")[0].checked)
+                        //@ts-ignore
+                        let lock = Boolean(html.find("#lock")[0].checked)
                         let textureData = {
                             texturePath: path,
                             scale: scale,
@@ -451,26 +466,41 @@ class CTA {
                             equip: equip,
                             lock: lock
                         }
-                        CTA.addAnimation(token, textureData, pushActor, name)
+                        CTA.addAnimation(token, textureData, pushActor, name, undefined)
                     }
                 },
                 two: {
-                    label: i18n("CTA.RePick"),
-                    callback: (html) => {
+                    label: i18n(MODULE_NAME+".RePick"),
+                    callback: (html) => { //TODO OPE ISSUE FOR INSERT IN TYPE SCRIPT
+                        //@ts-ignore
                         let path = String(OGpath ? OGpath : html.find("#path")[0].value)
+                        //@ts-ignore
                         let name = String(html.find("#name")[0].value)
+                        //@ts-ignore
                         let scale = Number(html.find("#scale")[0].value)
+                        //@ts-ignore
                         let speed = Number(html.find("#speed")[0].value)
+                        //@ts-ignore
                         let rotation = String(html.find("#rotation")[0].checked ? "static" : "rotation")
+                        //@ts-ignore
                         let pushActor = Boolean(html.find("#pushActor")[0].checked)
+                        //@ts-ignore
                         let multiple = Number(html.find("#multiple")[0].value)
+                        //@ts-ignore
                         let xScale = Number(html.find("#xScale")[0].value)
+                        //@ts-ignore
                         let yScale = Number(html.find("#yScale")[0].value)
+                        //@ts-ignore
                         let opacity = Number(html.find("#opacity")[0].value)
+                        //@ts-ignore
                         let tint = parseInt(String(html.find("#tint")[0].value).substr(1), 16)
+                        //@ts-ignore
                         let belowToken = Boolean(html.find("#belowToken")[0].checked)
+                        //@ts-ignore
                         let radius = Number(html.find("#radius")[0].value) * 2
+                        //@ts-ignore
                         let equip = Boolean(html.find("#equip")[0].checked)
+                        //@ts-ignore
                         let lock = Boolean(html.find("#lock")[0].checked)
                         let oldData:TextureData = {
                             texturePath: path,
@@ -492,7 +522,7 @@ class CTA {
                 }
             },
             default: ""
-        })._render(true)
+        }).render(true) // instead of _render(true)
 
 
         $('.form-group #rotation').change(function () {
@@ -517,7 +547,7 @@ class CTA {
     }
 
     static async getAnims(token) {
-        if (getCanvas().tokens.controlled.length !== 1) { ui.notifications.notify(i18n("CTA.TokenError")); return; }
+        if (getCanvas().tokens.controlled.length !== 1) { ui.notifications.notify(i18n(MODULE_NAME+".TokenError")); return; }
         if (!token) token = getCanvas().tokens.controlled[0]
         let anims = await token.getFlag(MODULE_NAME, "anim")
         let content = ``;
@@ -538,11 +568,11 @@ class CTA {
                     let updateAnim = html.find("[name=anims]")[0].value;
 
                     new Dialog({
-                        title: i18n("CTA.Confirm"),
-                        content: i18n("CTA.Confirm_Content"),
+                        title: i18n(MODULE_NAME+".Confirm"),
+                        content: i18n(MODULE_NAME+".Confirm_Content"),
                         buttons: {
                             one: {
-                                label: i18n("CTA.ActorDelete"),
+                                label: i18n(MODULE_NAME+".ActorDelete"),
                                 icon: `<i class="fas fa-check"></i>`,
                                 callback: () => {
                                     let fadeOut = game.settings.get(MODULE_NAME, "fadeOut")
@@ -550,7 +580,7 @@ class CTA {
                                 }
                             },
                             two: {
-                                label: i18n("CTA.TokenDelete"),
+                                label: i18n(MODULE_NAME+".TokenDelete"),
                                 icon: `<i class="fas fa-check"></i>`,
                                 callback: () => {
                                     let fadeOut = game.settings.get(MODULE_NAME, "fadeOut")
@@ -558,7 +588,7 @@ class CTA {
                                 }
                             },
                             three: {
-                                label: i18n("CTA.Return"),
+                                label: i18n(MODULE_NAME+".Return"),
                                 icon: `<i class="fas fa-undo-alt"></i>`,
                                 callback: () => {
                                     CTA.getAnims(token)
@@ -570,7 +600,7 @@ class CTA {
                 }
             },
             three: {
-                label: i18n("CTA.Replicate"),
+                label: i18n(MODULE_NAME+".Replicate"),
                 icon: `<i class="fas fa-file-import"></i>`,
                 callback: (html) => {
                     let animId = html.find("[name=anims]")[0].value;
@@ -579,40 +609,41 @@ class CTA {
                 }
             },
             four: {
-                label: i18n("CTA.AddNew"),
+                label: i18n(MODULE_NAME+".AddNew"),
                 icon: `<i class="fas fa-plus"></i>`,
                 callback: () => {
-                    CTA.pickEffect(token)
+                    CTA.pickEffect(token, undefined)
                 }
             }
         }
-        let addButton = {
+        let addButton:any = {
             one: {
-                label: i18n("CTA.AddNew"),
+                label: i18n(MODULE_NAME+".AddNew"),
                 icon: `<i class="fas fa-plus"></i>`,
                 callback: () => {
-                    CTA.pickEffect(token)
+                    CTA.pickEffect(token, undefined)
                 }
             }
         }
         if (anims && anims.length > 0) {
             content = `<div class="form group">
-                            <label>${i18n("CTA.Animations")}:</label>
+                            <label>${i18n(MODULE_NAME+".Animations")}:</label>
                             <div><select name="anims">${anims.reduce((acc, anim) => acc += `<option value = ${anim.id}>${anim.name}</option>`, '')}</select></div>
                         </div>`;
             addButton = allButtons
         };
         new Dialog({
-            title: i18n("CTA.AnimationPicker"),
+            title: i18n(MODULE_NAME+".AnimationPicker"),
             content: content,
-            buttons: addButton
+            buttons: addButton,
+            default: ""
         }).render(true)
     }
 
     // Add button to sidebar
     static getSceneControlButtons(buttons) {
         if (!game.modules.get("socketlib")?.active) {
-            ui.notifications.error(i18n("CTA.SocketLib_warn"))
+            ui.notifications.error(i18n(MODULE_NAME+".SocketLib_warn"))
             return;
         }
         let tokenButton = buttons.find(b => b.name == "token")
@@ -620,10 +651,10 @@ class CTA {
         if (tokenButton) {
             tokenButton.tools.push({
                 name: "cta-anim",
-                title: i18n("CTA.AddAnimation"),
+                title: i18n(MODULE_NAME+".AddAnimation"),
                 icon: "fas fa-spinner",
                 visible: playerPermissions,
-                onClick: () => CTA.getAnims(),
+                onClick: () => CTA.getAnims(undefined),
                 button: true
             });
         }
@@ -636,7 +667,7 @@ class CTA {
     static generateMacro(oldData) {
         let data = duplicate(oldData)
         let image = data.textureData.texturePath.includes(".webm") ? "icons/svg/acid.svg" : data.textureData.texturePath
-        let macroData = {
+        let macroData:Macro.Data = {
             command: `
             let textureData = {
                 texturePath: "${data.textureData.texturePath}",
@@ -658,10 +689,15 @@ class CTA {
             img: image,
             name: `CTA ${data.name}`,
             scope: "global",
-            type: "script"
+            type: "script",
+            actorIds: undefined,
+            author: undefined,
+            permission: undefined,
+            _id: undefined,
+            flags: undefined
         }
         Macro.create(macroData)
-        ui.notifications.notify(i18n("CTA.MacroPrompt", { macroName: `CTA ${data.name}` }))
+        ui.notifications.notify(i18nFormat(MODULE_NAME+".MacroPrompt", { macroName: `CTA ${data.name}` }))
     }
 
     /**
@@ -672,8 +708,9 @@ class CTA {
         let CTAPick = new FilePicker({
             type: "imagevideo",
             current: "",
-            callback: path => {
-                CTA.animationDialog(path, token, oldData)
+            //@ts-ignore
+            callback: path => { //TODO OPE ISSUE FOR INSERT IN TYPE SCRIPT
+                CTA.animationDialog(path, token, oldData, undefined)
             },
 
         })
@@ -682,6 +719,7 @@ class CTA {
 }
 
 Hooks.once("socketlib.ready", () => {
+    //@ts-ignore
     CTAsocket = socketlib.registerModule(MODULE_NAME);
     CTAsocket.register("renderAnim", CTArender.RenderAnim)
     CTAsocket.register("removeByName", CTA.removeAnimByName)
@@ -695,7 +733,7 @@ Hooks.once("socketlib.ready", () => {
 Hooks.on("updateToken", (scene, token, update) => {
     if (!getProperty(update, "rotation")) return;
     let fullToken = getCanvas().tokens.get(token._id)
-    let icons = fullToken.children.filter(i => i.CTA && !i.CTAlock)
+    let icons = fullToken.children.filter((i:any) => i.CTA && !i.CTAlock)
     icons.forEach(i => i.angle = update.rotation)
 })
 
@@ -707,7 +745,7 @@ class FlagData{
 
 class TextureData{
     texturePath: string;
-    scale: any; // Can be a stirng or a number
+    scale: any; // Can be a string or a number
     speed: number;
     multiple: number;
     rotation: string;
@@ -723,16 +761,16 @@ class TextureData{
 
 // Hooks.on('init', () => {
 //     game.settings.register(MODULE_NAME, "playerPermissions", {
-//         name: i18n("CTA.Permissions"),
-//         hint: i18n("CTA.Permissions_hint"),
+//         name: i18n(MODULE_NAME+".Permissions"),
+//         hint: i18n(MODULE_NAME+".Permissions_hint"),
 //         scope: "world",
 //         config: true,
 //         default: false,
 //         type: Boolean,
 //     });
 //     game.settings.register(MODULE_NAME, "fadeOut", {
-//         name: i18n("CTA.FadeAnims"),
-//         hint: i18n("CTA.FadeAnims_hint"),
+//         name: i18n(MODULE_NAME+".FadeAnims"),
+//         hint: i18n(MODULE_NAME+".FadeAnims_hint"),
 //         scope: "world",
 //         config: true,
 //         default: true,
