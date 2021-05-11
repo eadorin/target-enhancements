@@ -44,7 +44,8 @@
     }
   ],
   "scripts": [
-    "./module/libs/settings-extender.js"
+    "./module/libs/settings-extender.js",
+    "greensock/dist/gsap.min.js"
   ],
   "esmodules": [
     "target-enhancements.js"

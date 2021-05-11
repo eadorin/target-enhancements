@@ -15,11 +15,11 @@ import * as Helpers from './helpers';
 //@ts-ignore
 // import ColorSetting from "../../colorsettings/colorSetting.js";
 import { getCanvas, MODULE_NAME } from './settings';
-// import { TargetContainer } from './TargetContainer';
 import { error } from '../target-enhancements';
-import { TargetContainer } from './TargetContainer';
-import { FlagsTargeting } from './lib-targeting/utilsTargeting';
+import { FlagsTargeting, SOURCE_TYPES_TARGETING } from './lib-targeting/TargetConstants';
 import { helpers } from 'handlebars';
+import { TokenTarget } from './lib-targeting/TokenTarget';
+import { TargetContainer } from './TargetContainer';
 
 Array.prototype.partition = function(rule) {
     return this.reduce((acc, val) => {
@@ -98,6 +98,37 @@ export class TargetEnhancements {
         TargetEnhancements.registerResizeModifier();
         $('body').on('mousewheel',TargetEnhancements.resizeHandler);
 
+        // ADDED 4535992
+        try{
+            getCanvas()
+        }catch(e){
+            return;
+        }
+        if(game.scenes.active){
+            let targets = [];
+            if(game.scenes.active.data.flags[MODULE_NAME][TargetEnhancements.npc_targeting_key]){
+                targets = <any[]>game.scenes.active.data.flags[MODULE_NAME][TargetEnhancements.npc_targeting_key];
+                targets.forEach( (targetfounded:any) => {
+                    const tfounded:Token = Helpers.getTokenByTokenID(targetfounded.id);
+                    TargetEnhancements.drawTargetIndicators(tfounded);
+                });  
+            }else if(game.scenes.active.data.flags[MODULE_NAME][FlagsTargeting.targets]){
+                targets = Object.values(game.scenes.active.data.flags[MODULE_NAME][FlagsTargeting.targets].items);
+                for (let i = 0; i < targets.length; i++) {
+                    const targetfounded = <TokenTarget>targets[i];
+                    const tfounded:Token = Helpers.getTokenByTokenID(targetfounded.targetID);
+                    TargetEnhancements.drawTargetIndicators(tfounded);
+                }
+            }
+            if(targets && targets.length <= 0){
+                targets = TargetContainer.getAllTargets();
+                for (let i = 0; i < targets.length; i++) {
+                    const tfounded:Token = <Token>targets[i];
+                    TargetEnhancements.drawTargetIndicators(tfounded);
+                }
+            }
+        }
+        // END ADDED 4535992  
     }
 
     // MOD 4535992 Removed we use easy-target
@@ -124,17 +155,15 @@ export class TargetEnhancements {
      * @param {*} tf
      */
     static async hoverTokenEventHandler(token:Token,hovered:Boolean) {
-        // if(token['target'] && token['target']._geometry){
-        //   token['target'].clear();
-        // }
-        if(!TargetContainer.isEmpty){
-            await TargetContainer.targetClassTargetTokenHandler(game.user, token, false, undefined);
+        if(token['target'] && token['target']._geometry){
+          token['target'].clear();
+          token['target'].removeChildren();
         }
+
         if (TargetEnhancements.getTargets(await token.targeted).selfA.length) {
 
             // only redraw if not already existing
-            // if (token['target'].children.length <= 0) {
-            if(TargetContainer.isEmpty()){
+            if (token['target'].children.length <= 0) {
                 TargetEnhancements.drawTargetIndicators(token);
             }
         }
@@ -239,12 +268,14 @@ export class TargetEnhancements {
         let token:Token = getCanvas().tokens.get(token_obj._id);
         // console.log("Token updated:",token.icon);
         try {
-            //token['target']?.clear(); // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
-            TargetContainer.clear()
+            token['target'].clear(); // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
+            //token['target'].removeChildren();
         } catch (error) {}
         // patch for issue #11. Only fixes it for DND I think :(
         try {
-            if (token_obj.actorData.data.attributes.hp.value == 0) {return;}
+            if (token_obj.actorData.data.attributes.hp.value == 0) {
+                return;
+            }
         } catch (error) {}
 
 
@@ -268,9 +299,8 @@ export class TargetEnhancements {
         // token['target'].filters = new ImageFilters().TiltShift().filters;
         // token.icon.filters = new ImageFilters().Glow().filters;
 
-         // only redraw if not already existing
-        //if (token['target'].children.length <= 0) {
-        if (TargetContainer.isEmpty()) {
+        // only redraw if not already existing
+        if (token['target'].children.length <= 0) {
             let indicator = new TargetIndicator(token);
             await indicator.create(selectedIndicator);
         }
@@ -294,29 +324,34 @@ export class TargetEnhancements {
      static TokenPrototypeRefreshTargetHandler = async function(wrapped, ...args) {
         //let token = args[0];
         let token:Token = this;
-        //if(token['target'] && token['target']._geometry){
-        //     token['target'].clear(); // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
-        // }
-        if(!TargetContainer.isEmpty){
-            await TargetContainer.targetClassTargetTokenHandler(game.user, token, false, undefined);
+        TargetEnhancements.TokenPrototypeRefreshTargetHandlerinternal(token);
+        return wrapped(...args);
+    }
+
+    static TokenPrototypeRefreshTargetHandlerinternal = async function(token:Token){
+        if(token['target'] && token['target']._geometry){
+            token['target'].clear(); // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
+            token['target'].removeChildren();
         }
+        
         if (!token.targeted.size){
             return;
         }
         // Determine whether the current user has target and any other users
-		    const [others, users] = Array.from(token.targeted).partition(u => u === game.user);
-		    const userTarget = users.length;
+        const [others, users] = Array.from(token.targeted).partition(u => u === game.user);
+        const userTarget = users.length;
 
         // For the current user, draw the target arrows
+        /*
         if (userTarget) {
-          TargetEnhancements.drawTargetIndicators(token);
+            TargetEnhancements.drawTargetIndicators(token);
         }
 
         // TODO TO INTEGRATE ?????
         // For other users, draw offset pips
         for (let [i, u] of others.entries()) {
-        	let color = colorStringToHex(u['data'].color);
-        	//token['target'].beginFill(color, 1.0).lineStyle(2, 0x0000000).drawCircle(2 + (i * 8), 0, 6);
+            let color = colorStringToHex(u['data'].color);
+            //token['target'].beginFill(color, 1.0).lineStyle(2, 0x0000000).drawCircle(2 + (i * 8), 0, 6);
             if(token.getFlag(MODULE_NAME,FlagsTargeting.target)){
                 token.setFlag(
                     MODULE_NAME,
@@ -326,8 +361,36 @@ export class TargetEnhancements {
 
             }
         }
+        */
+        if (userTarget) {
+            if(game.scenes.active){
+                if ( (typeof game.scenes.active.getFlag(MODULE_NAME, FlagsTargeting.targets)) !== 'undefined') {
+                    const myTargets = <TokenTarget[]>game.scenes.active.getFlag(MODULE_NAME, FlagsTargeting.targets);
+                    if(myTargets && myTargets.length > 0){
+                        myTargets.forEach(element => {
+                            const targetId = element.getTargetID;
+                            const targetToken = getCanvas().tokens.placeables.find( (x:any) => {return x.id === targetId});
+                            TargetEnhancements.drawTargetIndicators(targetToken);
+                        });
 
-        return wrapped(...args);
+                        // For other users, draw offset pips
+                        for (let [i, u] of others.entries()) {
+                            let color = colorStringToHex(u['data'].color);
+                            //token['target'].beginFill(color, 1.0).lineStyle(2, 0x0000000).drawCircle(2 + (i * 8), 0, 6);
+                            if(token.getFlag(MODULE_NAME,FlagsTargeting.target)){
+                                token.setFlag(
+                                    MODULE_NAME,
+                                    FlagsTargeting.target,
+                                    (<PIXI.Graphics>token.getFlag(MODULE_NAME,FlagsTargeting.target)).beginFill(color, 1.0).lineStyle(2, 0x0000000).drawCircle(2 + (i * 8), 0, 6)
+                                );
+
+                            }
+                            TargetEnhancements.drawTargetIndicators(token);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -373,7 +436,7 @@ export class TargetEnhancements {
             return false;
         }
         await token['target'].clear();
-        //await TargetContainer.clear();
+        
         let mySet = [];
 
         // get flag if exists, if not create it
@@ -386,7 +449,12 @@ export class TargetEnhancements {
         console.log(MODULE_NAME,mySet);
 
         // cull out tokens not actively controlled.
-        let myObj = {id:token.id,img:token.data.img,name:token.data.name,type:"npc"};
+        let myObj = {
+            id:token.id,
+            img:token.data.img,
+            name:token.data.name,
+            type:"npc"
+        };
         if (opt) {
             if (!mySet.find(x=> x.id === token.id)) {
                 mySet.push(myObj);
@@ -399,10 +467,35 @@ export class TargetEnhancements {
         // update the flag. Have to unset first b/c sometimes it just doesn't take the setting
         getCanvas().scene.unsetFlag(MODULE_NAME,TargetEnhancements.npc_targeting_key).then( () => {
             getCanvas().scene.setFlag(MODULE_NAME, (TargetEnhancements.npc_targeting_key) , toStore);
-        })
-        await token['target'].clear();
-        //await TargetContainer.clear();
-        //TargetContainer.targetClassControlTokenHandler(token, opt);
+        });
+
+        // MOD 4535992
+        
+        await TargetContainer.targetClassControlTokenHandler(token, opt);
+        
+        // get flag if exists, if not create it
+        if (typeof getCanvas().scene.getFlag(MODULE_NAME, (FlagsTargeting.targets)) === 'undefined'){
+            await getCanvas().scene.setFlag(MODULE_NAME, (FlagsTargeting.targets), mySet);
+        }
+
+        // not really a set, an array of npc token info
+        let mySetTargets = <any[]>getCanvas().scene.getFlag(MODULE_NAME,FlagsTargeting.targets);
+
+        let ttt = new TokenTarget(token.id, game.user.id,SOURCE_TYPES_TARGETING.SOURCE_TYPE_TOKEN);
+        if (opt) {
+            if (!mySetTargets.find(x=> x.id === ttt.getTargetID())) {
+                mySetTargets.push(ttt);
+            }
+        } else {
+            mySetTargets.splice(mySetTargets.findIndex(x => x.id === ttt.getTargetID()),1);
+        }
+        let toStoreTargets = Array.from(mySetTargets);
+
+        // update the flag. Have to unset first b/c sometimes it just doesn't take the setting
+        getCanvas().scene.unsetFlag(MODULE_NAME,FlagsTargeting.targets).then( () => {
+            getCanvas().scene.setFlag(MODULE_NAME, (FlagsTargeting.targets) , toStoreTargets);
+        });
+        //END MOD 4535992
         return;
     }
 
@@ -425,7 +518,6 @@ export class TargetEnhancements {
                 await token['target'].clear(); // indicator & baubles // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
                 await token['target'].removeChildren(); // baubles // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
 
-                //await TargetContainer.clear();
             } catch(err) {
                 // something weird happeened. return;
                 error(err);
@@ -480,12 +572,15 @@ export class TargetEnhancements {
         //-----------------------------
         if (userArray.length) {
             TargetEnhancements.drawTargetIndicators(token);
+           
         }
 
         //-----------------------------
         //           Tokens
         //-----------------------------
-        if (!targetingItems.length) { return;} // only user is ourself or no one
+        if (!targetingItems.length) { 
+            return; // only user is ourself or no one
+        } 
 
         // TODO: update which tokens are now targeting the token, store this in a custom property or in a canvas flag
 
@@ -651,21 +746,12 @@ export class TargetEnhancements {
         // MOD p4535992 REMOVED NOT NEED THIS ?
         /*
         game.user.targets.forEach( t => {
-            //t['target'].clear();  // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
-            TargetContainer.clear();
+            t['target'].clear();  // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
+            t['target'].removeChild();
             TargetEnhancements.drawTargetIndicators(t);
         });
         */
-       // END MOD p4535992 REMOVED NOT NEED THIS ?
-        if(game.scenes.active){
-           if(game.scenes.active.getFlag(MODULE_NAME,TargetEnhancements.npc_targeting_key)){
-                const targets = <any[]>game.scenes.active.getFlag(MODULE_NAME,TargetEnhancements.npc_targeting_key);
-                targets.forEach( (t:any) => {
-                    const token:Token = Helpers.getTokenByTokenID(t.id);
-                    TargetEnhancements.drawTargetIndicators(t);
-                });
-           }  
-        }
+       // END MOD p4535992 REMOVED NOT NEED THIS ?  
     }
 
     static renderTokenEventHandler(a, div, data) {
@@ -682,7 +768,7 @@ export class TargetEnhancements {
      * @param {User} user              -- the user clearing the targets
      * @param {TokenLayer} tokenlayer  -- token layer
      */
-    static clearTokenTargetsHandler(user,tokenlayer) {
+    static async clearTokenTargetsHandler(user,tokenlayer) {
 
         user.targets.forEach( t =>
             t.setTarget(false,
@@ -701,18 +787,31 @@ export class TargetEnhancements {
             }
             token['target'].clear(); // indicator & baubles // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
             token['target'].removeChildren(); // baubles // THE KEY 'target' IS IMPORTANT FOR REMOVE THE PIXI GRAPHIC
-    
+            //token.unsetFlag(MODULE_NAME,FlagsTargeting.target);
         }
     
         game.user.targets.clear();
 
-        if (user.isGM) {
-            getCanvas().scene.unsetFlag(MODULE_NAME,TargetEnhancements.npc_targeting_key);
+        // if (user.isGM) {
+        //     getCanvas().scene.unsetFlag(MODULE_NAME,TargetEnhancements.npc_targeting_key);
+        // }
+
+        /*
+        getCanvas().scene.unsetFlag(MODULE_NAME,TargetEnhancements.npc_targeting_key);
+        getCanvas().scene.unsetFlag(MODULE_NAME,FlagsTargeting.targets);
+        if(game.scenes.active.data.flags[MODULE_NAME][TargetEnhancements.npc_targeting_key]){
+            game.scenes.active.data.flags[MODULE_NAME][TargetEnhancements.npc_targeting_key] = null;
         }
+        if(game.scenes.active.data.flags[MODULE_NAME][FlagsTargeting.targets]){
+            game.scenes.active.data.flags[MODULE_NAME][FlagsTargeting.targets] = null;
+        }
+        if(game.scenes.active.data.flags[MODULE_NAME]){
+            await game.scenes.active.unsetFlag(MODULE_NAME,FlagsTargeting.targets);
+        }
+        */
 
         // ADDED AND REMOVED 4535992
         // //Helpers.clearTargets();
-
 
         //game.users['updateTokenTargets']();
 
@@ -841,16 +940,14 @@ export class TargetEnhancements {
     * The tokenDelete event is called after a token is destroyed which is too late to handle un-targeting
     */
     static tokenDeleteHandler = function (wrapped, ...args) {
-        // if( TargetContainer.getTargetGraphics(this.targeted,this.data)){
-        //     TargetContainer.getTargetGraphics(this.targeted,this.data).destroy();
-        // }
         this.targeted.forEach((user:User) =>
-          user.targets.forEach((t:Token) => {
-              t.setTarget(false, {user: user, releaseOthers: true, groupSelection:false });
+          user.targets.forEach((token:Token) => {
+              token.setTarget(false, {user: user, releaseOthers: true, groupSelection:false });
+              token['target'].clear();
+              //token['target'].removeChildren();
           })
         );
-        // return onDelete.apply(this, options, userId);
-        // return onDelete.apply(options, userId);
+
         return wrapped(...args);
     }
 
@@ -863,11 +960,9 @@ export class TargetEnhancements {
         let token:Token = await Helpers.getTokenByTokenID(TargetEnhancements.clickedToken);
         if (game.settings.get(MODULE_NAME,'enable-target-modifier-key')) {
             if (TargetEnhancements.modKeyPressed) {
-                //if(token['target'] && token['target']._geometry){
-                //     token['target'].clear();
-                // }
-                if(!TargetContainer.isEmpty){
-                    TargetContainer.clear();
+                if(token['target'] && token['target']._geometry){
+                    token['target'].clear();
+                    //token['target'].removeChildren();
                 }
                 if (!token.targeted.has(game.user)) {
                     //token.setTarget(game.user, {releaseOthers: false});
@@ -890,7 +985,8 @@ export class TargetEnhancements {
     }
 
     static async preCreateSceneHandler(){
-        TargetEnhancements.clearTokenTargetsHandler(game.user,null);
+        // REMOVED 4535992
+        //TargetEnhancements.clearTokenTargetsHandler(game.user,null);
     }
 }
 

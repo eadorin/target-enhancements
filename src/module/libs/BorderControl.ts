@@ -1,5 +1,3 @@
-import { TokenTarget } from "../lib-targeting/TokenTarget";
-import { FlagsTargeting } from "../lib-targeting/utilsTargeting";
 import { getCanvas, MODULE_NAME } from "../settings";
 import { TargetEnhancements } from "../TargetEnhancements";
 import { TargetIndicator } from "../TargetIndicator";
@@ -244,24 +242,9 @@ export class BorderFrame {
         // MOD 4535992
 
         // Recover the target from lib-targeting library
-        if(game.scenes.active){
-            if ( (typeof game.scenes.active.getFlag(MODULE_NAME, FlagsTargeting.targets)) !== 'undefined') {
-                const myTargets = <TokenTarget[]>game.scenes.active.getFlag(MODULE_NAME, FlagsTargeting.targets);
-                if(myTargets && myTargets.length > 0){
-                    myTargets.forEach(element => {
-                        const targetId = element.getTargetID;
-                        const targetToken = getCanvas().tokens.placeables.find( (x:any) => {return x.id === targetId});
-                        TargetEnhancements.drawTargetIndicators(targetToken);
-                    });
-
-                    // For other users, draw offset pips
-                    for (let [i, u] of others.entries()) {
-                        
-                    }
-                }
-            }
-        }
-
+        //let token = args[0];
+        let token:Token = this;
+        TargetEnhancements.TokenPrototypeRefreshTargetHandlerinternal(token);
         // END MOD 4535992
     }
 

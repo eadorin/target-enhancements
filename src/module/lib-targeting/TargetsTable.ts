@@ -1,6 +1,6 @@
 import { ObjectSet } from "./ObjectSet";
 import { TokenTarget } from "./TokenTarget";
-import { FlagsTargeting, FlagScopeTargeting, socketNameTargeting, SOCKET_MESSAGE_TYPES_TARGETING, SOURCE_TYPES_TARGETING } from "./utilsTargeting";
+import { FlagsTargeting, FlagScopeTargeting, socketNameTargeting, SOCKET_MESSAGE_TYPES_TARGETING, SOURCE_TYPES_TARGETING } from "./TargetConstants";
 
 /**
  * Targets Table is responsible for building a simple array of records,

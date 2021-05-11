@@ -62,12 +62,12 @@ export class NPCTargeting {
         }
     }
 
-    static setNewTargetsTable(targetsTable:TargetsTable){
-      NPCTargeting.tt = targetsTable;
-    }
-
     static getTargetsTable():TargetsTable{
       return NPCTargeting.tt;
+    }
+
+    static setTargetsTable(targetsTable:TargetsTable):TargetsTable{
+      return NPCTargeting.tt = targetsTable;
     }
 
     static async isEmpty(){

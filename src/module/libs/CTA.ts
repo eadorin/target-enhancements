@@ -2,7 +2,7 @@ import { i18nFormat } from "../../target-enhancements";
 import { getCanvas, MODULE_NAME } from "../settings";
 
 let CTAsocket;
-let CTAtweens = []
+export let CTAtweens = []
 class CTArender {
     /**
      * flagData = {
@@ -134,47 +134,47 @@ class CTArender {
 export class CTA {
 
 
-    static ready() {
+    // static ready() {
 
-        Hooks.on("canvasInit", async () => {
-            if (CTAtweens) {
-                CTAtweens.forEach(i => i.kill())
-            }
-            Hooks.once("canvasPan", () => {
-                CTA.AddTweens(undefined)
-            })
+    //     Hooks.on("canvasInit", async () => {
+    //         if (CTAtweens) {
+    //             CTAtweens.forEach(i => i.kill())
+    //         }
+    //         Hooks.once("canvasPan", () => {
+    //             CTA.AddTweens(undefined)
+    //         })
 
-        });
-        Hooks.on("preDeleteToken", (scene, token) => {
-            let deleteToken = getCanvas().tokens.get(token._id)
-            if (!deleteToken) return;
-            //@ts-ignore
-            TweenMax.killTweensOf(deleteToken.children)
-        });
-        Hooks.on("createToken", (scene, token) => {
-            let tokenInstance = getCanvas().tokens.get(token._id)
-            if (!tokenInstance) return;
-            let flags = tokenInstance.getFlag(MODULE_NAME, "anim") ? tokenInstance.getFlag(MODULE_NAME, "anim") : []
-            if (flags) CTA.AddTweens(tokenInstance)
-        });
-        Hooks.on("preUpdateToken", async (_scene, token, update) => {
-            if ("height" in update || "width" in update) {
-                let fullToken = getCanvas().tokens.get(token._id)
-                let CTAtweens = fullToken.children.filter((c:any) => c.CTA === true)
-                for (let child of CTAtweens) {
-                    //@ts-ignore
-                    TweenMax.killTweensOf(child)
-                    child.destroy()
-                }
-            }
-        })
-        Hooks.on("updateToken", (_scene, token, update) => {
-            if ("height" in update || "width" in update || "img" in update) {
-                let fullToken = getCanvas().tokens.get(token._id)
-                CTA.AddTweens(fullToken)
-            }
-        })
-    }
+    //     });
+    //     Hooks.on("preDeleteToken", (scene, token) => {
+    //         let deleteToken = getCanvas().tokens.get(token._id)
+    //         if (!deleteToken) return;
+    //         //@ts-ignore
+    //         TweenMax.killTweensOf(deleteToken.children)
+    //     });
+    //     Hooks.on("createToken", (scene, token) => {
+    //         let tokenInstance = getCanvas().tokens.get(token._id)
+    //         if (!tokenInstance) return;
+    //         let flags = tokenInstance.getFlag(MODULE_NAME, "anim") ? tokenInstance.getFlag(MODULE_NAME, "anim") : []
+    //         if (flags) CTA.AddTweens(tokenInstance)
+    //     });
+    //     Hooks.on("preUpdateToken", async (_scene, token, update) => {
+    //         if ("height" in update || "width" in update) {
+    //             let fullToken = getCanvas().tokens.get(token._id)
+    //             let CTAtweens = fullToken.children.filter((c:any) => c.CTA === true)
+    //             for (let child of CTAtweens) {
+    //                 //@ts-ignore
+    //                 TweenMax.killTweensOf(child)
+    //                 child.destroy()
+    //             }
+    //         }
+    //     })
+    //     Hooks.on("updateToken", (_scene, token, update) => {
+    //         if ("height" in update || "width" in update || "img" in update) {
+    //             let fullToken = getCanvas().tokens.get(token._id)
+    //             CTA.AddTweens(fullToken)
+    //         }
+    //     })
+    // }
 
     static AddTweens(token) {
         let testArray = []

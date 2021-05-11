@@ -1,4 +1,4 @@
-import { SOURCE_TYPES_TARGETING } from "./utilsTargeting";
+import { SOURCE_TYPES_TARGETING } from "./TargetConstants";
 
 /**
  * Generic class to hold our records
@@ -9,14 +9,20 @@ import { SOURCE_TYPES_TARGETING } from "./utilsTargeting";
   sourceID:string;
   sourceType:SOURCE_TYPES_TARGETING;
   // targetGraphics:PIXI.Graphics;
-  id:string;
+  // id:string;
+  // img:string;
+  // name:string;
+  // type:string;
 
   constructor(targetID:string, sourceID:string, sourceType:SOURCE_TYPES_TARGETING) {
-      this.id = sourceID+"_"+targetID;
+      // this.id = sourceID+"_"+targetID;
       this.targetID = targetID;
       this.sourceID = sourceID;
       this.sourceType = sourceType;
       // this.targetGraphics = new PIXI.Graphics();
+      // img:token.data.img,
+      // name:token.data.name,
+      // type:"npc"
   }
 
   toString() {
@@ -24,7 +30,7 @@ import { SOURCE_TYPES_TARGETING } from "./utilsTargeting";
   }
 
   getID():string{
-    return this.id;
+    return this.sourceID+"_"+this.targetID;
   }
 
   getTargetID(){
