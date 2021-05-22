@@ -184,13 +184,15 @@ npm run-script clean
 
 ## TODO List / Known Issues / Limitations
 
-- [Bug] I commented the "pulse" and "rotate" options on the "TargetIndicator" class because they broke foundry when i delete the token or change the scene. I will try tso fix this.
+- [Feature][High Priority] Make it work with 0.8.X release.
 
-- [Feature] Show to others player the animated token marker
+- [Bug][High Priority] I commented the "pulse" and "rotate" options on the "TargetIndicator" class because they broke foundry when i delete the token or change the scene. I will try tso fix this.
+
+- [Bug][High Priority] Show to others player the animated token marker of my targets (integration with game socket ?)
+
+- [Bug][High Priority] When i refresh the scene we lose all the target (integration with flag system ?)
 
 - [Bug][Switching Scenes or Deleting tokens while target locks up game](https://github.com/eadorin/target-enhancements/issues/31)
-
-- [Bug][Medium priority] When you refesh/reload the page lose all targets
 
 - [Feature][Low priority] Adjust the display of the target token icons!! (currently uses a black outline + shadow)
 
@@ -204,8 +206,7 @@ npm run-script clean
 
 - [Feature][Low priority] Change the target image hover the tokens by using local image file (png,webm,ecc.), possible integration with [Custom-Token-Animations](https://github.com/kandashi/Custom-Token-Animations)
 
-
-- [OTHER ISSUE ARE SET ON TRELLO](https://trello.com/c/KvEZVMtw/213-modulebountyrevive-target-enhancements) 
+- OTHER ISSUE CAN BE FOUND ON THE [ISSUE PAGE](https://github.com/eadorin/target-enhancements/issues) 
 
 ## [Changelog](./changelog.md)
 
