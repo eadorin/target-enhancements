@@ -5,9 +5,8 @@
  */
 export class ObjectSet {
     constructor() {
-        this.items = {};
         this.item_count = 0;
-        this.items = {};
+        this.items = [];
         this.item_count = 0;
     }
     contains(x) {
@@ -28,7 +27,7 @@ export class ObjectSet {
         return this;
     }
     clear() {
-        this.items = {};
+        this.items = [];
         this.item_count = 0;
         return this;
     }

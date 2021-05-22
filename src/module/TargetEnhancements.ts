@@ -105,11 +105,11 @@ export class TargetEnhancements {
             return;
         }
         if(game.scenes.active){
-            let targets = [];
+            let targets = <TokenTarget[]>[];
             if(game.scenes.active.data.flags[MODULE_NAME][TargetEnhancements.npc_targeting_key]){
-                targets = <any[]>game.scenes.active.data.flags[MODULE_NAME][TargetEnhancements.npc_targeting_key];
-                targets.forEach( (targetfounded:any) => {
-                    const tfounded:Token = Helpers.getTokenByTokenID(targetfounded.id);
+                targets = <TokenTarget[]>game.scenes.active.data.flags[MODULE_NAME][TargetEnhancements.npc_targeting_key];
+                targets.forEach( (targetfounded:TokenTarget) => {
+                    const tfounded:Token = Helpers.getTokenByTokenID(targetfounded.targetID);
                     TargetEnhancements.drawTargetIndicators(tfounded);
                 });  
             }else if(game.scenes.active.data.flags[MODULE_NAME][FlagsTargeting.targets]){
@@ -123,7 +123,7 @@ export class TargetEnhancements {
             if(targets && targets.length <= 0){
                 targets = TargetContainer.getAllTargets();
                 for (let i = 0; i < targets.length; i++) {
-                    const tfounded:Token = <Token>targets[i];
+                    const tfounded:Token = Helpers.getTokenByTokenID(targets[i].targetID);
                     TargetEnhancements.drawTargetIndicators(tfounded);
                 }
             }
@@ -368,7 +368,7 @@ export class TargetEnhancements {
                     const myTargets = <TokenTarget[]>game.scenes.active.getFlag(MODULE_NAME, FlagsTargeting.targets);
                     if(myTargets && myTargets.length > 0){
                         myTargets.forEach(element => {
-                            const targetId = element.getTargetID;
+                            const targetId = element.targetID;
                             const targetToken = getCanvas().tokens.placeables.find( (x:any) => {return x.id === targetId});
                             TargetEnhancements.drawTargetIndicators(targetToken);
                         });
@@ -465,9 +465,9 @@ export class TargetEnhancements {
         let toStore = Array.from(mySet);
 
         // update the flag. Have to unset first b/c sometimes it just doesn't take the setting
-        getCanvas().scene.unsetFlag(MODULE_NAME,TargetEnhancements.npc_targeting_key).then( () => {
-            getCanvas().scene.setFlag(MODULE_NAME, (TargetEnhancements.npc_targeting_key) , toStore);
-        });
+        //getCanvas().scene.unsetFlag(MODULE_NAME,TargetEnhancements.npc_targeting_key).then( () => {
+            getCanvas().scene.setFlag(MODULE_NAME, TargetEnhancements.npc_targeting_key , toStore);
+        //});
 
         // MOD 4535992
         
@@ -479,22 +479,20 @@ export class TargetEnhancements {
         }
 
         // not really a set, an array of npc token info
-        let mySetTargets = <any[]>getCanvas().scene.getFlag(MODULE_NAME,FlagsTargeting.targets);
+        let mySetTargets = <TokenTarget[]>getCanvas().scene.getFlag(MODULE_NAME,FlagsTargeting.targets);
 
         let ttt = new TokenTarget(token.id, game.user.id,SOURCE_TYPES_TARGETING.SOURCE_TYPE_TOKEN);
         if (opt) {
-            if (!mySetTargets.find(x=> x.id === ttt.getTargetID())) {
-                mySetTargets.push(ttt);
-            }
+            mySetTargets.push(ttt);   
         } else {
-            mySetTargets.splice(mySetTargets.findIndex(x => x.id === ttt.getTargetID()),1);
+            mySetTargets.splice(mySetTargets.findIndex(x => x.targetID === ttt.targetID),1);
         }
         let toStoreTargets = Array.from(mySetTargets);
 
         // update the flag. Have to unset first b/c sometimes it just doesn't take the setting
-        getCanvas().scene.unsetFlag(MODULE_NAME,FlagsTargeting.targets).then( () => {
+        //getCanvas().scene.unsetFlag(MODULE_NAME,FlagsTargeting.targets).then( () => {
             getCanvas().scene.setFlag(MODULE_NAME, (FlagsTargeting.targets) , toStoreTargets);
-        });
+        //});
         //END MOD 4535992
         return;
     }

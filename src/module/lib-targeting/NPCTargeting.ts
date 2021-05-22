@@ -1,5 +1,8 @@
 import { initHooks } from "../Hooks";
+import { getCanvas } from "../settings";
+import { SOURCE_TYPES_TARGETING } from "./TargetConstants";
 import { TargetsTable } from "./TargetsTable";
+import { TokenTarget } from "./TokenTarget";
 
 /**
  * NPCTargeting.js -   v0.5
@@ -13,7 +16,7 @@ import { TargetsTable } from "./TargetsTable";
  */
 export class NPCTargeting {
 
-    static controlledUnits:Token[] = [];
+    static controlledUnits:TokenTarget[] = [];
     static tt:TargetsTable;
     static _self = "";
 
@@ -36,10 +39,11 @@ export class NPCTargeting {
      */
      static async controlTokenHandler(token:Token, tf:Boolean) {
         console.log("npc", NPCTargeting.controlledUnits);
+        let tt = new TokenTarget(token.id, game.user.id, SOURCE_TYPES_TARGETING.SOURCE_TYPE_TOKEN);
         if (tf) {
-          NPCTargeting.controlledUnits.push(token);
+          NPCTargeting.controlledUnits.push(tt);
         } else {
-          NPCTargeting.controlledUnits = NPCTargeting.controlledUnits.filter( i => i !== token); // remove token
+          NPCTargeting.controlledUnits = NPCTargeting.controlledUnits.filter( i => i !== tt); // remove token
         }
     }
 
@@ -51,13 +55,14 @@ export class NPCTargeting {
      */
 
      static async targetTokenHandler(user:User, token:Token, tf:Boolean, data?:any) {
+        let tt = new TokenTarget(token.id, game.user.id, SOURCE_TYPES_TARGETING.SOURCE_TYPE_TOKEN);
         if (tf) {
           NPCTargeting.controlledUnits.forEach(t => {
-            NPCTargeting.tt.addTarget(t, token, data);
+            NPCTargeting.tt.addTarget(this.getTokenByTokenID(token), this.getTokenByTokenID(game.user.id), data);
           });
         } else {
           NPCTargeting.controlledUnits.forEach(t => {
-            NPCTargeting.tt.removeTarget(t,token);
+            NPCTargeting.tt.removeTarget(this.getTokenByTokenID(token), this.getTokenByTokenID(game.user.id));
           });
         }
     }
@@ -66,12 +71,19 @@ export class NPCTargeting {
       return NPCTargeting.tt;
     }
 
-    static setTargetsTable(targetsTable:TargetsTable):TargetsTable{
-      return NPCTargeting.tt = targetsTable;
-    }
+    // static setTargetsTable(targetsTable:TargetsTable):TargetsTable{
+    //   return NPCTargeting.tt = targetsTable;
+    // }
 
     static async isEmpty(){
       return (await NPCTargeting.tt.getAllRecords()).length <= 0;
+    }
+
+    static getTokenByTokenID(id) {
+      return getCanvas().tokens.placeables.find( x => {return x.id === id});
+    }
+    static getTokenByTokenName(name) {
+        return getCanvas().tokens.placeables.find( x => { return x.name == name});
     }
 
 }

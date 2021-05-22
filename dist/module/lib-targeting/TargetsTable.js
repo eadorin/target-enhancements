@@ -156,7 +156,7 @@ export class TargetsTable {
     getRecord(source, target) {
         let record;
         for (let recordTmp of this.records.values()) {
-            let idTmp = recordTmp.id;
+            let idTmp = recordTmp.targetID;
             if (idTmp == target.id) {
                 record = recordTmp;
                 break;

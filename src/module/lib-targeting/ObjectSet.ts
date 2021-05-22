@@ -1,3 +1,5 @@
+import { TokenTarget } from "./TokenTarget";
+
 /**
  * Set of objects.  Requires a .toString() overload to distinguish objects.
  * Credit: https://stackoverflow.com/users/177222/ashleysbrain
@@ -5,11 +7,12 @@
  */
 export class ObjectSet {
 
-  items = {};
+//   items = {};
+  items:TokenTarget[];
   item_count = 0;
 
   constructor() {
-      this.items = {};
+      this.items = [];
       this.item_count = 0;
   }
 
@@ -36,7 +39,7 @@ export class ObjectSet {
   }
 
   clear() {
-      this.items = {};
+      this.items = [];
       this.item_count = 0;
 
       return this;
@@ -51,7 +54,7 @@ export class ObjectSet {
   }
 
   values() {
-      var i, ret = [];
+      var i, ret:TokenTarget[] = [];
 
       for (i in this.items) {
           if (this.items.hasOwnProperty(i))

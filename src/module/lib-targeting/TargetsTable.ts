@@ -1,6 +1,7 @@
 import { ObjectSet } from "./ObjectSet";
-import { TokenTarget } from "./TokenTarget";
+// import { TokenTarget } from "./TokenTarget";
 import { FlagsTargeting, FlagScopeTargeting, socketNameTargeting, SOCKET_MESSAGE_TYPES_TARGETING, SOURCE_TYPES_TARGETING } from "./TargetConstants";
+import { TokenTarget } from "./TokenTarget";
 
 /**
  * Targets Table is responsible for building a simple array of records,
@@ -90,7 +91,7 @@ export class TargetsTable {
      * It should only be executed by the GM
      * @param {TokenTarget} record the record to be added
      */
-    async addTargetFromPlayer(record: TokenTarget) {
+    async addTargetFromPlayer(record: Token) {
         await this.records.add(record);
         this.storeTable();
     }
@@ -129,7 +130,7 @@ export class TargetsTable {
      * It should only be executed by the GM
      * @param {TokenTarget} record the record to be removed
      */
-    async removeTargetFromPlayer(record:TokenTarget) {
+    async removeTargetFromPlayer(record:Token) {
         await this.records.delete(record);
         this.storeTable();
     }
@@ -179,25 +180,25 @@ export class TargetsTable {
     getRecord(source: User | Token, target:Token):TokenTarget {
         let record:TokenTarget;
         for(let recordTmp of this.records.values()){
-          let idTmp:string = (<TokenTarget>recordTmp).getID();
-          if(idTmp == String(target.id+"_"+source.id)){
+          let idTmp:string = (<TokenTarget>recordTmp).targetID;
+          if(idTmp == target.id){
             record = recordTmp;
             break;
           }
         }
-        if(!record){
-          if (source instanceof User) {
-              if (source.isGM) {
-                  // check if GM controls tokens
-                  // TODO
-                  record = new TokenTarget(target.id, source.id, SOURCE_TYPES_TARGETING.SOURCE_TYPE_GM);
-              } else {
-                  record = new TokenTarget(target.id, source.id, SOURCE_TYPES_TARGETING.SOURCE_TYPE_PLAYER);
-              }
-          } else if (source instanceof Token) {
-              record = new TokenTarget(target.id, source.id, SOURCE_TYPES_TARGETING.SOURCE_TYPE_TOKEN);
-          }
-        }
+        // if(!record){
+        //   if (source instanceof User) {
+        //       if (source.isGM) {
+        //           // check if GM controls tokens
+        //           // TODO
+        //           record = new TokenTarget(target.id, source.id, SOURCE_TYPES_TARGETING.SOURCE_TYPE_GM);
+        //       } else {
+        //           record = new TokenTarget(target.id, source.id, SOURCE_TYPES_TARGETING.SOURCE_TYPE_PLAYER);
+        //       }
+        //   } else if (source instanceof Token) {
+        //       record = new TokenTarget(target.id, source.id, SOURCE_TYPES_TARGETING.SOURCE_TYPE_TOKEN);
+        //   }
+        // }
         return record;
     }
 
