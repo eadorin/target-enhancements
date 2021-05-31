@@ -14,8 +14,8 @@ export enum SOCKET_MESSAGE_TYPES_TARGETING {
 */
 export const FlagScopeTargeting = "TargetsTable";
 export enum FlagsTargeting {
-   target = 'target', // Single target element on token
-   targets = 'targets' // Multiple Targets on token
+   target = 'target', // Single target element on token THIS IS SET ON THE SPECIFIC TOKEN
+   targets = 'targets' // Multiple Targets on token THIS IS SET ON THE SCENE
 };
 
 /**

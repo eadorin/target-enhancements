@@ -92,6 +92,10 @@ Hooks.once('ready', () => {
 	  ui.notifications.error(`The '${MODULE_NAME}', please make sure you have the "FXMaster" module installed and enabled.`);
     return;
 	}
+	// if (!game.modules.get("Custom-Token-Animations")?.active && game.user.isGM){
+	// 	ui.notifications.error(`The '${MODULE_NAME}', please make sure you have the "Custom-Token-Animations" module installed and enabled.`);
+	// 	return;
+	// }
 	readyHooks();
 });
 

@@ -175,7 +175,7 @@ export class EasyTarget {
 				wrapped(...args);
 			}
 		}
-		// MOD 4535992
+
 		static tokenOnControl = function (wrapped, ...args) {
 			for(let elem of args){
 				const releaseOthers = elem.releaseOthers;
@@ -184,63 +184,7 @@ export class EasyTarget {
 			}
 			return wrapped(...args);
 		}
-		// END MOD 4535992
-		// if (game.modules.get('lib-wrapper')?.active) {
-		// 	libWrapper.register(MODULE_NAME, 'Token.prototype.setTarget', tokenSetTarget, 'WRAPPER');
-		// 	libWrapper.register(MODULE_NAME, 'Token.prototype._onClickLeft', tokenOnClickLeft, 'WRAPPER');
-		// 	libWrapper.register(MODULE_NAME, 'Token.prototype._canControl', tokenCanControl, 'WRAPPER');
-		// 	libWrapper.register(MODULE_NAME, 'TokenLayer.prototype.targetObjects', tokenLayerTargetObjects, 'WRAPPER');
-		// 	libWrapper.register(MODULE_NAME, 'Canvas.prototype._onClickLeft', canvasOnClickLeft, 'WRAPPER');
-		// 	libWrapper.register(MODULE_NAME, 'Canvas.prototype._onDragLeftDrop', canvasOnDragLeftDrop, 'WRAPPER');
-		// 	libWrapper.register(MODULE_NAME, 'TemplateLayer.prototype._onDragLeftDrop', templateLayerOnDragLeftDrop, 'WRAPPER');
-		// 	libWrapper.register(MODULE_NAME, 'KeyboardManager.prototype._onKeyC', keyboardManagerOnKeyC, 'MIXED');
-		// 	// MOD 4535992
-		// 	libWrapper.register(MODULE_NAME, 'Token.prototype.control', tokenOnControl, 'WRAPPER');
-		// 	// END MOD 4535992
-		// } else {
-		// 	error("YOU MUST USE lib-wrapper");
-
-		// 	const cachedTokenSetTarget = Token.prototype.setTarget;
-		// 	Token.prototype.setTarget = function () {
-		// 		return tokenSetTarget.call(this, cachedTokenSetTarget.bind(this), ...arguments);
-		// 	};
-
-		// 	const cachedTokenOnClickLeft = Token.prototype._onClickLeft;
-		// 	Token.prototype._onClickLeft = function () {
-		// 		return tokenOnClickLeft.call(this, cachedTokenOnClickLeft.bind(this), ...arguments);
-		// 	};
-
-		// 	const cachedTokenCanControl = Token.prototype._canControl;
-		// 	Token.prototype._canControl = function () {
-		// 		return tokenCanControl.call(this, cachedTokenCanControl.bind(this), ...arguments);
-		// 	};
-
-		// 	const cachedTokenLayerTargetObjects = TokenLayer.prototype.targetObjects;
-		// 	TokenLayer.prototype.targetObjects = function () {
-		// 		return tokenLayerTargetObjects.call(this, cachedTokenLayerTargetObjects.bind(this), ...arguments);
-		// 	};
-
-		// 	const cachedCanvasOnClickLeft = Canvas.prototype._onClickLeft;
-		// 	Canvas.prototype._onClickLeft = function () {
-		// 		return canvasOnClickLeft.call(this, cachedCanvasOnClickLeft.bind(this), ...arguments);
-		// 	};
-
-		// 	const cachedCanvasOnDragLeftDrop = Canvas.prototype._onDragLeftDrop;
-		// 	Canvas.prototype._onDragLeftDrop = function () {
-		// 		return canvasOnDragLeftDrop.call(this, cachedCanvasOnDragLeftDrop.bind(this), ...arguments);
-		// 	};
-
-		// 	const cachedTemplateLayerOnDragLeftDrop = TemplateLayer.prototype._onDragLeftDrop;
-		// 	TemplateLayer.prototype._onDragLeftDrop = function () {
-		// 		return templateLayerOnDragLeftDrop.call(this, cachedTemplateLayerOnDragLeftDrop.bind(this), ...arguments);
-		// 	};
-
-		// 	const cachedKeyboardManagerOnKeyC = KeyboardManager.prototype._onKeyC;
-		// 	KeyboardManager.prototype._onKeyC = function () {
-		// 		return keyboardManagerOnKeyC.call(this, cachedKeyboardManagerOnKeyC.bind(this), ...arguments);
-		// 	};
-		// }
-	// }
+		
 
 	static releaseBehaviour = function (oe) {
 		const mode = game.settings.get(MODULE_NAME, 'release');

@@ -1,6 +1,7 @@
-import { debug, log, setDebugLevel, warn, i18n } from '../target-enhancements';
+import { debug, log, setDebugLevel, warn, i18n, i18nFormat } from '../target-enhancements';
+//import { hotkeys } from './libs/lib-df-hotkeys.shim.js';
 //@ts-ignore
-import ColorSetting from '../../colorsettings/colorSetting.js';
+import ColorSetting from '/modules/colorsettings/colorSetting.js';
 // import './libs/settings-extender.js';
 
 // window['TargetsTable'] = TargetsTable;
@@ -180,6 +181,13 @@ export const registerSettings = function () {
       type: Boolean
   });
 
+  //   hotkeys.registerShortcut({
+//     name : i18n(MODULE_NAME+".enable-target-modifier-key-name"),
+//     label: i18n(MODULE_NAME+".enable-target-modifier-key-hint"),
+//     default: { key: hotkeys.keys.KeyT, alt: false, ctrl: false, shift: false },
+//     onKeyDown: () => trigger(false)
+//   });
+
   game.settings.register(MODULE_NAME,'enable-target-portraits', {
       name : i18n(MODULE_NAME+".enable-target-portraits-name"),
       hint : i18n(MODULE_NAME+".enable-target-portraits-hint"),
@@ -221,6 +229,212 @@ export const registerSettings = function () {
   //   //     //const bindWithShift = KeyBinding.eventIsForBinding(event, withShift);
   //   // }
   // });
+
+  // ========================================================
+  // CUSTOM TOKEN ANIMATION (CUSTOMIZED)
+  // ========================================================
+
+  game.settings.register(MODULE_NAME, "playerPermissions", {
+        name: i18nFormat("target-enhancements.Permissions"),
+        hint: i18nFormat("target-enhancements.Permissions_hint"),
+        scope: "world",
+        config: true,
+        default: false,
+        type: Boolean,
+    });
+    game.settings.register(MODULE_NAME, "fadeOut", {
+        name: i18nFormat("target-enhancements.FadeAnims"),
+        hint: i18nFormat("target-enhancements.FadeAnims_hint"),
+        scope: "world",
+        config: true,
+        default: true,
+        type: Boolean,
+    });
+  
+  // ========================================================
+  // BORDER CONTROL SETTINGS (CUSTOMIZED)
+  // ========================================================
+
+    game.settings.register(MODULE_NAME, "removeBorders", {
+        name: 'Remove Borders',
+        hint: 'Remove the border from specific tokens',
+        scope: 'world',
+        type: String,
+        choices: {
+            "0": "None",
+            "1": "Non Owned",
+            "2": "All",
+        },
+        default: "0",
+        config: true,
+    });
+
+    game.settings.register(MODULE_NAME, "healthGradient", {
+        name: 'HP Gradient',
+        scope: 'world',
+        type: Boolean,
+        default: false,
+        config: true,
+    });
+    game.settings.register(MODULE_NAME, "healthGradientA", {
+        name: 'HP Gradient Start',
+        scope: 'world',
+        type: String,
+        default: "#1b9421",
+        config: true,
+    });
+    game.settings.register(MODULE_NAME, "healthGradientB", {
+        name: 'HP Gradient End',
+        scope: 'world',
+        type: String,
+        default: "#c9240a",
+        config: true,
+    });
+    game.settings.register(MODULE_NAME, "stepLevel", {
+        name: 'Gradient Step Level',
+        hint: 'How many individual colors are part of the gradient',
+        scope: 'world',
+        type: Number,
+        default: 10,
+        config: true,
+    });
+
+    game.settings.register(MODULE_NAME, "borderWidth", {
+        name: 'Border Width',
+        hint: 'Override border width',
+        scope: 'client',
+        type: Number,
+        default: 4,
+        config: true,
+    });
+    game.settings.register(MODULE_NAME, "borderOffset", {
+        name: 'Border Offset',
+        hint: 'Customize border offset',
+        scope: 'client',
+        type: Number,
+        default: 0,
+        config: true,
+    });
+    game.settings.register(MODULE_NAME, "targetSize", {
+        name: 'Target Size Multiplier',
+        scope: 'client',
+        type: Number,
+        default: 1,
+        config: true,
+    });
+    game.settings.register(MODULE_NAME, "internatTarget", {
+        name: 'Internal Target',
+        hint: "Target reticule inside  token borders",
+        scope: 'client',
+        type: Boolean,
+        default: false,
+        config: true,
+    });
+    game.settings.register(MODULE_NAME, "circleBorders", {
+        name: 'Circular Borders',
+        scope: 'client',
+        type: Boolean,
+        default: false,
+        config: true,
+    });
+    game.settings.register(MODULE_NAME, "hudPos", {
+        name: 'Border Control HUD Position',
+        scope: 'client',
+        type: String,
+        default: ".right",
+        choices: {
+            ".right": "Right",
+            ".left": "Left",
+        },
+        config: true,
+    });
+    game.settings.register(MODULE_NAME, "controlledColor", {
+        name: 'Color: Controlled',
+        scope: 'client',
+        type: String,
+        default: "#FF9829",
+        config: true,
+    });
+    game.settings.register(MODULE_NAME, "controlledColorEx", {
+        name: 'Color: Controlled External',
+        scope: 'client',
+        type: String,
+        default: "#000000",
+        config: true,
+    });
+    game.settings.register(MODULE_NAME, "hostileColor", {
+        name: 'Color: Hostile',
+        scope: 'client',
+        type: String,
+        default: "#E72124",
+        config: true,
+    });
+    game.settings.register(MODULE_NAME, "hostileColorEx", {
+        name: 'Color: Hostile External',
+        scope: 'client',
+        type: String,
+        default: "#000000",
+        config: true,
+    });
+    game.settings.register(MODULE_NAME, "friendlyColor", {
+        name: 'Color: Friendly',
+        scope: 'client',
+        type: String,
+        default: "#43DFDF",
+        config: true,
+    });
+    game.settings.register(MODULE_NAME, "friendlyColorEx", {
+        name: 'Color: Friendly External',
+        scope: 'client',
+        type: String,
+        default: "#000000",
+        config: true,
+    });
+    game.settings.register(MODULE_NAME, "neutralColor", {
+        name: 'Color: Neutral',
+        scope: 'client',
+        type: String,
+        default: "#F1D836",
+        config: true,
+    });
+    game.settings.register(MODULE_NAME, "neutralColorEx", {
+        name: 'Color: Neutral External',
+        scope: 'client',
+        type: String,
+        default: "#000000",
+        config: true,
+    });
+    game.settings.register(MODULE_NAME, "partyColor", {
+        name: 'Color: Party',
+        scope: 'client',
+        type: String,
+        default: "#33BC4E",
+        config: true,
+    });
+    game.settings.register(MODULE_NAME, "partyColorEx", {
+        name: 'Color: Party External',
+        scope: 'client',
+        type: String,
+        default: "#000000",
+        config: true,
+    });
+    game.settings.register(MODULE_NAME, "targetColor", {
+        name: 'Color: Target',
+        scope: 'client',
+        type: String,
+        default: "#FF9829",
+        config: true,
+    });
+    game.settings.register(MODULE_NAME, "targetColorEx", {
+        name: 'Color: Target External',
+        scope: 'client',
+        type: String,
+        default: "#000000",
+        config: true,
+    });
+
+
+
 
 }
 

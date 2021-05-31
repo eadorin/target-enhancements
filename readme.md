@@ -2,13 +2,8 @@
 
 # Target Enhancements -- FoundryVTT Module
 
-## THIS MODULE IS STILL IN BETA IF YOU WANT TO CONTIBUTE ADD SOME BOUNTY FOR DEVELOPING
+## THI MODULSE IS ABBANDONED USE INSTEAD [Smart-Target](https://github.com/theripper93/Smart-Target)
 
-I tried to solve the problems as far as I could, but now I can't solve the remaining problems myself, for anyone who wants to contribute financially to attract the attention of some developer I put below the link of the reward on trello
-
-[Bounty on trelllo of League of Extraordinary foundryvtt developers](https://trello.com/c/KvEZVMtw/213-modulebountyrevive-target-enhancements)
-
-Target Enhancements is a module for FoundryVTT that provides customizations for targeting. As a colorblind player, having icons instead of indistinguishable colored dots makes for a much better experience.
 
 # Why this module?
 
@@ -52,6 +47,10 @@ This module uses the [color settings](https://github.com/ardittristan/VTTColorSe
 ### FXMaster
 
 This module uses the [FXMaster](https://gitlab.com/mesfoliesludiques/foundryvtt-fxmaster) library like a dependency. It is a hard dependency and it is recommended for the best experience and compatibility with other modules.
+
+### Custom Token Animations
+
+This module uses the [Custom Token Animations](https://github.com/kandashi/Custom-Token-Animations) library like a dependency. It is a hard dependency and it is recommended for the best experience and compatibility with other modules.
 
 ## Usage & features
 
@@ -180,13 +179,15 @@ npm run-script clean
 
 ## TODO List / Known Issues / Limitations
 
-- [Bug] I commented the "pulse" and "rotate" options on the "TargetIndicator" class because they broke foundry when i delete the token or change the scene. I will try tso fix this.
+- [Feature][High Priority] Make it work with 0.8.X release.
 
-- [Feature] Show to others player the animated token marker
+- [Bug][High Priority] I commented the "pulse" and "rotate" options on the "TargetIndicator" class because they broke foundry when i delete the token or change the scene. I will try tso fix this.
+
+- [Bug][High Priority] Show to others player the animated token marker of my targets (integration with game socket ?)
+
+- [Bug][High Priority] When i refresh the scene we lose all the target (integration with flag system ?)
 
 - [Bug][Switching Scenes or Deleting tokens while target locks up game](https://github.com/eadorin/target-enhancements/issues/31)
-
-- [Bug][Medium priority] When you refesh/reload the page lose all targets
 
 - [Feature][Low priority] Adjust the display of the target token icons!! (currently uses a black outline + shadow)
 
@@ -200,8 +201,7 @@ npm run-script clean
 
 - [Feature][Low priority] Change the target image hover the tokens by using local image file (png,webm,ecc.), possible integration with [Custom-Token-Animations](https://github.com/kandashi/Custom-Token-Animations)
 
-
-- [OTHER ISSUE ARE SET ON TRELLO](https://trello.com/c/KvEZVMtw/213-modulebountyrevive-target-enhancements) 
+- OTHER ISSUE CAN BE FOUND ON THE [ISSUE PAGE](https://github.com/eadorin/target-enhancements/issues) 
 
 ## [Changelog](./changelog.md)
 
@@ -231,6 +231,7 @@ Thanks to anyone who helps me with this code! I appreciate the user community's 
 - [Foundry VTT - Bullseye](https://gitlab.com/Ionshard/foundry-vtt-bullseye) ty to [Ionshard](https://gitlab.com/Ionshard)
 - [settings-extender](https://gitlab.com/cswendrowski/settings-extender) ty to [foundry-azzurrite](https://gitlab.com/foundry-azzurite)
 - [T is for target](https://github.com/basicer/foundryvtt-t-is-for-target) ty to [basicer](https://github.com/basicer)
+- [Custom-Token-Animations](https://github.com/kandashi/Custom-Token-Animations) ty to [kandashi](https://github.com/kandashi)
 
 and of course a huge ty to all the developers of 'League of Extraordinary foundryvtt developers' for give me a hand every time i ask.
 
