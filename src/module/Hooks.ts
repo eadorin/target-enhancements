@@ -1,27 +1,87 @@
 import { warn, error, debug, i18n } from "../target-enhancements";
 import { EasyTarget } from "./easyTarget";
+import { TargetContainer } from "./TargetContainer";
+import { BorderFrame } from "./libs/BorderControl";
+import { CTA, CTAtweens } from "./libs/CTA";
 // import { TargetContainer } from "./TargetContainer";
-import { MODULE_NAME } from "./settings";
+import { getCanvas, MODULE_NAME } from "./settings";
 import { TargetEnhancements } from "./TargetEnhancements";
 //import * as libWrapper  from "/modules/lib-wrapper/lib-wrapper";
 
 export let readyHooks = async () => {
-  // TargetContainer.ready();
+
+  // ===========================================
+  // TARGET ENCHANTMENTS
+  // ===========================================
+
+  TargetContainer.ready(MODULE_NAME);
+  
   //@ts-ignore
   libWrapper.register(MODULE_NAME, 'Token.prototype.control', EasyTarget.tokenOnControl, 'WRAPPER');
+
+
+
+  // ===========================================
+  // CUSTOM TOKEN ANIMATION (CUSTOMIZED)
+  // ============================================
+
+  //CTA.ready();
+
+  Hooks.on("canvasInit", async () => {
+      if (CTAtweens) {
+          CTAtweens.forEach(i => i.kill())
+      }
+      Hooks.once("canvasPan", () => {
+          CTA.AddTweens(undefined)
+      })
+
+  });
+  Hooks.on("preDeleteToken", (scene, token) => {
+      let deleteToken = getCanvas().tokens.get(token._id)
+      if (!deleteToken) return;
+      //@ts-ignore
+      TweenMax.killTweensOf(deleteToken.children)
+  });
+  Hooks.on("createToken", (scene, token) => {
+      let tokenInstance = getCanvas().tokens.get(token._id)
+      if (!tokenInstance) return;
+      let flags = tokenInstance.getFlag(MODULE_NAME, "anim") ? tokenInstance.getFlag(MODULE_NAME, "anim") : []
+      if (flags) CTA.AddTweens(tokenInstance)
+  });
+  Hooks.on("preUpdateToken", async (_scene, token, update) => {
+      if ("height" in update || "width" in update) {
+          let fullToken = getCanvas().tokens.get(token._id)
+          let CTAtweens = fullToken.children.filter((c:any) => c.CTA === true)
+          for (let child of CTAtweens) {
+              //@ts-ignore
+              TweenMax.killTweensOf(child)
+              child.destroy()
+          }
+      }
+  })
+  Hooks.on("updateToken", (_scene, token, update) => {
+      if ("height" in update || "width" in update || "img" in update) {
+          let fullToken = getCanvas().tokens.get(token._id)
+          CTA.AddTweens(fullToken)
+      }
+  })
+
+  // ===========================================
+  // BORDER CONTROL (CUSTOMIZED)
+  // ===========================================
+
+  //@ts-ignore
+  //libWrapper.register(MODULE_NAME, 'Token.prototype._refreshBorder', BorderFrame.newBorder, 'OVERRIDE')
+  //@ts-ignore
+  //libWrapper.register(MODULE_NAME, 'Token.prototype._getBorderColor', BorderFrame.newBorderColor, 'OVERRIDE')
+  //@ts-ignore
+  libWrapper.register(MODULE_NAME, 'Token.prototype._refreshTarget', BorderFrame.newTarget, 'OVERRIDE')
+
 }
 
 export let initHooks = () => {
   warn("Init Hooks processing");
-
-  // setup all the hooks
-
-  // ==================================
-  // INTEGRATION EASY TARGET
-  // ==================================
-
-  // EasyTarget.patch();
-
+  
   // ==================================
   // INTEGRATION LIB TARGETING
   // ==================================
@@ -29,10 +89,6 @@ export let initHooks = () => {
   // Hooks.on("ready",TargetClass.ready); // MOVED TO ESYTARGET CLASS
   // Hooks.on("targetToken", TargetClass.targetTokenHandler); // MOVED TO ESYTARGET CLASS
   // Hooks.on("controlToken",TargetClass.controlTokenHandler); // MOVED TO ESYTARGET CLASS
-
-  // ==================================
-  // INTEGRATION BETTER TARGET
-  // ==================================
 
   // ==================================
   // INTEGRATION TARGET ENHANCEMENTS
@@ -44,6 +100,7 @@ export let initHooks = () => {
   Hooks.on("render",TargetEnhancements.renderTokenEventHandler);
   Hooks.on("preUpdateScene",TargetEnhancements.preUpdateSceneEventHandler);
   Hooks.on("renderSceneControls",TargetEnhancements.preUpdateSceneEventHandler);
+
   //Hooks.on("controlToken",TargetEnhancements.controlTokenEventHandler); // MOVED TO ESYTARGET CLASS
   Hooks.on("clearTokenTargets",TargetEnhancements.clearTokenTargetsHandler);
   Hooks.on("getSceneControlButtons",TargetEnhancements.getSceneControlButtonsHandler);
@@ -102,7 +159,7 @@ export let initHooks = () => {
   //     //return onDelete.apply(this, options, userId);
   //     return onDelete.apply(options, userId);
   // }
-  
+
   //@ts-ignore
   libWrapper.register(MODULE_NAME, 'Token.prototype.delete', TargetEnhancements.tokenDeleteHandler, 'WRAPPER');
   //@ts-ignore
@@ -111,6 +168,7 @@ export let initHooks = () => {
   libWrapper.register(MODULE_NAME, 'Token.prototype._getBorderColor', TargetEnhancements.customBorderColors, 'WRAPPER');
   // libWrapper.register(MODULE_NAME, 'PIXI.Graphics.prototype.drawEllipse', TargetEnhancements.drawDashLine, 'WRAPPER');
   PIXI.Graphics.prototype['drawDashLine'] = TargetEnhancements.drawDashLine;
+
 }
 
 

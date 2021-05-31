@@ -1,46 +1,38 @@
-import { TokenTarget } from './TokenTarget';
-import { getCanvas, MODULE_NAME } from '../settings';
-import { NPCTargeting } from './NPCTargeting';
-import { TargetsTable } from './TargetsTable';
+import { TokenTarget } from './lib-targeting/TokenTarget';
+import { NPCTargeting } from './lib-targeting/NPCTargeting';
+import { TargetsTable } from './lib-targeting/TargetsTable';
+import { getCanvas, MODULE_NAME } from './settings';
+import { TargetIndicator } from './TargetIndicator';
+import { CTA } from './libs/CTA';
+import { BorderFrame } from './libs/BorderControl';
+import { FlagsTargeting } from './lib-targeting/TargetConstants';
 
 // ==========================================================
 // THIS IS A IMPLEMENTATION OF THE LIB TARGET LIBRARY
 // ==========================================================
 
-/* ------------------------------------ */
-/* Initialize module					*/
-/* ------------------------------------ */
 Hooks.once('init', async () => {
   // Load lib-targetting module
   window['TargetsTable'] = TargetsTable;
   window['NPCTargeting'] = NPCTargeting;
 });
 
-/* ------------------------------------ */
-/* Setup module							*/
-/* ------------------------------------ */
-Hooks.once('setup', function () {
-	// Do anything after initialization but before ready
-});
-
-/* ------------------------------------ */
-/* When ready							*/
-/* ------------------------------------ */
-Hooks.once('ready', () => {
-	TargetContainer.ready();
-});
-
+// Hooks.once('ready', async () => {
+//   TargetContainer.ready(MODULE_NAME);
+// });
 
 // TODO Integrated in separate library module
 export class TargetContainer {
 
     // static npcTargeting:NPCTargeting ;
+    static nameSpace:string;
 
-    static ready() {
+    static ready(moduleName) {
       //NPCTargeting = window['NPCTargeting'];
       let targetsTable;
       try {
-          targetsTable = new TargetsTable(MODULE_NAME);
+          TargetContainer.nameSpace = moduleName;
+          targetsTable = new TargetsTable(moduleName);
       } catch(error) {
           console.error(error);
           ui.notifications.error("You need to load the Lib-Targeting Module");
@@ -51,37 +43,40 @@ export class TargetContainer {
     } // -- end ready
 
 
-    static async targetClassTargetTokenHandler(user: User ,token: Token, targeted:Boolean) {
+    static async targetClassTargetTokenHandler(user: User ,token: Token, targeted:Boolean, data:PIXI.Graphics) {
         // TODO Check out the code targeted as some problem 'true'
-        await NPCTargeting.targetTokenHandler(user,token,targeted);
+        await NPCTargeting.targetTokenHandler(user,token,targeted, data);
+        //if(NPCTargeting.getTargetsTable()){
+          let targetSources =  await NPCTargeting.getTargetsTable().getTargetSources(token);
+          let sourceTargets = await NPCTargeting.getTargetsTable().getSourceTargets(user);
 
-        let targetSources =  await NPCTargeting.getTargetsTable().getTargetSources(token);
-        let sourceTargets = await NPCTargeting.getTargetsTable().getSourceTargets(user);
-
-        console.log(MODULE_NAME,"Token is Targeted By:", targetSources);
-        console.log(MODULE_NAME,"User is targeting:", sourceTargets);
-        if(game.settings.get(MODULE_NAME, 'display_notificaton_enable_notification')){
-            // for (let targetSource of targetSources) {
-              TargetContainer.targetClassMessageCreate("Token is Targeted By:",targetSources);
-            // }
-            // for (let sourceTarget of sourceTargets) {
-              TargetContainer.targetClassMessageCreate("User is targeting:",sourceTargets);
-            // }
-        }
+          console.log(TargetContainer.nameSpace,"Token is Targeted By:", targetSources);
+          console.log(TargetContainer.nameSpace,"User is targeting:", sourceTargets);
+          if(game.settings.get(MODULE_NAME, 'display_notificaton_enable_notification')){
+              // for (let targetSource of targetSources) {
+                TargetContainer.targetClassMessageCreate("Token is Targeted By:",targetSources);
+              // }
+              // for (let sourceTarget of sourceTargets) {
+                TargetContainer.targetClassMessageCreate("User is targeting:",sourceTargets);
+              // }
+          }
+        //}else{
+        //  NPCTargeting.setTargetsTable(new TargetsTable(TargetContainer.nameSpace));
+        //}
     }
 
-    static async targetClassControlTokenHandler(token:Token, tf:Boolean) {
-        await NPCTargeting.controlTokenHandler(token, tf);
+    static async targetClassControlTokenHandler(token:Token, targeted:Boolean) {
+        await NPCTargeting.controlTokenHandler(token, targeted);
     }
 
 
-    static async addTarget(source: User | Token, target : Token | string, data: any){
-      await NPCTargeting.getTargetsTable().addTarget(source,target);
-    }
+    // static async addTarget(source: User | Token, target : Token | string, data:PIXI.Graphics){
+    //   await NPCTargeting.getTargetsTable().addTarget(source,target,data);
+    // }
 
-    static async removeTarget(source: User | Token, target : Token | string){
-      await NPCTargeting.getTargetsTable().removeTarget(source,target);
-    }
+    // static async removeTarget(source: User | Token, target : Token | string){
+    //   await NPCTargeting.getTargetsTable().removeTarget(source,target);
+    // }
 
     static async clear(){
       await NPCTargeting.getTargetsTable().clear();
@@ -95,12 +90,19 @@ export class TargetContainer {
       return NPCTargeting.getTargetsTable().getRecord(u, token);
     }
 
-    static getTargetsToken(u: User, token: Token):TokenTarget[]{
-      return NPCTargeting.getTargetsTable().getAllRecords();
+    static getAllTargets(){
+      return NPCTargeting.controlledUnits;
     }
 
     static isEmpty(){
       return NPCTargeting.isEmpty();
+    }
+
+    static async getCurrentTargets() {
+      if (!getCanvas().scene.getFlag(MODULE_NAME,FlagsTargeting.targets)) {
+          return [];
+      }
+      return await <TokenTarget[]>getCanvas().scene.getFlag(MODULE_NAME,FlagsTargeting.targets);
     }
 
     // UTILITY
@@ -118,8 +120,8 @@ export class TargetContainer {
       let nameTargets = [];
 
       for (let target of tokenTargets) {
-          let tokenTarget:any = TargetContainer.getTokenByTokenID(target.getTargetID());
-          let tokenSource:any = TargetContainer.getTokenByTokenID(target.getSourceID());
+          let tokenTarget:Token = TargetContainer.getTokenByTokenID(target.targetID);
+          let tokenSource:Token = TargetContainer.getTokenByTokenID(target.sourceID);
           let nameTarget = tokenTarget.actor.data.name;
           let nameSource = tokenSource.actor.data.name;
           if(nameSource){
